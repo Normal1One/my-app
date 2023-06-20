@@ -41,8 +41,23 @@ model User {
     emailVerified  DateTime?
     image          String?
     hashedPassword String?
+    role           Role      @default(USER)
     accounts       Account[]
     sessions       Session[]
+    posts          Post[]    @relation("AuthoredPosts")
+    favorites      Post[]    @relation("FavoritePosts")
+}
+
+model Post {
+    id            String   @id @default(cuid())
+    title         String
+    text          String
+    viewCount     Int      @default(0)
+    createdAt     DateTime @default(now())
+    author        User     @relation("AuthoredPosts", fields: [authorId], references: [id], onDelete: Cascade)
+    authorId      String
+    favoritedBy   User?    @relation("FavoritePosts", fields: [favoritedById], references: [id], onDelete: Cascade)
+    favoritedById String?
 }
 
 model VerificationToken {
@@ -51,4 +66,9 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+enum Role {
+    USER
+    ADMIN
 }

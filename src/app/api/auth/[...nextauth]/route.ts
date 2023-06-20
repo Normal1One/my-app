@@ -2,62 +2,54 @@ import NextAuth from 'next-auth/next';
 import GoogleProvider from 'next-auth/providers/google';
 import GithubProvider from 'next-auth/providers/github';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import EmailProvider from 'next-auth/providers/email';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { Adapter } from 'next-auth/adapters';
-import { prisma } from '@/app/lib/prismadb';
-import { AuthOptions } from 'next-auth';
-import bcrypt from 'bcrypt';
+import { prisma } from '@/lib/prismadb';
 
-export const authOptions: AuthOptions = {
-    adapter: PrismaAdapter(prisma) as Adapter,
+const handler = NextAuth({
+    adapter: <Adapter>PrismaAdapter(prisma),
     providers: [
         GoogleProvider({
-            clientId: process.env.GOOGLE_ID as string,
-            clientSecret: process.env.GOOGLE_SECRET as string,
+            clientId: <string>process.env.GOOGLE_ID,
+            clientSecret: <string>process.env.GOOGLE_SECRET,
         }),
         GithubProvider({
-            clientId: process.env.GITHUB_ID as string,
-            clientSecret: process.env.GITHUB_SECRET as string,
+            clientId: <string>process.env.GITHUB_ID,
+            clientSecret: <string>process.env.GITHUB_SECRET,
+        }),
+        EmailProvider({
+            server: <string>process.env.EMAIL_SERVER,
+            from: <string>process.env.EMAIL_FROM,
         }),
         CredentialsProvider({
             name: 'credentials',
             credentials: {
-                email: {
-                    label: 'Email',
-                    type: 'text',
-                    placeholder: 'jsmith@gmail.com',
-                },
+                email: { label: 'Email', type: 'text' },
                 password: { label: 'Password', type: 'password' },
-                username: {
-                    label: 'Username',
-                    type: 'text',
-                    placeholder: 'John Smith',
-                },
             },
             async authorize(credentials) {
-                if (!credentials?.email || !credentials.password) {
-                    throw new Error('Please enter an email and password');
-                }
-                const user = await prisma.user.findUnique({
-                    where: {
-                        email: credentials.email,
-                    },
-                });
-
-                if (!user || !user.hashedPassword) {
-                    throw new Error('No user found');
-                }
-
-                const passwordMatch = await bcrypt.compare(
-                    credentials.password,
-                    user.hashedPassword
+                const response = await fetch(
+                    `${process.env.NEXTAUTH_URL}/api/login`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            email: credentials?.email,
+                            password: credentials?.password,
+                        }),
+                    }
                 );
 
-                if (!passwordMatch) {
-                    throw new Error('Incorrect password');
-                }
+                const user = await response.json();
 
-                return user;
+                if (user) {
+                    return user;
+                } else {
+                    return null;
+                }
             },
         }),
     ],
@@ -65,8 +57,9 @@ export const authOptions: AuthOptions = {
     session: {
         strategy: 'jwt',
     },
-    debug: process.env.NODE_ENV !== 'production',
-};
+    pages: {
+        signIn: '/auth/login',
+    },
+});
 
-const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };

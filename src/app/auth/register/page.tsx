@@ -21,64 +21,41 @@ export default function Register() {
     };
 
     return (
-        <div className='max-w-xs m-auto mt-5'>
-            <form className='flex flex-col' onSubmit={registerUser}>
-                <div className='mb-4'>
-                    <label
-                        className='block text-sm font-bold mb-2'
-                        htmlFor='username'
-                    >
-                        Username
-                    </label>
+        <div className='flex align-middle h-screen'>
+            <form className='flex flex-col m-auto p-7 rounded shadow-xl gap-4 bg-gray-300' onSubmit={registerUser}>
                     <input
-                        className='appearance-none w-full leading-tight focus:outline-none rounded'
-                        id='username'
+                        className='appearance-none leading-tight focus:outline-none rounded border-none'
                         type='text'
                         required
                         value={data.name}
+                        placeholder='Username'
                         onChange={(e) =>
                             setData({ ...data, name: e.target.value })
                         }
                     ></input>
-                </div>
-                <div className='mb-4'>
-                    <label
-                        className='block text-sm font-bold mb-2'
-                        htmlFor='email'
-                    >
-                        Email
-                    </label>
                     <input
-                        className='appearance-none w-full leading-tight focus:outline-none rounded'
-                        id='email'
+                        className='appearance-none w-full leading-tight focus:outline-none rounded border-none'
                         type='text'
                         required
                         value={data.email}
+                        placeholder='Email'
                         onChange={(e) =>
                             setData({ ...data, email: e.target.value })
                         }
                     ></input>
-                </div>
-                <div className='mb-6'>
-                    <label
-                        className='block text-sm font-bold mb-2'
-                        htmlFor='password'
-                    >
-                        Password
-                    </label>
                     <input
-                        className='appearance-none w-full leading-tight focus:outline-none rounded'
-                        id='password'
+                        className='appearance-none w-full leading-tight focus:outline-none rounded border-none'
                         type='password'
+                        placeholder='Password'
                         required
+                        autoComplete='on'
                         value={data.password}
                         onChange={(e) =>
                             setData({ ...data, password: e.target.value })
                         }
                     ></input>
-                </div>
                 <button
-                    className='font-bold focus:outline-none m-auto text-white bg-black rounded pt-3 pb-3 hover:opacity-75 w-full'
+                    className='font-bold focus:outline-none m-auto text-white bg-gray-500 rounded pt-3 pb-3 hover:opacity-75 w-full'
                     type='submit'
                 >
                     Sign Up
