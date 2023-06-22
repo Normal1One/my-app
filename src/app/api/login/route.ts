@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
 import { prisma } from '@/lib/prismadb';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
     const body = await request.json();
     const { email, password } = body;
 
@@ -16,7 +16,7 @@ export async function POST(request: Request) {
         },
     });
 
-    if (!user || !user.hashedPassword) {
+    if (!user || !user?.hashedPassword) {
         throw new Error('No user found');
     }
 
@@ -26,8 +26,6 @@ export async function POST(request: Request) {
         throw new Error('Incorrect password');
     }
 
-    if (user && passwordMatch) {
-        const { hashedPassword, ...userWithoutHashedPassword } = user;
-        return new Response(JSON.stringify(userWithoutHashedPassword));
-    } else return new Response(JSON.stringify(null));
+    const { hashedPassword, ...result } = user;
+    return new Response(JSON.stringify(result));
 }
