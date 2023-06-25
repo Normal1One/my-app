@@ -40,30 +40,30 @@ export default function Login() {
     };
 
     return (
-        <>
+        <section>
             <div>
                 <Toaster />
             </div>
             <div className='flex align-middle h-screen'>
                 <form
-                    className='flex flex-col m-auto p-7 rounded shadow-xl gap-4 bg-gray-300'
+                    className='flex flex-col m-auto p-7 max-w-xs rounded shadow-xl gap-4 bg-gray-300'
                     onSubmit={handleSubmit(onSubmit)}
                     noValidate
                 >
                     <input
-                        className='appearance-none leading-tight focus:outline-none rounded border-none'
+                        className='appearance-none leading-tight p-3 focus:outline-none rounded border-none'
                         type='text'
                         placeholder='Email'
                         {...register('email')}
                     ></input>
-                    <p className='text-red-500'>{errors.email?.message}</p>
+                    {errors.email && <p className='text-red-500'>{errors.email?.message}</p>}
                     <input
-                        className='appearance-none leading-tight focus:outline-none rounded border-none'
+                        className='appearance-none leading-tight p-3 focus:outline-none rounded border-none'
                         type='password'
                         placeholder='Password'
                         {...register('password')}
                     ></input>
-                    <p className='text-red-500'>{errors.password?.message}</p>
+                    {errors.password && <p className='text-red-500'>{errors.password?.message}</p>}
                     <button
                         className='font-bold focus:outline-none m-auto text-white bg-gray-500 rounded pt-3 pb-3 hover:opacity-75 w-full'
                         type='submit'
@@ -89,6 +89,6 @@ export default function Login() {
                     </button>
                 </form>
             </div>
-        </>
+        </section>
     );
 }

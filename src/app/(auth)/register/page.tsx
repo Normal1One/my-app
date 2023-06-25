@@ -53,14 +53,14 @@ export default function Register() {
                         placeholder='Name'
                         {...register('name')}
                     ></input>
-                    <p className='text-red-500'>{errors.name?.message}</p>
+                    {errors.name && <p className='text-red-500'>{errors.name?.message}</p>}
                     <input
                         className='appearance-none w-full leading-tight focus:outline-none rounded border-none'
                         type='email'
                         placeholder='Email'
                         {...register('email')}
                     ></input>
-                    <p className='text-red-500'>{errors.email?.message}</p>
+                    {errors.email && <p className='text-red-500'>{errors.email?.message}</p>}
                     <input
                         className='appearance-none w-full leading-tight focus:outline-none rounded border-none'
                         type='password'
@@ -68,7 +68,7 @@ export default function Register() {
                         placeholder='Password'
                         {...register('password')}
                     ></input>
-                    <p className='text-red-500'>{errors.password?.message}</p>
+                    {errors.password && <p className='text-red-500'>{errors.password?.message}</p>}
                     <button
                         className='font-bold focus:outline-none m-auto text-white bg-gray-500 rounded pt-3 pb-3 hover:opacity-75 w-full'
                         type='submit'

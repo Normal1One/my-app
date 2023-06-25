@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (exist) {
-        throw new Error('Email already exists');
+        throw new NextResponse('Email already exists', { status: 409 });
     }
 
     const user = await prisma.user.create({

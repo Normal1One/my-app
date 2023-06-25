@@ -8,15 +8,15 @@ import { prisma } from '@/lib/prismadb';
 import axios from 'axios';
 
 const handler = NextAuth({
-    adapter: <Adapter>PrismaAdapter(prisma),
+    adapter: PrismaAdapter(prisma) as Adapter,
     providers: [
         GoogleProvider({
-            clientId: <string>process.env.GOOGLE_ID,
-            clientSecret: <string>process.env.GOOGLE_SECRET,
+            clientId: process.env.GOOGLE_ID,
+            clientSecret: process.env.GOOGLE_SECRET,
         }),
         GithubProvider({
-            clientId: <string>process.env.GITHUB_ID,
-            clientSecret: <string>process.env.GITHUB_SECRET,
+            clientId: process.env.GITHUB_ID,
+            clientSecret: process.env.GITHUB_SECRET,
         }),
         CredentialsProvider({
             name: 'credentials',
@@ -33,22 +33,25 @@ const handler = NextAuth({
                     })
                 );
 
-                const user = response.data;
-
-                if (user) {
-                    return user;
-                } else {
-                    return null;
-                }
+                return response.data || null;
             },
         }),
     ],
-    secret: process.env.NEXTAUTH_SECRET,
     session: {
         strategy: 'jwt',
     },
+    secret: process.env.SECRET_KEY,
     pages: {
-        signIn: '/auth/login',
+        signIn: '/login',
+    },
+    callbacks: {
+        async jwt({ token, user }) {
+            return { ...token, ...user };
+        },
+        async session({ session, token }) {
+            session.user = token as any;
+            return session;
+        },
     },
 });
 

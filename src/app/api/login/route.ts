@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import { prisma } from '@/lib/prismadb';
 import { NextRequest, NextResponse } from 'next/server';
+import { signJwtAccessToken } from '@/lib/jwt';
 
 export async function POST(request: NextRequest) {
     const body = await request.json();
@@ -17,15 +18,16 @@ export async function POST(request: NextRequest) {
     });
 
     if (!user || !user?.hashedPassword) {
-        throw new Error('No user found');
+        return new NextResponse('No user found', { status: 404 });
     }
 
     const passwordMatch = await bcrypt.compare(password, user.hashedPassword);
 
     if (!passwordMatch) {
-        throw new Error('Incorrect password');
+        return new NextResponse('Incorrect password', { status: 401 });
     }
 
     const { hashedPassword, ...result } = user;
-    return new Response(JSON.stringify(result));
+    const accessToken = signJwtAccessToken(result);
+    return new Response(JSON.stringify({ ...result, accessToken }));
 }
