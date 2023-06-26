@@ -2,11 +2,11 @@ import { verifyJwt } from '@/lib/jwt';
 import { prisma } from '@/lib/prismadb';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(
+export const GET = async (
     request: NextRequest,
     { params }: { params: { id: string } }
-) {
-    const accessToken = request.headers.get('accessToken');
+) => {
+    const accessToken = request.headers.get('authorization');
 
     if (!accessToken || !verifyJwt(accessToken)) {
         return new NextResponse('Unauthorized', { status: 401 });
@@ -20,5 +20,6 @@ export async function GET(
         return new NextResponse('No user found', { status: 404 });
     }
 
-    return new Response(JSON.stringify(user));
-}
+    const { hashedPassword, ...result } = user;
+    return new Response(JSON.stringify(result));
+};

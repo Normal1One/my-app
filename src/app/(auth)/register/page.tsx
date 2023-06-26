@@ -5,6 +5,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import axios from 'axios';
 import { toast, Toaster } from 'react-hot-toast';
+import { signIn } from 'next-auth/react';
+import { BsGithub, BsGoogle } from 'react-icons/bs';
 
 const schema = yup
     .object({
@@ -20,7 +22,7 @@ type formValues = {
     password: string;
 };
 
-export default function Register() {
+const Register = () => {
     const {
         register,
         handleSubmit,
@@ -37,7 +39,7 @@ export default function Register() {
     };
 
     return (
-        <>
+        <section>
             <div>
                 <Toaster />
             </div>
@@ -48,35 +50,62 @@ export default function Register() {
                     noValidate
                 >
                     <input
-                        className='appearance-none leading-tight focus:outline-none rounded border-none'
+                        className='appearance-none leading-tight p-3 focus:outline-none rounded border-none'
                         type='text'
                         placeholder='Name'
                         {...register('name')}
                     ></input>
-                    {errors.name && <p className='text-red-500'>{errors.name?.message}</p>}
+                    {errors.name && (
+                        <p className='text-red-500'>{errors.name?.message}</p>
+                    )}
                     <input
-                        className='appearance-none w-full leading-tight focus:outline-none rounded border-none'
+                        className='appearance-none w-full leading-tight p-3 focus:outline-none rounded border-none'
                         type='email'
                         placeholder='Email'
                         {...register('email')}
                     ></input>
-                    {errors.email && <p className='text-red-500'>{errors.email?.message}</p>}
+                    {errors.email && (
+                        <p className='text-red-500'>{errors.email?.message}</p>
+                    )}
                     <input
-                        className='appearance-none w-full leading-tight focus:outline-none rounded border-none'
+                        className='appearance-none w-full leading-tight p-3 focus:outline-none rounded border-none'
                         type='password'
                         autoComplete='on'
                         placeholder='Password'
                         {...register('password')}
                     ></input>
-                    {errors.password && <p className='text-red-500'>{errors.password?.message}</p>}
+                    {errors.password && (
+                        <p className='text-red-500'>
+                            {errors.password?.message}
+                        </p>
+                    )}
                     <button
                         className='font-bold focus:outline-none m-auto text-white bg-gray-500 rounded pt-3 pb-3 hover:opacity-75 w-full'
                         type='submit'
                     >
                         Sign Up
                     </button>
+                    <div className='grid grid-cols-3 text-gray-400 items-center'>
+                        <hr className='border-gray-400' />
+                        <p className='text-center text-sm'>OR</p>
+                        <hr className='border-gray-400' />
+                    </div>
+                    <button
+                        className='flex flex-row items-center place-content-evenly font-bold focus:outline-none m-auto text-white bg-gray-500 rounded pt-3 pb-3 hover:opacity-75 w-full'
+                        onClick={() => signIn('github')}
+                    >
+                        Login with GitHub <BsGithub />
+                    </button>
+                    <button
+                        className='flex flex-row items-center place-content-evenly font-bold focus:outline-none m-auto text-white bg-gray-500 rounded pt-3 pb-3 hover:opacity-75 w-full'
+                        onClick={() => signIn('google')}
+                    >
+                        Login with Google <BsGoogle />
+                    </button>
                 </form>
             </div>
-        </>
+        </section>
     );
-}
+};
+
+export default Register;

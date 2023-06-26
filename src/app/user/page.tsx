@@ -1,25 +1,13 @@
-'use client';
+import { AuthGetApi } from '@/lib/fetchAPI';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../api/auth/[...nextauth]/route';
 
-import axios from 'axios';
-import { Session } from 'next-auth';
-import { useSession } from 'next-auth/react';
+const User = async () => {
+    const session = await getServerSession(authOptions);
 
-async function getUser(session: Session) {
-    const response = await axios.get(
-        `http://localhost:3000/api/user/${session.user.id}`,
-        { headers: { accessToken: session.user.accessToken } }
-    );
-    return response;
-}
+    const response = await AuthGetApi(`api/user/${session?.user.id}`);
 
-export default async function User() {
-    const { data: session } = useSession();
+    return <div>{JSON.stringify(response)}</div>;
+};
 
-    if (!session) {
-        return <p>You should be authorized</p>;
-    }
-
-    const data = await getUser(session);
-
-    return <p>{JSON.stringify(data)}</p>;
-}
+export default User;

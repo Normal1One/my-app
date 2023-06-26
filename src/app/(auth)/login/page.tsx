@@ -19,7 +19,7 @@ type formValues = {
     password: string;
 };
 
-export default function Login() {
+const Login = () => {
     const {
         register,
         handleSubmit,
@@ -35,6 +35,7 @@ export default function Login() {
             }
             if (callback?.ok && !callback?.error) {
                 toast.success('Logged in successfully!');
+                setTimeout(() => (window.location.href = '/'), 1000);
             }
         });
     };
@@ -56,14 +57,20 @@ export default function Login() {
                         placeholder='Email'
                         {...register('email')}
                     ></input>
-                    {errors.email && <p className='text-red-500'>{errors.email?.message}</p>}
+                    {errors.email && (
+                        <p className='text-red-500'>{errors.email?.message}</p>
+                    )}
                     <input
                         className='appearance-none leading-tight p-3 focus:outline-none rounded border-none'
                         type='password'
                         placeholder='Password'
                         {...register('password')}
                     ></input>
-                    {errors.password && <p className='text-red-500'>{errors.password?.message}</p>}
+                    {errors.password && (
+                        <p className='text-red-500'>
+                            {errors.password?.message}
+                        </p>
+                    )}
                     <button
                         className='font-bold focus:outline-none m-auto text-white bg-gray-500 rounded pt-3 pb-3 hover:opacity-75 w-full'
                         type='submit'
@@ -91,4 +98,6 @@ export default function Login() {
             </div>
         </section>
     );
-}
+};
+
+export default Login;

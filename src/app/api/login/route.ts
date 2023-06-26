@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prismadb';
 import { NextRequest, NextResponse } from 'next/server';
 import { signJwtAccessToken } from '@/lib/jwt';
 
-export async function POST(request: NextRequest) {
+export const POST = async (request: NextRequest) => {
     const body = await request.json();
     const { email, password } = body;
 
@@ -30,4 +30,4 @@ export async function POST(request: NextRequest) {
     const { hashedPassword, ...result } = user;
     const accessToken = signJwtAccessToken(result);
     return new Response(JSON.stringify({ ...result, accessToken }));
-}
+};
