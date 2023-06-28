@@ -16,17 +16,23 @@ export default function Header() {
                 </Link>
                 {data ? (
                     <>
-                        <button onClick={() => signOut()}>Sign Out</button>
+                        <button
+                            onClick={() =>
+                                signOut({ redirect: true, callbackUrl: '/' })
+                            }
+                        >
+                            Sign Out
+                        </button>
                         <Link href={`/user/${data.user.id}`}>
                             {data.user.image ? (
                                 <Image
                                     src={data.user.image}
-                                    width={50}
-                                    height={50}
+                                    width={48}
+                                    height={48}
                                     alt='Your profile picture'
                                 />
                             ) : (
-                                <BsPerson />
+                                <BsPerson className='w-12 h-12' />
                             )}
                         </Link>
                     </>
