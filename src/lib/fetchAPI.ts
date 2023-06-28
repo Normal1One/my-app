@@ -11,7 +11,6 @@ const refreshToken = async (refreshToken: string) => {
         }),
     });
     const data = await response.json();
-    console.log({ data });
 
     return data.accessToken;
 };
