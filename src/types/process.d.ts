@@ -4,5 +4,6 @@ declare namespace NodeJS {
         GITHUB_SECRET: string;
         GOOGLE_ID: string;
         GOOGLE_SECRET: string;
+        EMAIL_SERVER_PORT: number;
     }
 }

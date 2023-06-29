@@ -43,9 +43,13 @@ const Register = () => {
     });
 
     const onSubmit = async ({ confirmPassword, ...values }: formValues) => {
-        axios
+        await axios
             .post('/api/register', JSON.stringify(values))
-            .then(() => toast.success('Registered successfully!'))
+            .then(() => {
+                signIn('email', { redirect: false, email: values.email })
+                    .then(() => toast.success('A verification link has been sent to your email account'))
+                    .catch(() => toast.error('Something went wrong!'));
+            })
             .catch(() => toast.error('Something went wrong!'));
     };
 
@@ -67,7 +71,9 @@ const Register = () => {
                         aria-invalid={errors.name ? 'true' : 'false'}
                         {...register('name')}
                     ></input>
-                    <p className='text-rose-600 text-xs'>{errors.name?.message}</p>
+                    <p className='text-rose-600 text-xs'>
+                        {errors.name?.message}
+                    </p>
                     <input
                         className='appearance-none w-full leading-tight p-3 focus:outline-none rounded aria-invalid:border-2 border-rose-600'
                         type='email'
@@ -75,7 +81,9 @@ const Register = () => {
                         aria-invalid={errors.email ? 'true' : 'false'}
                         {...register('email')}
                     ></input>
-                    <p className='text-rose-600 text-xs'>{errors.email?.message}</p>
+                    <p className='text-rose-600 text-xs'>
+                        {errors.email?.message}
+                    </p>
                     <input
                         className='appearance-none w-full leading-tight p-3 focus:outline-none rounded aria-invalid:border-2 border-rose-600'
                         type='password'
@@ -83,7 +91,9 @@ const Register = () => {
                         aria-invalid={errors.password ? 'true' : 'false'}
                         {...register('password')}
                     ></input>
-                    <p className='text-rose-600 text-xs'>{errors.password?.message}</p>
+                    <p className='text-rose-600 text-xs'>
+                        {errors.password?.message}
+                    </p>
                     <input
                         className='appearance-none w-full leading-tight p-3 focus:outline-none rounded aria-invalid:border-2 border-rose-600'
                         type='password'

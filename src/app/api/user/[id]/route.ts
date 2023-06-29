@@ -9,7 +9,7 @@ export const GET = async (
     const accessToken = request.headers.get('authorization');
 
     if (!accessToken || !verifyJwt(accessToken)) {
-        return NextResponse.json({message: 'Unauthorized'}, { status: 401 });
+        return new NextResponse('Unauthorized', { status: 401 });
     }
 
     const user = await prisma.user.findUnique({

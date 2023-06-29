@@ -14,6 +14,9 @@ export default function Header() {
                 <Link href='/' className='hover:opacity-50'>
                     Home
                 </Link>
+                <Link href='/register' className='hover:opacity-50'>
+                    Sign Up
+                </Link>
                 {data ? (
                     <>
                         <button
@@ -27,12 +30,12 @@ export default function Header() {
                             {data.user.image ? (
                                 <Image
                                     src={data.user.image}
-                                    width={48}
-                                    height={48}
+                                    width={24}
+                                    height={24}
                                     alt='Your profile picture'
                                 />
                             ) : (
-                                <BsPerson className='w-12 h-12' />
+                                <BsPerson className='w-6 h-6' />
                             )}
                         </Link>
                     </>

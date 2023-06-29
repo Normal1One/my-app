@@ -1,6 +1,7 @@
 'use client';
 
 import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { BsGoogle, BsGithub } from 'react-icons/bs';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -22,6 +23,7 @@ type formValues = {
 };
 
 const Login = () => {
+    const router = useRouter()
     const {
         register,
         handleSubmit,
@@ -37,7 +39,7 @@ const Login = () => {
             }
             if (callback?.ok && !callback?.error) {
                 toast.success('Logged in successfully!');
-                setTimeout(() => (window.location.href = '/'), 1000);
+                setTimeout(() => router.push('/'), 1000);
             }
         });
     };
