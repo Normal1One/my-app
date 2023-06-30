@@ -53,7 +53,7 @@ export const authOptions: NextAuthOptions = {
         }),
     ],
     pages: {
-        signIn: '/login'
+        signIn: '/login',
     },
     session: {
         strategy: 'jwt',
@@ -64,7 +64,7 @@ export const authOptions: NextAuthOptions = {
             if (account) {
                 const { hashedPassword, ...result } = user as User;
                 const accessToken = signJwtAccessToken(result);
-                return { ...token, accessToken, ...user }
+                return { ...token, accessToken, ...user };
             }
             return { ...token, ...user };
         },
