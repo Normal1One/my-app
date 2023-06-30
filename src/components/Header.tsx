@@ -32,6 +32,7 @@ export default function Header() {
                                     src={data.user.image}
                                     width={24}
                                     height={24}
+                                    className='rounded-full'
                                     alt='Your profile picture'
                                 />
                             ) : (
