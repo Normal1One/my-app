@@ -2,11 +2,18 @@
 
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { BsGoogle, BsGithub } from 'react-icons/bs';
+import {
+    BsGoogle,
+    BsGithub,
+    BsTwitter,
+    BsEyeSlash,
+    BsEye,
+} from 'react-icons/bs';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { toast, Toaster } from 'react-hot-toast';
+import { useState } from 'react';
 
 const schema = z.object({
     email: z.string().min(1, { message: 'Email is required' }).email({
@@ -14,7 +21,7 @@ const schema = z.object({
     }),
     password: z
         .string()
-        .min(8, { message: 'Password must be atleast 8 characters' }),
+        .min(8, { message: 'Password must be at least 8 characters' }),
 });
 
 type formValues = {
@@ -23,7 +30,9 @@ type formValues = {
 };
 
 const Login = () => {
-    const router = useRouter()
+    const [show, setShow] = useState(false);
+    const handleClick = () => setShow(!show);
+    const router = useRouter();
     const {
         register,
         handleSubmit,
@@ -62,15 +71,32 @@ const Login = () => {
                         aria-invalid={errors.email ? 'true' : 'false'}
                         {...register('email')}
                     ></input>
-                    <p className='text-rose-600 text-xs'>{errors.email?.message}</p>
-                    <input
-                        className='appearance-none leading-tight p-3 focus:outline-none rounded aria-invalid:border-2 border-rose-600'
-                        type='password'
-                        placeholder='Password'
-                        aria-invalid={errors.password ? 'true' : 'false'}
-                        {...register('password')}
-                    ></input>
-                    <p className='text-rose-600 text-xs'>{errors.password?.message}</p>
+                    <p className='text-rose-600 text-xs'>
+                        {errors.email?.message}
+                    </p>
+                    <div className='flex'>
+                        <input
+                            className='appearance-none w-full leading-tight p-3 focus:outline-none rounded-l aria-invalid:border-2 border-rose-600'
+                            type={show ? 'text' : 'password'}
+                            placeholder='Password'
+                            aria-invalid={errors.password ? 'true' : 'false'}
+                            {...register('password')}
+                        />
+                        <button
+                            type='button'
+                            onClick={handleClick}
+                            className='bg-white rounded-r pr-3'
+                        >
+                            {show ? (
+                                <BsEyeSlash className='w-5 h-5 fill-gray-500' />
+                            ) : (
+                                <BsEye className='w-5 h-5 fill-gray-500' />
+                            )}
+                        </button>
+                    </div>
+                    <p className='text-rose-600 text-xs'>
+                        {errors.password?.message}
+                    </p>
                     <button
                         className='font-bold focus:outline-none m-auto text-white bg-gray-500 rounded pt-3 pb-3 hover:opacity-75 w-full'
                         type='submit'
@@ -84,15 +110,39 @@ const Login = () => {
                     </div>
                     <button
                         className='flex flex-row items-center place-content-evenly font-bold focus:outline-none m-auto text-white bg-gray-500 rounded pt-3 pb-3 hover:opacity-75 w-full'
-                        onClick={() => signIn('github')}
+                        type='button'
+                        onClick={() =>
+                            signIn('github', {
+                                redirect: true,
+                                callbackUrl: '/',
+                            })
+                        }
                     >
-                        Login with GitHub <BsGithub />
+                        Sign up with GitHub <BsGithub />
                     </button>
                     <button
                         className='flex flex-row items-center place-content-evenly font-bold focus:outline-none m-auto text-white bg-gray-500 rounded pt-3 mt-2 pb-3 hover:opacity-75 w-full'
-                        onClick={() => signIn('google')}
+                        type='button'
+                        onClick={() =>
+                            signIn('google', {
+                                redirect: true,
+                                callbackUrl: '/',
+                            })
+                        }
                     >
-                        Login with Google <BsGoogle />
+                        Sign up with Google <BsGoogle />
+                    </button>
+                    <button
+                        className='flex flex-row items-center place-content-evenly font-bold focus:outline-none m-auto text-white bg-gray-500 rounded pt-3 mt-2 pb-3 hover:opacity-75 w-full'
+                        type='button'
+                        onClick={() =>
+                            signIn('twitter', {
+                                redirect: true,
+                                callbackUrl: '/',
+                            })
+                        }
+                    >
+                        Sign up with Twitter <BsTwitter />
                     </button>
                 </form>
             </div>

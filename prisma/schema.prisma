@@ -15,6 +15,8 @@ model Account {
     providerAccountId        String
     refresh_token            String? @db.String
     refresh_token_expires_in Int?
+    oauth_token              String? @db.String
+    oauth_token_secret       String?
     access_token             String? @db.String
     expires_at               Int?
     token_type               String?

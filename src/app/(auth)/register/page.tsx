@@ -6,7 +6,7 @@ import * as z from 'zod';
 import axios from 'axios';
 import { toast, Toaster } from 'react-hot-toast';
 import { signIn } from 'next-auth/react';
-import { BsEye, BsEyeSlash, BsGithub, BsGoogle } from 'react-icons/bs';
+import { BsEye, BsEyeSlash, BsGithub, BsGoogle, BsTwitter } from 'react-icons/bs';
 import { useState } from 'react';
 
 const schema = z
@@ -162,6 +162,7 @@ const Register = () => {
                     </div>
                     <button
                         className='flex flex-row items-center place-content-evenly font-bold focus:outline-none m-auto text-white bg-gray-500 rounded pt-3 pb-3 hover:opacity-75 w-full'
+                        type='button'
                         onClick={() =>
                             signIn('github', {
                                 redirect: true,
@@ -173,6 +174,7 @@ const Register = () => {
                     </button>
                     <button
                         className='flex flex-row items-center place-content-evenly font-bold focus:outline-none m-auto text-white bg-gray-500 rounded pt-3 mt-2 pb-3 hover:opacity-75 w-full'
+                        type='button'
                         onClick={() =>
                             signIn('google', {
                                 redirect: true,
@@ -181,6 +183,18 @@ const Register = () => {
                         }
                     >
                         Sign up with Google <BsGoogle />
+                    </button>
+                    <button
+                        className='flex flex-row items-center place-content-evenly font-bold focus:outline-none m-auto text-white bg-gray-500 rounded pt-3 mt-2 pb-3 hover:opacity-75 w-full'
+                        type='button'
+                        onClick={() =>
+                            signIn('twitter', {
+                                redirect: true,
+                                callbackUrl: '/',
+                            })
+                        }
+                    >
+                        Sign up with Twitter <BsTwitter />
                     </button>
                 </form>
             </div>
