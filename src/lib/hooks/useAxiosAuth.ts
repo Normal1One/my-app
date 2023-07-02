@@ -1,47 +1,47 @@
-'use client';
+'use client'
 
-import { useSession } from 'next-auth/react';
-import { axiosAuth } from '../axios';
-import { useEffect } from 'react';
-import { useRefreshToken } from './useRefreshToken';
+import { useSession } from 'next-auth/react'
+import { axiosAuth } from '../axios'
+import { useEffect } from 'react'
+import { useRefreshToken } from './useRefreshToken'
 
 const useAxiosAuth = () => {
-    const { data: session } = useSession();
-    const refreshToken = useRefreshToken();
+    const { data: session } = useSession()
+    const refreshToken = useRefreshToken()
 
     useEffect(() => {
         const requestIntercept = axiosAuth.interceptors.request.use(
             (config) => {
                 if (!config.headers['Authorization']) {
-                    config.headers['Authorization'] = session?.user.accessToken;
+                    config.headers['Authorization'] = session?.user.accessToken
                 }
-                return config;
+                return config
             },
             (error) => Promise.reject(error)
-        );
+        )
 
         const responseIntercept = axiosAuth.interceptors.response.use(
             (response) => response,
             async (error) => {
-                const prevRequest = error.config;
+                const prevRequest = error.config
                 if (error.response.status === 401 && !prevRequest.sent) {
-                    prevRequest.sent = true;
-                    await refreshToken();
+                    prevRequest.sent = true
+                    await refreshToken()
                     prevRequest.headers['authorization'] =
-                        session?.user.accessToken;
-                    return axiosAuth(prevRequest);
+                        session?.user.accessToken
+                    return axiosAuth(prevRequest)
                 }
-                return Promise.reject(error);
+                return Promise.reject(error)
             }
-        );
+        )
 
         return () => {
-            axiosAuth.interceptors.request.eject(requestIntercept);
-            axiosAuth.interceptors.response.eject(responseIntercept);
-        };
-    }, [session, refreshToken]);
+            axiosAuth.interceptors.request.eject(requestIntercept)
+            axiosAuth.interceptors.response.eject(responseIntercept)
+        }
+    }, [session, refreshToken])
 
-    return axiosAuth;
-};
+    return axiosAuth
+}
 
-export default useAxiosAuth;
+export default useAxiosAuth

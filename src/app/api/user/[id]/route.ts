@@ -1,25 +1,25 @@
-import { verifyJwt } from '@/lib/jwt';
-import { prisma } from '@/lib/prismadb';
-import { NextRequest, NextResponse } from 'next/server';
+import { verifyJwt } from '@/lib/jwt'
+import { prisma } from '@/lib/prismadb'
+import { NextRequest, NextResponse } from 'next/server'
 
 export const GET = async (
     request: NextRequest,
     { params }: { params: { id: string } }
 ) => {
-    const accessToken = request.headers.get('authorization');
+    const accessToken = request.headers.get('authorization')
 
     if (!accessToken || !verifyJwt(accessToken)) {
-        return new NextResponse('Unauthorized', { status: 401 });
+        return new NextResponse('Unauthorized', { status: 401 })
     }
 
     const user = await prisma.user.findUnique({
-        where: { id: params.id },
-    });
+        where: { id: params.id }
+    })
 
     if (!user) {
-        return new NextResponse('No user found', { status: 404 });
+        return new NextResponse('No user found', { status: 404 })
     }
 
-    const { hashedPassword, ...result } = user;
-    return new Response(JSON.stringify(result));
-};
+    const { hashedPassword, ...result } = user
+    return new Response(JSON.stringify(result))
+}

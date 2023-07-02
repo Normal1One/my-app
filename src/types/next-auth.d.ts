@@ -1,10 +1,10 @@
-import { DefaultUser } from 'next-auth';
+import { DefaultUser } from 'next-auth'
 
 declare module 'next-auth' {
     interface Session {
         user: DefaultUser & {
-            accessToken: string;
-            refreshToken: string;
-        };
+            accessToken: string
+            refreshToken: string
+        }
     }
 }

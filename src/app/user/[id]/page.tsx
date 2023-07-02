@@ -1,9 +1,9 @@
-import { AuthGetApi } from '@/lib/fetchAPI';
+import { AuthGetApi } from '@/lib/fetchAPI'
 
 const User = async ({ params }: { params: { id: string } }) => {
-    const response = await AuthGetApi(`api/user/${params.id}`);
+    const response = await AuthGetApi(`api/user/${params.id}`)
 
-    return <div>{JSON.stringify(response)}</div>;
-};
+    return <div>{JSON.stringify(response)}</div>
+}
 
-export default User;
+export default User
