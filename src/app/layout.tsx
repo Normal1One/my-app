@@ -1,25 +1,28 @@
-import Header from '@/components/Header';
-import Provider from '../components/Provider';
-import './globals.css';
-import { Inter } from 'next/font/google';
+import Header from '@/components/Header'
+import Provider from '../components/Provider'
+import { Inter } from 'next/font/google'
+import './globals.css'
+import ThemeProvider from '@/components/ThemeProvider'
 
 const inter = Inter({
-    subsets: ['latin'],
-});
+    subsets: ['latin']
+})
 
 export default function RootLayout({
-    children,
+    children
 }: {
-    children: React.ReactNode;
+    children: React.ReactNode
 }) {
     return (
-        <html lang='en'>
-            <body className={inter.className}>
-                <Provider>
-                    <Header />
-                    {children}
-                </Provider>
-            </body>
-        </html>
-    );
+        <ThemeProvider>
+            <html lang='en'>
+                <body className={inter.className}>
+                    <Provider>
+                        <Header />
+                        {children}
+                    </Provider>
+                </body>
+            </html>
+        </ThemeProvider>
+    )
 }
