@@ -28,13 +28,13 @@ const Header = () => {
                             Sign Out
                         </button>
                         <Link href={`/user/${data.user.id}`}>
-                            {data.user.image && data.user.name ? (
+                            {data.user.image ? (
                                 <Image
                                     src={data.user.image}
                                     width={24}
                                     height={24}
                                     className='rounded-full'
-                                    alt={data.user.name}
+                                    alt={data.user.name || ''}
                                 />
                             ) : (
                                 <BsPerson className='h-6 w-6' />

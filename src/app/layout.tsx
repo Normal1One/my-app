@@ -1,7 +1,7 @@
 import Header from '@/components/Header'
 import Provider from '../components/Provider'
 import { Inter } from 'next/font/google'
-import './globals.css'
+import '../styles/globals.css'
 import ThemeProvider from '@/components/ThemeProvider'
 
 const inter = Inter({

@@ -14,6 +14,7 @@ import {
     BsTwitter
 } from 'react-icons/bs'
 import { useState } from 'react'
+import Link from 'next/link'
 
 const schema = z
     .object({
@@ -87,6 +88,7 @@ const Register = () => {
                     onSubmit={handleSubmit(onSubmit)}
                     noValidate
                 >
+                    <p className='mb-5 self-center text-2xl'>Sign Up</p>
                     <input
                         className='appearance-none rounded border-rose-600 p-3 leading-tight focus:outline-none aria-invalid:border-2 dark:bg-black'
                         type='text'
@@ -121,9 +123,9 @@ const Register = () => {
                             className='rounded-r bg-white pr-3 dark:bg-black'
                         >
                             {show.password ? (
-                                <BsEyeSlash className='h-5 w-5 fill-gray-500' />
+                                <BsEyeSlash className='h-5 w-5 fill-gray-500 hover:opacity-80' />
                             ) : (
-                                <BsEye className='h-5 w-5 fill-gray-500' />
+                                <BsEye className='h-5 w-5 fill-gray-500 hover:opacity-80' />
                             )}
                         </button>
                     </div>
@@ -146,9 +148,9 @@ const Register = () => {
                             className='rounded-r bg-white pr-3 dark:bg-black'
                         >
                             {show.confirmPassword ? (
-                                <BsEyeSlash className='h-5 w-5 fill-gray-500' />
+                                <BsEyeSlash className='h-5 w-5 fill-gray-500 hover:opacity-80' />
                             ) : (
-                                <BsEye className='h-5 w-5 fill-gray-500' />
+                                <BsEye className='h-5 w-5 fill-gray-500 hover:opacity-80' />
                             )}
                         </button>
                     </div>
@@ -202,6 +204,12 @@ const Register = () => {
                     >
                         Sign up with Twitter <BsTwitter />
                     </button>
+                    <Link
+                        href='/login'
+                        className='mt-2 self-center text-sm text-gray-500'
+                    >
+                        Already have an account?
+                    </Link>
                 </form>
             </div>
         </section>
