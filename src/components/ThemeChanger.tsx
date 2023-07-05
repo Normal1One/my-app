@@ -8,12 +8,12 @@ const ThemeChanger = () => {
         <div>
             {theme === 'dark' ? (
                 <BsMoon
-                    className='cursor-pointer'
+                    className='h-6 w-6 cursor-pointer'
                     onClick={() => setTheme('light')}
                 />
             ) : (
                 <BsSun
-                    className='cursor-pointer'
+                    className='h-6 w-6 cursor-pointer'
                     onClick={() => setTheme('dark')}
                 />
             )}

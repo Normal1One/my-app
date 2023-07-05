@@ -1,8 +1,10 @@
-import Header from '@/components/Header'
-import Provider from '../components/Provider'
+'use client'
+
 import { Inter } from 'next/font/google'
 import '../styles/globals.css'
-import ThemeProvider from '@/components/ThemeProvider'
+import { ServerThemeProvider } from '@wits/next-themes'
+import { SessionProvider } from 'next-auth/react'
+import { Toaster } from 'react-hot-toast'
 
 const inter = Inter({
     subsets: ['latin']
@@ -14,15 +16,15 @@ export default function RootLayout({
     children: React.ReactNode
 }) {
     return (
-        <ThemeProvider>
+        <ServerThemeProvider attribute='class'>
             <html lang='en'>
                 <body className={inter.className}>
-                    <Provider>
-                        <Header />
+                    <SessionProvider>
+                        <Toaster />
                         {children}
-                    </Provider>
+                    </SessionProvider>
                 </body>
             </html>
-        </ThemeProvider>
+        </ServerThemeProvider>
     )
 }

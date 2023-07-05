@@ -12,7 +12,7 @@ import {
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { toast, Toaster } from 'react-hot-toast'
+import { toast } from 'react-hot-toast'
 import { useState } from 'react'
 import Link from 'next/link'
 
@@ -55,112 +55,105 @@ const SignIn = () => {
     }
 
     return (
-        <section>
-            <div>
-                <Toaster />
-            </div>
-            <div className='flex h-[calc(100vh-64px)] align-middle'>
-                <form
-                    className='m-auto flex w-[20rem] max-w-xs flex-col gap-2 rounded bg-gray-300 p-7 shadow-xl dark:bg-gray-700'
-                    onSubmit={handleSubmit(onSubmit)}
-                    noValidate
-                >
-                    <p className='mb-5 self-center text-2xl'>Sign In</p>
+        <div className='flex h-[calc(100vh-64px)] align-middle'>
+            <form
+                className='m-auto flex w-[20rem] max-w-xs flex-col gap-2 rounded bg-gray-300 p-7 shadow-xl dark:bg-gray-700'
+                onSubmit={handleSubmit(onSubmit)}
+                noValidate
+            >
+                <p className='mb-5 self-center text-2xl'>Sign In</p>
+                <input
+                    className='appearance-none rounded border-rose-600 p-3 leading-tight focus:outline-none aria-invalid:border-2 dark:bg-black'
+                    type='text'
+                    placeholder='Email'
+                    aria-invalid={errors.email ? 'true' : 'false'}
+                    {...register('email')}
+                ></input>
+                <p className='text-xs text-rose-600'>{errors.email?.message}</p>
+                <div className='flex'>
                     <input
-                        className='appearance-none rounded border-rose-600 p-3 leading-tight focus:outline-none aria-invalid:border-2 dark:bg-black'
-                        type='text'
-                        placeholder='Email'
-                        aria-invalid={errors.email ? 'true' : 'false'}
-                        {...register('email')}
-                    ></input>
-                    <p className='text-xs text-rose-600'>
-                        {errors.email?.message}
-                    </p>
-                    <div className='flex'>
-                        <input
-                            className='w-full appearance-none rounded-l border-rose-600 p-3 leading-tight focus:outline-none aria-invalid:border-2 dark:bg-black'
-                            type={show ? 'text' : 'password'}
-                            placeholder='Password'
-                            aria-invalid={errors.password ? 'true' : 'false'}
-                            {...register('password')}
-                        />
-                        <button
-                            type='button'
-                            onClick={handleClick}
-                            className='rounded-r bg-white pr-3 dark:bg-black'
-                        >
-                            {show ? (
-                                <BsEyeSlash className='h-5 w-5 fill-gray-500 hover:opacity-80' />
-                            ) : (
-                                <BsEye className='h-5 w-5 fill-gray-500 hover:opacity-80' />
-                            )}
-                        </button>
-                    </div>
-                    <p className='text-xs text-rose-600'>
-                        {errors.password?.message}
-                    </p>
-                    <Link
-                        href='/forgot'
-                        className='mb-2 w-max text-sm text-gray-500'
-                    >
-                        Forgot password?
-                    </Link>
+                        className='w-full appearance-none rounded-l border-rose-600 p-3 leading-tight focus:outline-none aria-invalid:border-2 dark:bg-black'
+                        type={show ? 'text' : 'password'}
+                        placeholder='Password'
+                        aria-invalid={errors.password ? 'true' : 'false'}
+                        {...register('password')}
+                    />
                     <button
-                        className='m-auto w-full rounded bg-gray-500 pb-3 pt-3 font-bold text-white hover:opacity-80 focus:outline-none'
-                        type='submit'
-                    >
-                        Sign in
-                    </button>
-                    <div className='grid grid-cols-3 items-center text-gray-400'>
-                        <hr className='border-gray-400' />
-                        <p className='text-center text-sm'>OR</p>
-                        <hr className='border-gray-400' />
-                    </div>
-                    <button
-                        className='m-auto flex w-full flex-row place-content-evenly items-center rounded bg-gray-500 pb-3 pt-3 font-bold text-white hover:opacity-80 focus:outline-none'
                         type='button'
-                        onClick={() =>
-                            signIn('github', {
-                                redirect: true,
-                                callbackUrl: '/'
-                            })
-                        }
+                        onClick={handleClick}
+                        className='rounded-r bg-white pr-3 dark:bg-black'
                     >
-                        Sign in with GitHub <BsGithub />
+                        {show ? (
+                            <BsEyeSlash className='h-5 w-5 fill-gray-500 hover:opacity-80' />
+                        ) : (
+                            <BsEye className='h-5 w-5 fill-gray-500 hover:opacity-80' />
+                        )}
                     </button>
-                    <button
-                        className='m-auto mt-2 flex w-full flex-row place-content-evenly items-center rounded bg-gray-500 pb-3 pt-3 font-bold text-white hover:opacity-80 focus:outline-none'
-                        type='button'
-                        onClick={() =>
-                            signIn('google', {
-                                redirect: true,
-                                callbackUrl: '/'
-                            })
-                        }
-                    >
-                        Sign in with Google <BsGoogle />
-                    </button>
-                    <button
-                        className='m-auto mt-2 flex w-full flex-row place-content-evenly items-center rounded bg-gray-500 pb-3 pt-3 font-bold text-white hover:opacity-80 focus:outline-none'
-                        type='button'
-                        onClick={() =>
-                            signIn('twitter', {
-                                redirect: true,
-                                callbackUrl: '/'
-                            })
-                        }
-                    >
-                        Sign in with Twitter <BsTwitter />
-                    </button>
-                    <Link
-                        href='/register'
-                        className='mt-2 self-center text-sm text-gray-500'
-                    >
-                        Not registered yet?
-                    </Link>
-                </form>
-            </div>
-        </section>
+                </div>
+                <p className='text-xs text-rose-600'>
+                    {errors.password?.message}
+                </p>
+                <Link
+                    href='/forgot'
+                    className='mb-2 w-max text-sm text-gray-500'
+                >
+                    Forgot password?
+                </Link>
+                <button
+                    className='m-auto w-full rounded bg-gray-500 pb-3 pt-3 font-bold text-white hover:opacity-80 focus:outline-none'
+                    type='submit'
+                >
+                    Sign in
+                </button>
+                <div className='grid grid-cols-3 items-center text-gray-400'>
+                    <hr className='border-gray-400' />
+                    <p className='text-center text-sm'>OR</p>
+                    <hr className='border-gray-400' />
+                </div>
+                <button
+                    className='m-auto flex w-full flex-row place-content-evenly items-center rounded bg-gray-500 pb-3 pt-3 font-bold text-white hover:opacity-80 focus:outline-none'
+                    type='button'
+                    onClick={() =>
+                        signIn('github', {
+                            redirect: true,
+                            callbackUrl: '/'
+                        })
+                    }
+                >
+                    Sign in with GitHub <BsGithub />
+                </button>
+                <button
+                    className='m-auto mt-2 flex w-full flex-row place-content-evenly items-center rounded bg-gray-500 pb-3 pt-3 font-bold text-white hover:opacity-80 focus:outline-none'
+                    type='button'
+                    onClick={() =>
+                        signIn('google', {
+                            redirect: true,
+                            callbackUrl: '/'
+                        })
+                    }
+                >
+                    Sign in with Google <BsGoogle />
+                </button>
+                <button
+                    className='m-auto mt-2 flex w-full flex-row place-content-evenly items-center rounded bg-gray-500 pb-3 pt-3 font-bold text-white hover:opacity-80 focus:outline-none'
+                    type='button'
+                    onClick={() =>
+                        signIn('twitter', {
+                            redirect: true,
+                            callbackUrl: '/'
+                        })
+                    }
+                >
+                    Sign in with Twitter <BsTwitter />
+                </button>
+                <Link
+                    href='/register'
+                    className='mt-2 self-center text-sm text-gray-500'
+                >
+                    Not registered yet?
+                </Link>
+            </form>
+        </div>
     )
 }
 

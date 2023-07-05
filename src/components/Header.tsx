@@ -12,11 +12,14 @@ const Header = () => {
     return (
         <div className='bg-gray-200 dark:bg-gray-800'>
             <div className='m-auto flex max-w-7xl items-center justify-around pb-5 pt-5'>
-                <Link href='/' className='hover:opacity-50'>
+                <Link href='/' className='hover:opacity-80'>
                     Home
                 </Link>
-                <Link href='/register' className='hover:opacity-50'>
+                <Link href='/register' className='hover:opacity-80'>
                     Sign Up
+                </Link>
+                <Link href='/user/reset-password' className='hover:opacity-80'>
+                    Reset Password
                 </Link>
                 {data ? (
                     <>
