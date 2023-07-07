@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    input {
+        @apply border-gray-400 bg-gray-200 p-3 transition focus:shadow-md focus:outline-none
+    }
+}
+
+@layer components {
+    .input-invalid {
+        @apply border-rose-600 bg-rose-200 placeholder-rose-600
+    }
+}

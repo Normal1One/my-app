@@ -4,7 +4,6 @@ import { signIn, signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { BsPerson } from 'react-icons/bs'
-import ThemeChanger from './ThemeChanger'
 
 const Header = () => {
     const { data } = useSession()
@@ -47,7 +46,6 @@ const Header = () => {
                 ) : (
                     <button onClick={() => signIn()}>Sign In</button>
                 )}
-                <ThemeChanger />
             </div>
         </div>
     )
