@@ -6,15 +6,10 @@ import * as z from 'zod'
 import axios from 'axios'
 import { toast } from 'react-hot-toast'
 import { signIn } from 'next-auth/react'
-import {
-    BsEye,
-    BsEyeSlash,
-    BsGithub,
-    BsGoogle,
-    BsTwitter
-} from 'react-icons/bs'
+import { BsEye, BsEyeSlash } from 'react-icons/bs'
 import { useState } from 'react'
 import Link from 'next/link'
+import SocialLoginButtons from '@/components/SocialLoginButtons'
 
 const schema = z
     .object({
@@ -24,6 +19,7 @@ const schema = z
         }),
         password: z
             .string()
+            .min(1, { message: 'Password is required' })
             .min(8, { message: 'Password must be at least 8 characters' }),
         confirmPassword: z
             .string()
@@ -46,7 +42,7 @@ interface ShowState {
     confirmPassword: boolean
 }
 
-const Register = () => {
+const SignUp = () => {
     const [show, setShow] = useState({
         password: false,
         confirmPassword: false
@@ -70,77 +66,108 @@ const Register = () => {
                 email: values.email
             })
             toast.success(
-                'A verification link has been sent to your email account'
+                `A verification link has been sent to ${values.email}`
             )
         } catch (error) {
-            toast.error('Something went wrong!')
+            toast.error('Something went wrong')
         }
     }
 
     return (
-        <div className='flex h-[calc(100vh-64px)] align-middle'>
+        <div className='flex h-screen'>
             <form
-                className='m-auto flex w-[20rem] max-w-xs flex-col gap-2 rounded bg-gray-300 p-7 shadow-xl dark:bg-gray-700'
+                className='m-auto flex w-96 flex-col gap-2'
                 onSubmit={handleSubmit(onSubmit)}
                 noValidate
             >
                 <p className='mb-5 self-center text-2xl'>Sign Up</p>
+                <label htmlFor='name' className='mb-2 text-sm'>
+                    Name
+                </label>
                 <input
-                    className='appearance-none rounded border-rose-600 p-3 leading-tight focus:outline-none aria-invalid:border-2 dark:bg-black'
+                    className={`rounded border ${
+                        errors.name && 'input-invalid'
+                    }`}
                     type='text'
-                    placeholder='Name'
-                    aria-invalid={errors.name ? 'true' : 'false'}
+                    placeholder='J Smith'
+                    id='name'
                     {...register('name')}
                 />
                 <p className='text-xs text-rose-600'>{errors.name?.message}</p>
+                <label htmlFor='email' className='mb-2 text-sm'>
+                    Email
+                </label>
                 <input
-                    className='w-full appearance-none rounded border-rose-600 p-3 leading-tight focus:outline-none aria-invalid:border-2 dark:bg-black'
+                    className={`rounded border ${
+                        errors.email && 'input-invalid'
+                    }`}
                     type='email'
-                    placeholder='Email'
-                    aria-invalid={errors.email ? 'true' : 'false'}
+                    autoComplete='username'
+                    placeholder='jsmith@example.com'
+                    id='email'
                     {...register('email')}
                 />
                 <p className='text-xs text-rose-600'>{errors.email?.message}</p>
+                <label htmlFor='password' className='mb-2 text-sm'>
+                    Password
+                </label>
                 <div className='flex'>
                     <input
-                        className='w-full appearance-none rounded-l border-rose-600 p-3 leading-tight focus:outline-none aria-invalid:border-2 dark:bg-black'
+                        className={`w-full rounded-l border-b border-l border-t ${
+                            errors.password && 'input-invalid'
+                        }`}
                         type={show.password ? 'text' : 'password'}
-                        placeholder='Password'
-                        aria-invalid={errors.password ? 'true' : 'false'}
+                        autoComplete='new-password'
+                        placeholder='••••••••'
+                        id='password'
                         {...register('password')}
                     />
                     <button
                         type='button'
                         onClick={() => handleClick('password')}
-                        className='rounded-r bg-white pr-3 dark:bg-black'
+                        className={`rounded-r border-b border-r border-t pr-3 ${
+                            errors.password
+                                ? 'border-rose-600 bg-rose-200'
+                                : 'border-gray-400 bg-gray-200'
+                        }`}
                     >
                         {show.password ? (
-                            <BsEyeSlash className='h-5 w-5 fill-gray-500 hover:opacity-80' />
+                            <BsEyeSlash className='h-5 w-5 fill-gray-400 hover:opacity-80' />
                         ) : (
-                            <BsEye className='h-5 w-5 fill-gray-500 hover:opacity-80' />
+                            <BsEye className='h-5 w-5 fill-gray-400 hover:opacity-80' />
                         )}
                     </button>
                 </div>
                 <p className='text-xs text-rose-600'>
                     {errors.password?.message}
                 </p>
+                <label htmlFor='confirmPassword' className='mb-2 text-sm'>
+                    Confirm Password
+                </label>
                 <div className='flex'>
                     <input
-                        className='w-full appearance-none rounded-l border-rose-600 p-3 leading-tight focus:outline-none aria-invalid:border-2 dark:bg-black'
+                        className={`w-full rounded-l border-b border-l border-t ${
+                            errors.confirmPassword && 'input-invalid'
+                        }`}
                         type={show.confirmPassword ? 'text' : 'password'}
-                        placeholder='Confirm Password'
-                        aria-invalid={errors.confirmPassword ? 'true' : 'false'}
+                        autoComplete='new-password'
+                        placeholder='••••••••'
+                        id='confirmPassword'
                         {...register('confirmPassword')}
                     />
                     <button
                         type='button'
                         onClick={() => handleClick('confirmPassword')}
-                        className='rounded-r bg-white pr-3 dark:bg-black'
+                        className={`rounded-r border-b border-r border-t pr-3 ${
+                            errors.confirmPassword
+                                ? 'border-rose-600 bg-rose-200'
+                                : 'border-gray-400 bg-gray-200'
+                        }`}
                     >
                         {show.confirmPassword ? (
-                            <BsEyeSlash className='h-5 w-5 fill-gray-500 hover:opacity-80' />
+                            <BsEyeSlash className='h-5 w-5 fill-gray-400 hover:opacity-80' />
                         ) : (
-                            <BsEye className='h-5 w-5 fill-gray-500 hover:opacity-80' />
+                            <BsEye className='h-5 w-5 fill-gray-400 hover:opacity-80' />
                         )}
                     </button>
                 </div>
@@ -148,7 +175,7 @@ const Register = () => {
                     {errors.confirmPassword?.message}
                 </p>
                 <button
-                    className='m-auto w-full rounded bg-gray-500 pb-3 pt-3 font-bold text-white hover:opacity-80 focus:outline-none'
+                    className='w-full rounded bg-gray-400 pb-3 pt-3 text-white hover:opacity-80'
                     type='submit'
                 >
                     Sign Up
@@ -158,51 +185,16 @@ const Register = () => {
                     <p className='text-center text-sm'>OR</p>
                     <hr className='border-gray-400' />
                 </div>
-                <button
-                    className='m-auto flex w-full flex-row place-content-evenly items-center rounded bg-gray-500 pb-3 pt-3 font-bold text-white hover:opacity-80 focus:outline-none'
-                    type='button'
-                    onClick={() =>
-                        signIn('github', {
-                            redirect: true,
-                            callbackUrl: '/'
-                        })
-                    }
-                >
-                    Sign up with GitHub <BsGithub />
-                </button>
-                <button
-                    className='m-auto mt-2 flex w-full flex-row place-content-evenly items-center rounded bg-gray-500 pb-3 pt-3 font-bold text-white hover:opacity-80 focus:outline-none'
-                    type='button'
-                    onClick={() =>
-                        signIn('google', {
-                            redirect: true,
-                            callbackUrl: '/'
-                        })
-                    }
-                >
-                    Sign up with Google <BsGoogle />
-                </button>
-                <button
-                    className='m-auto mt-2 flex w-full flex-row place-content-evenly items-center rounded bg-gray-500 pb-3 pt-3 font-bold text-white hover:opacity-80 focus:outline-none'
-                    type='button'
-                    onClick={() =>
-                        signIn('twitter', {
-                            redirect: true,
-                            callbackUrl: '/'
-                        })
-                    }
-                >
-                    Sign up with Twitter <BsTwitter />
-                </button>
-                <Link
-                    href='/login'
-                    className='mt-2 self-center text-sm text-gray-500'
-                >
-                    Already have an account?
-                </Link>
+                <SocialLoginButtons />
+                <p className='mt-2 self-center text-sm'>
+                    {'Have an account? '}
+                    <Link href='/sign-in' className='text-gray-400 underline'>
+                        Sign In
+                    </Link>
+                </p>
             </form>
         </div>
     )
 }
 
-export default Register
+export default SignUp

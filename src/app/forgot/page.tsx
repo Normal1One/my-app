@@ -1,10 +1,12 @@
 'use client'
 
-import { signIn } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { toast } from 'react-hot-toast'
+import Link from 'next/link'
+import axios from '@/lib/axios'
+import { useRouter } from 'next/navigation'
 
 const schema = z.object({
     email: z.string().min(1, { message: 'Email is required' }).email({
@@ -12,45 +14,66 @@ const schema = z.object({
     })
 })
 
+type formValues = {
+    email: string
+}
+
 const Forgot = () => {
+    const router = useRouter()
     const {
         register,
         handleSubmit,
         formState: { errors }
-    } = useForm<{ email: string }>({
+    } = useForm<formValues>({
         resolver: zodResolver(schema)
     })
 
-    const onSubmit = async ({ email }: { email: string }) => {
+    const onSubmit = async ({ email }: formValues) => {
         try {
-            signIn('email', { email, redirect: false, callbackUrl: '/' })
-            toast.success(
-                'A verification link has been sent to your email account'
-            )
+            await axios.post('/api/forgot', email)
+            toast.success(`Email sent to ${email}`)
+            router.push('/sign-in')
         } catch (error) {
-            toast.error('Something went wrong!')
+            toast.error('Something went wrong')
         }
     }
 
     return (
-        <div className='flex h-[calc(100vh-64px)] align-middle'>
+        <div className='flex h-screen'>
             <form
-                className='m-auto flex w-[20rem] max-w-xs flex-col gap-2 rounded bg-gray-300 p-7 shadow-xl dark:bg-gray-700'
+                className='m-auto flex w-96 flex-col gap-2'
                 onSubmit={handleSubmit(onSubmit)}
                 noValidate
             >
-                <p className='mb-5 self-center text-2xl'>Sign in with Email</p>
+                <p className='mb-5 self-center text-2xl'>Email Reset Link</p>
+                <label htmlFor='email' className='mb-2 text-sm'>
+                    Email
+                </label>
                 <input
-                    className='appearance-none rounded border-rose-600 p-3 leading-tight focus:outline-none aria-invalid:border-2 dark:bg-black'
+                    className={`rounded border ${
+                        errors.email && 'input-invalid'
+                    }`}
                     type='text'
-                    placeholder='Email'
-                    aria-invalid={errors.email ? 'true' : 'false'}
+                    placeholder='jsmith@example.com'
+                    id='email'
                     {...register('email')}
                 ></input>
                 <p className='text-xs text-rose-600'>{errors.email?.message}</p>
-                <button className='m-auto flex w-full flex-row place-content-evenly items-center rounded bg-gray-500 pb-3 pt-3 font-bold text-white hover:opacity-80 focus:outline-none'>
-                    Sign in with Email
+                <button className='w-full rounded bg-gray-400 pb-3 pt-3 font-bold text-white hover:opacity-80'>
+                    Submit
                 </button>
+                <p className='mt-2 self-center text-sm'>
+                    {'Have an account? '}
+                    <Link href='/sign-in' className='text-gray-400 underline'>
+                        Sign In
+                    </Link>
+                </p>
+                <p className='self-center text-sm'>
+                    {"Don't have an account? "}
+                    <Link href='/sign-in' className='text-gray-400 underline'>
+                        Sign Up
+                    </Link>
+                </p>
             </form>
         </div>
     )

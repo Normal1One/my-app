@@ -41,11 +41,11 @@ const SignIn = () => {
     const onSubmit = async (data: formValues) => {
         signIn('credentials', { ...data, redirect: false }).then((callback) => {
             if (callback?.error) {
-                toast.error(callback.error)
+                toast.error('Something went wrong')
             }
             if (callback?.ok && !callback?.error) {
-                toast.success('Signed in successfully!')
-                setTimeout(() => router.push('/'), 1000)
+                toast.success('Signed in successfully')
+                router.push('/')
             }
         })
     }
@@ -127,7 +127,7 @@ const SignIn = () => {
                 <SocialLoginButtons />
                 <p className='mt-2 self-center text-sm'>
                     {"Don't have an account? "}
-                    <Link href='/register' className='text-gray-400 underline'>
+                    <Link href='/sign-up' className='text-gray-400 underline'>
                         Sign Up
                     </Link>
                 </p>

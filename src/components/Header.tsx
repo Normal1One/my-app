@@ -14,11 +14,8 @@ const Header = () => {
                 <Link href='/' className='hover:opacity-80'>
                     Home
                 </Link>
-                <Link href='/register' className='hover:opacity-80'>
+                <Link href='/sign-up' className='hover:opacity-80'>
                     Sign Up
-                </Link>
-                <Link href='/user/reset-password' className='hover:opacity-80'>
-                    Reset Password
                 </Link>
                 {data ? (
                     <>
