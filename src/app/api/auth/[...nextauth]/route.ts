@@ -46,14 +46,20 @@ export const authOptions: NextAuthOptions = {
             },
             async authorize(credentials) {
                 const response = await axios.post(
-                    `${process.env.NEXTAUTH_URL}/api/login`,
+                    `${process.env.NEXTAUTH_URL}/api/sign-in`,
                     JSON.stringify({
                         email: credentials?.email,
                         password: credentials?.password
                     })
                 )
 
-                return response.data || null
+                const user = response.data
+
+                if (user.ok && user) {
+                    return user
+                }
+
+                return null
             }
         })
     ],
@@ -69,7 +75,7 @@ export const authOptions: NextAuthOptions = {
             if (account) {
                 const { hashedPassword, ...result } = user as User
                 const accessToken = signJwtAccessToken(result)
-                return { ...token, accessToken }
+                return { ...token, accessToken, ...user }
             }
             return { ...token, ...user }
         },

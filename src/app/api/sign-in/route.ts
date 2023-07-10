@@ -29,5 +29,5 @@ export const POST = async (request: NextRequest) => {
 
     const { hashedPassword, ...result } = user
     const accessToken = signJwtAccessToken(result)
-    return new Response(JSON.stringify({ ...result, accessToken }))
+    return new NextResponse(JSON.stringify({ ...result, accessToken }))
 }

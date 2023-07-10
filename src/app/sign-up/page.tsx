@@ -3,13 +3,14 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import axios from 'axios'
+import axios, { isAxiosError } from 'axios'
 import { toast } from 'react-hot-toast'
 import { signIn } from 'next-auth/react'
-import { BsEye, BsEyeSlash } from 'react-icons/bs'
 import { useState } from 'react'
 import Link from 'next/link'
 import SocialLoginButtons from '@/components/SocialLoginButtons'
+import PasswordButton from '@/components/PasswordButton'
+import Button from '@/components/Button'
 
 const schema = z
     .object({
@@ -59,17 +60,20 @@ const SignUp = () => {
 
     const onSubmit = async ({ confirmPassword, ...values }: formValues) => {
         try {
-            await axios.post('/api/register', JSON.stringify(values))
+            const response = await axios.post(
+                '/api/sign-up',
+                JSON.stringify(values)
+            )
             signIn('email', {
                 redirect: false,
                 callbackUrl: '/',
                 email: values.email
             })
-            toast.success(
-                `A verification link has been sent to ${values.email}`
-            )
+            toast.success(response.data)
         } catch (error) {
-            toast.error('Something went wrong')
+            if (isAxiosError(error)) {
+                toast.error(error.response?.data)
+            }
         }
     }
 
@@ -85,8 +89,9 @@ const SignUp = () => {
                     Name
                 </label>
                 <input
-                    className={`rounded border ${
-                        errors.name && 'input-invalid'
+                    className={`rounded border border-gray-400 bg-gray-200 p-3 transition focus:shadow-md focus:outline-none ${
+                        errors.name &&
+                        'border-rose-600 bg-rose-200 placeholder-rose-600'
                     }`}
                     type='text'
                     placeholder='J Smith'
@@ -98,8 +103,9 @@ const SignUp = () => {
                     Email
                 </label>
                 <input
-                    className={`rounded border ${
-                        errors.email && 'input-invalid'
+                    className={`rounded border border-gray-400 bg-gray-200 p-3 transition focus:shadow-md focus:outline-none ${
+                        errors.email &&
+                        'border-rose-600 bg-rose-200 placeholder-rose-600'
                     }`}
                     type='email'
                     autoComplete='username'
@@ -113,8 +119,9 @@ const SignUp = () => {
                 </label>
                 <div className='flex'>
                     <input
-                        className={`w-full rounded-l border-b border-l border-t ${
-                            errors.password && 'input-invalid'
+                        className={`w-full rounded-l border-b border-l border-t border-gray-400 bg-gray-200 p-3 transition focus:shadow-md focus:outline-none ${
+                            errors.password &&
+                            'border-rose-600 bg-rose-200 placeholder-rose-600'
                         }`}
                         type={show.password ? 'text' : 'password'}
                         autoComplete='new-password'
@@ -122,21 +129,11 @@ const SignUp = () => {
                         id='password'
                         {...register('password')}
                     />
-                    <button
-                        type='button'
-                        onClick={() => handleClick('password')}
-                        className={`rounded-r border-b border-r border-t pr-3 ${
-                            errors.password
-                                ? 'border-rose-600 bg-rose-200'
-                                : 'border-gray-400 bg-gray-200'
-                        }`}
-                    >
-                        {show.password ? (
-                            <BsEyeSlash className='h-5 w-5 fill-gray-400 hover:opacity-80' />
-                        ) : (
-                            <BsEye className='h-5 w-5 fill-gray-400 hover:opacity-80' />
-                        )}
-                    </button>
+                    <PasswordButton
+                        isHidden={show.password}
+                        isInvalid={errors.password}
+                        handleClick={() => handleClick('password')}
+                    />
                 </div>
                 <p className='text-xs text-rose-600'>
                     {errors.password?.message}
@@ -146,8 +143,9 @@ const SignUp = () => {
                 </label>
                 <div className='flex'>
                     <input
-                        className={`w-full rounded-l border-b border-l border-t ${
-                            errors.confirmPassword && 'input-invalid'
+                        className={`w-full rounded-l border-b border-l border-t border-gray-400 bg-gray-200 p-3 transition focus:shadow-md focus:outline-none ${
+                            errors.confirmPassword &&
+                            'border-rose-600 bg-rose-200 placeholder-rose-600'
                         }`}
                         type={show.confirmPassword ? 'text' : 'password'}
                         autoComplete='new-password'
@@ -155,31 +153,16 @@ const SignUp = () => {
                         id='confirmPassword'
                         {...register('confirmPassword')}
                     />
-                    <button
-                        type='button'
-                        onClick={() => handleClick('confirmPassword')}
-                        className={`rounded-r border-b border-r border-t pr-3 ${
-                            errors.confirmPassword
-                                ? 'border-rose-600 bg-rose-200'
-                                : 'border-gray-400 bg-gray-200'
-                        }`}
-                    >
-                        {show.confirmPassword ? (
-                            <BsEyeSlash className='h-5 w-5 fill-gray-400 hover:opacity-80' />
-                        ) : (
-                            <BsEye className='h-5 w-5 fill-gray-400 hover:opacity-80' />
-                        )}
-                    </button>
+                    <PasswordButton
+                        isHidden={show.confirmPassword}
+                        isInvalid={errors.confirmPassword}
+                        handleClick={() => handleClick('confirmPassword')}
+                    />
                 </div>
                 <p className='text-xs text-rose-600'>
                     {errors.confirmPassword?.message}
                 </p>
-                <button
-                    className='w-full rounded bg-gray-400 pb-3 pt-3 text-white hover:opacity-80'
-                    type='submit'
-                >
-                    Sign Up
-                </button>
+                <Button text='Sign Up' />
                 <div className='grid grid-cols-3 items-center text-gray-400'>
                     <hr className='border-gray-400' />
                     <p className='text-center text-sm'>OR</p>

@@ -16,7 +16,7 @@ export const POST = async (request: NextRequest) => {
         }
     })
 
-    if (!user) {
+    if (!user || !user?.hashedPassword) {
         return new NextResponse('No user found', { status: 404 })
     }
 
@@ -33,7 +33,7 @@ export const POST = async (request: NextRequest) => {
         }
     })
 
-    const link = `${process.env.NEXTAUTH_URL}/reset-password/${token}`
+    const link = `${process.env.NEXTAUTH_URL}/reset/${token}`
 
     const message = `<div>Click on the link below to reset your password.</div></br><div>${link}</div>`
 

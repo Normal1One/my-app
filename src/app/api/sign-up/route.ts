@@ -29,5 +29,5 @@ export const POST = async (request: NextRequest) => {
     })
 
     const { hashedPassword, ...result } = user
-    return new Response(JSON.stringify(result))
+    return new NextResponse(JSON.stringify(result))
 }

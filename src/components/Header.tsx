@@ -9,7 +9,7 @@ const Header = () => {
     const { data } = useSession()
 
     return (
-        <div className='bg-gray-200 dark:bg-gray-800'>
+        <div className='bg-gray-200'>
             <div className='m-auto flex max-w-7xl items-center justify-around pb-5 pt-5'>
                 <Link href='/' className='hover:opacity-80'>
                     Home

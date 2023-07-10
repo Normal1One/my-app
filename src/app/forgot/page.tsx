@@ -7,6 +7,8 @@ import { toast } from 'react-hot-toast'
 import Link from 'next/link'
 import axios from '@/lib/axios'
 import { useRouter } from 'next/navigation'
+import Button from '@/components/Button'
+import { isAxiosError } from 'axios'
 
 const schema = z.object({
     email: z.string().min(1, { message: 'Email is required' }).email({
@@ -30,11 +32,13 @@ const Forgot = () => {
 
     const onSubmit = async ({ email }: formValues) => {
         try {
-            await axios.post('/api/forgot', email)
-            toast.success(`Email sent to ${email}`)
+            const response = await axios.post('/api/forgot', email)
+            toast.success(response.data)
             router.push('/sign-in')
         } catch (error) {
-            toast.error('Something went wrong')
+            if (isAxiosError(error)) {
+                toast.error(error.response?.data)
+            }
         }
     }
 
@@ -50,8 +54,9 @@ const Forgot = () => {
                     Email
                 </label>
                 <input
-                    className={`rounded border ${
-                        errors.email && 'input-invalid'
+                    className={`rounded border border-gray-400 bg-gray-200 p-3 transition focus:shadow-md focus:outline-none ${
+                        errors.email &&
+                        'border-rose-600 bg-rose-200 placeholder-rose-600'
                     }`}
                     type='text'
                     placeholder='jsmith@example.com'
@@ -59,9 +64,7 @@ const Forgot = () => {
                     {...register('email')}
                 ></input>
                 <p className='text-xs text-rose-600'>{errors.email?.message}</p>
-                <button className='w-full rounded bg-gray-400 pb-3 pt-3 font-bold text-white hover:opacity-80'>
-                    Submit
-                </button>
+                <Button text='Submit' />
                 <p className='mt-2 self-center text-sm'>
                     {'Have an account? '}
                     <Link href='/sign-in' className='text-gray-400 underline'>

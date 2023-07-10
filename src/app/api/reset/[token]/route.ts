@@ -7,8 +7,7 @@ export const PUT = async (
     request: NextRequest,
     { params }: { params: { token: string } }
 ) => {
-    const body = await request.json()
-    const { password, newPassword } = body
+    const { newPassword } = await request.json()
 
     const { id } = jwt.verify(
         params.token,
@@ -25,15 +24,9 @@ export const PUT = async (
         return new NextResponse('No user found', { status: 404 })
     }
 
-    const passwordMatch = await bcrypt.compare(password, user.hashedPassword)
-
-    if (!passwordMatch) {
-        return new NextResponse('Incorrect password', { status: 401 })
-    }
-
     await prisma.user.update({
         where: {
-            id: user.id
+            id
         },
         data: {
             hashedPassword: await bcrypt.hash(newPassword, 10),

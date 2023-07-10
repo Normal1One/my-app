@@ -21,5 +21,5 @@ export const GET = async (
     }
 
     const { hashedPassword, ...result } = user
-    return new Response(JSON.stringify(result))
+    return new NextResponse(JSON.stringify(result))
 }
