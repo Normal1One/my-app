@@ -1,7 +1,7 @@
-import bcrypt from 'bcrypt'
-import { prisma } from '@/lib/prismadb'
-import { NextRequest, NextResponse } from 'next/server'
 import { signJwtAccessToken } from '@/lib/jwt'
+import { prisma } from '@/lib/prismadb'
+import bcrypt from 'bcrypt'
+import { NextRequest, NextResponse } from 'next/server'
 
 export const POST = async (request: NextRequest) => {
     const body = await request.json()

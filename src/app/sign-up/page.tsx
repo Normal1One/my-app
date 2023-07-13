@@ -1,16 +1,16 @@
 'use client'
 
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
-import axios, { isAxiosError } from 'axios'
-import { toast } from 'react-hot-toast'
-import { signIn } from 'next-auth/react'
-import { useState } from 'react'
-import Link from 'next/link'
-import SocialLoginButtons from '@/components/SocialLoginButtons'
-import PasswordButton from '@/components/PasswordButton'
 import Button from '@/components/Button'
+import PasswordButton from '@/components/PasswordButton'
+import SocialLoginButtons from '@/components/SocialLoginButtons'
+import { zodResolver } from '@hookform/resolvers/zod'
+import axios, { isAxiosError } from 'axios'
+import { signIn } from 'next-auth/react'
+import Link from 'next/link'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'react-hot-toast'
+import { z } from 'zod'
 
 const schema = z
     .object({
@@ -60,19 +60,20 @@ const SignUp = () => {
 
     const onSubmit = async ({ confirmPassword, ...values }: formValues) => {
         try {
-            const response = await axios.post(
-                '/api/sign-up',
-                JSON.stringify(values)
-            )
+            await axios.post('/api/sign-up', JSON.stringify(values))
             signIn('email', {
                 redirect: false,
                 callbackUrl: '/',
                 email: values.email
             })
-            toast.success(response.data)
+            toast.success(
+                `Email sent to ${values.email}, please check your email`
+            )
         } catch (error) {
             if (isAxiosError(error)) {
                 toast.error(error.response?.data)
+            } else {
+                toast.error('Something went wrong')
             }
         }
     }

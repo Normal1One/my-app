@@ -26,7 +26,7 @@ const Header = () => {
                         >
                             Sign Out
                         </button>
-                        <Link href={`/user/${data.user.id}`}>
+                        <Link href={`/users/${data.user.id}`}>
                             {data.user.image ? (
                                 <Image
                                     src={data.user.image}

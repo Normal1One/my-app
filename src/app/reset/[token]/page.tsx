@@ -1,13 +1,13 @@
 'use client'
 
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
-import { toast } from 'react-hot-toast'
-import { useState } from 'react'
-import axios, { AxiosError, isAxiosError } from 'axios'
-import PasswordButton from '@/components/PasswordButton'
 import Button from '@/components/Button'
+import PasswordButton from '@/components/PasswordButton'
+import { zodResolver } from '@hookform/resolvers/zod'
+import axios, { isAxiosError } from 'axios'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'react-hot-toast'
+import { z } from 'zod'
 
 const schema = z
     .object({
@@ -59,6 +59,8 @@ const Reset = ({ params }: { params: { token: string } }) => {
         } catch (error) {
             if (isAxiosError(error)) {
                 toast.error(error.response?.data)
+            } else {
+                toast.error('Something went wrong')
             }
         }
     }

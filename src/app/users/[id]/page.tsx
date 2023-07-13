@@ -7,8 +7,8 @@ import Link from 'next/link'
 import { BsPerson } from 'react-icons/bs'
 
 const User = async ({ params }: { params: { id: string } }) => {
-    const data = await getServerSession(authOptions)
-    const response = await AuthGetApi(`api/user/${params.id}`)
+    const session = await getServerSession(authOptions)
+    const response = await AuthGetApi(`api/users/${params.id}`)
 
     return (
         <section>
@@ -28,7 +28,7 @@ const User = async ({ params }: { params: { id: string } }) => {
                     )}
                     <p className='text-lg'>{response.name}</p>
                     <p className='text-lg'>{response.email}</p>
-                    {data?.user.id === params.id && (
+                    {session?.user.id === params.id && (
                         <Link
                             href='/update'
                             className='text-gray-400 underline'

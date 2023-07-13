@@ -1,23 +1,24 @@
-import NextAuth from 'next-auth/next'
-import GoogleProvider from 'next-auth/providers/google'
-import GithubProvider from 'next-auth/providers/github'
-import TwitterProvider from 'next-auth/providers/twitter'
-import EmailProvider from 'next-auth/providers/email'
-import CredentialsProvider from 'next-auth/providers/credentials'
-import { PrismaAdapter } from '@auth/prisma-adapter'
-import { Adapter } from 'next-auth/adapters'
+import axios from '@/lib/axios'
 import { prisma } from '@/lib/prismadb'
-import axios from 'axios'
+import { PrismaAdapter } from '@auth/prisma-adapter'
 import { NextAuthOptions } from 'next-auth'
-import { signJwtAccessToken } from '@/lib/jwt'
-import { User } from '@prisma/client'
+import { Adapter } from 'next-auth/adapters'
+import NextAuth from 'next-auth/next'
+import CredentialsProvider from 'next-auth/providers/credentials'
+import EmailProvider from 'next-auth/providers/email'
+import GithubProvider from 'next-auth/providers/github'
+import GoogleProvider from 'next-auth/providers/google'
+import TwitterProvider from 'next-auth/providers/twitter'
 
 export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma) as Adapter,
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_ID,
-            clientSecret: process.env.GOOGLE_SECRET
+            clientSecret: process.env.GOOGLE_SECRET,
+            authorization: {
+                params: { access_type: 'offline', prompt: 'consent' }
+            }
         }),
         GithubProvider({
             clientId: process.env.GITHUB_ID,
@@ -73,11 +74,14 @@ export const authOptions: NextAuthOptions = {
     callbacks: {
         async jwt({ token, user, account }) {
             if (account) {
-                const { hashedPassword, ...result } = user as User
-                const accessToken = signJwtAccessToken(result)
-                return { ...token, accessToken, ...user }
+                return {
+                    ...user,
+                    ...token,
+                    accessToken: account.access_token,
+                    refreshToken: account.refresh_token
+                }
             }
-            return { ...token, ...user }
+            return { ...user, ...token }
         },
         async session({ session, token }) {
             session.user = token as any

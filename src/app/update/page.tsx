@@ -1,17 +1,17 @@
 'use client'
 
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
-import { BsPerson } from 'react-icons/bs'
-import Image from 'next/image'
-import { useSession } from 'next-auth/react'
-import { FormEvent, useEffect, useState } from 'react'
-import { getFile, uploadFile } from '@/lib/utils'
-import axios from '@/lib/axios'
-import { toast } from 'react-hot-toast'
 import Button from '@/components/Button'
+import useAxiosAuth from '@/lib/hooks/useAxiosAuth'
+import { getFile, uploadFile } from '@/lib/utils'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { isAxiosError } from 'axios'
+import { useSession } from 'next-auth/react'
+import Image from 'next/image'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'react-hot-toast'
+import { BsPerson } from 'react-icons/bs'
+import { z } from 'zod'
 
 const schema = z.object({
     name: z.string().min(1, { message: 'Name is required' }),
@@ -29,6 +29,7 @@ const Update = () => {
     const [file, setFile] = useState<File>()
     const [defaultValuesSet, setDefaultValuesSet] = useState(false)
     const { data } = useSession()
+    const axiosAuth = useAxiosAuth()
     const {
         register,
         handleSubmit,
@@ -46,11 +47,13 @@ const Update = () => {
                 const fileURL = getFile(response.$id)
                 data.fileURL = fileURL
             }
-            await axios.post(`${process.env.NEXTAUTH_URL}/api/update`, data)
+            await axiosAuth.post(`${process.env.NEXTAUTH_URL}/api/update`, data)
             toast.success('User updated successfully')
         } catch (error) {
             if (isAxiosError(error)) {
                 toast.error(error.response?.data)
+            } else {
+                toast.error('Something went wrong')
             }
         }
     }

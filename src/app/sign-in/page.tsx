@@ -1,16 +1,16 @@
 'use client'
 
-import { signIn } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
-import { toast } from 'react-hot-toast'
-import { useState } from 'react'
-import Link from 'next/link'
-import SocialLoginButtons from '@/components/SocialLoginButtons'
-import PasswordButton from '@/components/PasswordButton'
 import Button from '@/components/Button'
+import PasswordButton from '@/components/PasswordButton'
+import SocialLoginButtons from '@/components/SocialLoginButtons'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { signIn } from 'next-auth/react'
+import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'react-hot-toast'
+import { z } from 'zod'
 
 const schema = z.object({
     email: z.string().min(1, { message: 'Email is required' }).email({
@@ -31,6 +31,8 @@ const SignIn = () => {
     const [show, setShow] = useState(false)
     const handleClick = () => setShow(!show)
     const router = useRouter()
+    const searchParams = useSearchParams()
+    const error = searchParams.get('error')
     const {
         register,
         handleSubmit,
@@ -62,6 +64,14 @@ const SignIn = () => {
             }
         })
     }
+
+    useEffect(() => {
+        if (error) {
+            toast.error(
+                'To confirm your identity, sign in with the same account you used originally.'
+            )
+        }
+    }, [error])
 
     return (
         <div className='flex h-screen'>

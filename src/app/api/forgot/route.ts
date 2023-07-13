@@ -1,10 +1,11 @@
 import { prisma } from '@/lib/prismadb'
-import { NextRequest, NextResponse } from 'next/server'
-import jwt from 'jsonwebtoken'
 import { sendEmail } from '@/lib/sendMail'
+import jwt from 'jsonwebtoken'
+import { NextRequest, NextResponse } from 'next/server'
 
 export const POST = async (request: NextRequest) => {
-    const email = await request.json()
+    const body = await request.json()
+    const { email } = body
 
     if (!email) {
         return new NextResponse('Missing fields', { status: 400 })
@@ -21,7 +22,7 @@ export const POST = async (request: NextRequest) => {
     }
 
     const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY!, {
-        expiresIn: '30d'
+        expiresIn: '24h'
     })
 
     await prisma.user.update({
