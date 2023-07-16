@@ -1,6 +1,8 @@
 import axios from '@/lib/axios'
+import { signJwtAccessToken } from '@/lib/jwt'
 import { prisma } from '@/lib/prismadb'
 import { PrismaAdapter } from '@auth/prisma-adapter'
+import { User } from '@prisma/client'
 import { NextAuthOptions } from 'next-auth'
 import { Adapter } from 'next-auth/adapters'
 import NextAuth from 'next-auth/next'
@@ -15,10 +17,7 @@ export const authOptions: NextAuthOptions = {
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_ID,
-            clientSecret: process.env.GOOGLE_SECRET,
-            authorization: {
-                params: { access_type: 'offline', prompt: 'consent' }
-            }
+            clientSecret: process.env.GOOGLE_SECRET
         }),
         GithubProvider({
             clientId: process.env.GITHUB_ID,
@@ -74,12 +73,9 @@ export const authOptions: NextAuthOptions = {
     callbacks: {
         async jwt({ token, user, account }) {
             if (account) {
-                return {
-                    ...user,
-                    ...token,
-                    accessToken: account.access_token,
-                    refreshToken: account.refresh_token
-                }
+                const { hashedPassword, ...result } = user as User
+                const { accessToken, refreshToken } = signJwtAccessToken(result)
+                return { ...user, ...token, accessToken, refreshToken }
             }
             return { ...user, ...token }
         },

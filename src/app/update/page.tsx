@@ -38,15 +38,9 @@ const Update = () => {
     } = useForm<formValues>({
         resolver: zodResolver(schema)
     })
-
     const onSubmit = async (values: formValues) => {
-        const data: { values: formValues; fileURL?: string } = { values }
+        const data: formValues & { file?: File } = values
         try {
-            if (file) {
-                const response = await uploadFile(file)
-                const fileURL = getFile(response.$id)
-                data.fileURL = fileURL
-            }
             await axiosAuth.post(`${process.env.NEXTAUTH_URL}/api/update`, data)
             toast.success('User updated successfully')
         } catch (error) {
@@ -84,7 +78,7 @@ const Update = () => {
                             alt={data?.user.name}
                             width={48}
                             height={48}
-                            className='mr-7'
+                            className='mr-7 rounded-full'
                         />
                     ) : (
                         <BsPerson className='mr-7 h-12 w-12' />

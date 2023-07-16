@@ -2,7 +2,7 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { getServerSession } from 'next-auth'
 
 const refreshToken = async (refreshToken: string) => {
-    const response = await fetch(`${process.env.NEXTAUTH_URL}/auth/refresh`, {
+    const response = await fetch(`${process.env.NEXTAUTH_URL}/api/refresh`, {
         method: 'POST',
         body: JSON.stringify({
             refresh: refreshToken
@@ -19,7 +19,7 @@ export const AuthGetApi = async (url: string) => {
     let response = await fetch(`${process.env.NEXTAUTH_URL}/${url}`, {
         method: 'GET',
         headers: {
-            Authorization: session?.user.accessToken || ''
+            Authorization: `Bearer ${session?.user.accessToken}`
         }
     })
 
@@ -32,7 +32,7 @@ export const AuthGetApi = async (url: string) => {
         response = await fetch(`${process.env.NEXTAUTH_URL}/${url}`, {
             method: 'GET',
             headers: {
-                Authorization: session?.user.accessToken || ''
+                Authorization: `Bearer ${session?.user.accessToken}`
             }
         })
         return await response.json()
