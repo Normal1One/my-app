@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 import { useRefreshToken } from './useRefreshToken'
 
 const useAxiosAuth = () => {
-    const { data: session } = useSession()
+    const { data } = useSession()
     const refreshToken = useRefreshToken()
 
     useEffect(() => {
@@ -15,7 +15,7 @@ const useAxiosAuth = () => {
                 if (!config.headers['Authorization']) {
                     config.headers[
                         'Authorization'
-                    ] = `Bearer ${session?.user?.accessToken}`
+                    ] = `Bearer ${data?.user?.accessToken}`
                 }
                 return config
             },
@@ -31,7 +31,7 @@ const useAxiosAuth = () => {
                     await refreshToken()
                     prevRequest.headers[
                         'Authorization'
-                    ] = `Bearer ${session?.user.accessToken}`
+                    ] = `Bearer ${data?.user.accessToken}`
                     return axiosAuth(prevRequest)
                 }
                 return Promise.reject(error)
@@ -42,7 +42,7 @@ const useAxiosAuth = () => {
             axiosAuth.interceptors.request.eject(requestIntercept)
             axiosAuth.interceptors.response.eject(responseIntercept)
         }
-    }, [session, refreshToken])
+    }, [data, refreshToken])
 
     return axiosAuth
 }

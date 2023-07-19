@@ -1,19 +1,18 @@
-import { Client, Storage, ID } from 'appwrite'
+import { createClient } from '@supabase/supabase-js'
+import { v4 as uuidv4 } from 'uuid'
 
-const client = new Client()
-    .setEndpoint('https://cloud.appwrite.io/v1')
-    .setProject(process.env.APPWRITE_PROJECT_ID)
-
-const storage = new Storage(client)
+const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    { auth: { persistSession: false } }
+)
 
 export const uploadFile = async (file: File) => {
-    return await storage.createFile(
-        process.env.APPWRITE_BUCKET_ID,
-        ID.unique(),
-        file
-    )
-}
-
-export const getFile = (id: string) => {
-    return storage.getFileView(process.env.APPWRITE_BUCKET_ID, id).toString()
+    const { data, error } = await supabase.storage
+        .from('avatars')
+        .upload(uuidv4(), file, {
+            cacheControl: '3600',
+            upsert: false
+        })
+    return { data, error }
 }

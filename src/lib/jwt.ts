@@ -2,7 +2,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken'
 
 export const signJwtAccessToken = (payload: JwtPayload) => {
     const accessToken = jwt.sign(payload, process.env.SECRET_KEY!, {
-        expiresIn: '1d'
+        expiresIn: '24h'
     })
     const refreshToken = jwt.sign(payload, process.env.SECRET_KEY!, {
         expiresIn: '30d'
@@ -11,6 +11,10 @@ export const signJwtAccessToken = (payload: JwtPayload) => {
 }
 
 export const verifyJwt = (token: string) => {
-    const decoded = jwt.verify(token, process.env.SECRET_KEY!)
-    return decoded as JwtPayload
+    try {
+        const decoded = jwt.verify(token, process.env.SECRET_KEY!)
+        return decoded as JwtPayload
+    } catch (error) {
+        return false
+    }
 }

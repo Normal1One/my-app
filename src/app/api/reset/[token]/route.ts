@@ -1,6 +1,6 @@
+import { verifyJwt } from '@/lib/jwt'
 import { prisma } from '@/lib/prismadb'
 import bcrypt from 'bcrypt'
-import jwt, { JwtPayload } from 'jsonwebtoken'
 import { NextRequest, NextResponse } from 'next/server'
 
 export const PUT = async (
@@ -15,10 +15,7 @@ export const PUT = async (
     }
 
     try {
-        const { id } = jwt.verify(
-            params.token,
-            process.env.SECRET_KEY!
-        ) as JwtPayload
+        const { id } = verifyJwt(params.token)
 
         const user = await prisma.user.findUnique({
             where: {

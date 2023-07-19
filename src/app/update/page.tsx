@@ -2,7 +2,6 @@
 
 import Button from '@/components/Button'
 import useAxiosAuth from '@/lib/hooks/useAxiosAuth'
-import { getFile, uploadFile } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { isAxiosError } from 'axios'
 import { useSession } from 'next-auth/react'
@@ -12,6 +11,8 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { BsPerson } from 'react-icons/bs'
 import { z } from 'zod'
+import fs from 'fs'
+import { headers } from 'next/dist/client/components/headers'
 
 const schema = z.object({
     name: z.string().min(1, { message: 'Name is required' }),
@@ -39,10 +40,17 @@ const Update = () => {
         resolver: zodResolver(schema)
     })
     const onSubmit = async (values: formValues) => {
-        const data: formValues & { file?: File } = values
         try {
-            await axiosAuth.post(`${process.env.NEXTAUTH_URL}/api/update`, data)
-            toast.success('User updated successfully')
+            const response = await axiosAuth.post(
+                '/api/update',
+                { file, ...values },
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
+            )
+            toast.success(response.data)
         } catch (error) {
             if (isAxiosError(error)) {
                 toast.error(error.response?.data)

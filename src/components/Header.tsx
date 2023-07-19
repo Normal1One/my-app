@@ -14,11 +14,14 @@ const Header = () => {
                 <Link href='/' className='hover:opacity-80'>
                     Home
                 </Link>
-                <Link href='/sign-up' className='hover:opacity-80'>
-                    Sign Up
-                </Link>
                 {data ? (
                     <>
+                        <Link
+                            href='/update-password'
+                            className='hover:opacity-80'
+                        >
+                            Update password
+                        </Link>
                         <button
                             onClick={() =>
                                 signOut({ redirect: true, callbackUrl: '/' })
@@ -41,7 +44,12 @@ const Header = () => {
                         </Link>
                     </>
                 ) : (
-                    <button onClick={() => signIn()}>Sign In</button>
+                    <>
+                        <Link href='/sign-up' className='hover:opacity-80'>
+                            Sign Up
+                        </Link>
+                        <button onClick={() => signIn()}>Sign In</button>
+                    </>
                 )}
             </div>
         </div>

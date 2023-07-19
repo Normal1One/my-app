@@ -7,7 +7,7 @@ declare namespace NodeJS {
         GOOGLE_ID: string
         GOOGLE_SECRET: string
         EMAIL_SERVER_PORT: number
-        APPWRITE_PROJECT_ID: string
-        APPWRITE_BUCKET_ID: string
+        NEXT_PUBLIC_SUPABASE_URL: string
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: string
     }
 }

@@ -1,5 +1,5 @@
 import { verifyJwt } from '@/lib/jwt'
-import jwt from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 import { NextRequest, NextResponse } from 'next/server'
 
 export const POST = async (request: NextRequest) => {
@@ -11,10 +11,10 @@ export const POST = async (request: NextRequest) => {
     }
 
     try {
-        const { iat, exp, ...result } = verifyJwt(refresh)
+        const { iat, exp, ...result } = verifyJwt(refresh) as JwtPayload
 
         const accessToken = jwt.sign(result, process.env.SECRET_KEY!, {
-            expiresIn: '1d'
+            expiresIn: '24h'
         })
 
         return new NextResponse(JSON.stringify({ accessToken }))
