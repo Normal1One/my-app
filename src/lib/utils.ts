@@ -16,3 +16,8 @@ export const uploadFile = async (file: File) => {
         })
     return { data, error }
 }
+
+export const getFileURL = (path: string) => {
+    const { data } = supabase.storage.from('avatars').getPublicUrl(path)
+    return data
+}

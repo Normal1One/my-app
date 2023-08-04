@@ -8,7 +8,7 @@ export const GET = async (
 ) => {
     const accessToken = request.headers.get('authorization')
 
-    if (!accessToken || !verifyJwt(accessToken.split(' ')[1])) {
+    if (!accessToken || !verifyJwt(accessToken)) {
         return new NextResponse('Unauthorized', { status: 401 })
     }
 

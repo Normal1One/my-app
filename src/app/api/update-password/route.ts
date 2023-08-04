@@ -14,11 +14,11 @@ export const POST = async (request: NextRequest) => {
 
     const accessToken = request.headers.get('authorization')
 
-    if (!accessToken || !verifyJwt(accessToken.split(' ')[1])) {
+    if (!accessToken || !verifyJwt(accessToken)) {
         return new NextResponse('Unauthorized', { status: 401 })
     }
 
-    const { id } = verifyJwt(accessToken.split(' ')[1]) as JwtPayload
+    const { id } = verifyJwt(accessToken) as JwtPayload
 
     const user = await prisma.user.findUnique({
         where: {

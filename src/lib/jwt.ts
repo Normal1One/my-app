@@ -12,9 +12,12 @@ export const signJwtAccessToken = (payload: JwtPayload) => {
 
 export const verifyJwt = (token: string) => {
     try {
-        const decoded = jwt.verify(token, process.env.SECRET_KEY!)
+        const decoded = jwt.verify(
+            token.replace('Bearer ', ''),
+            process.env.SECRET_KEY!
+        )
         return decoded as JwtPayload
     } catch (error) {
-        return false
+        console.error(error)
     }
 }
