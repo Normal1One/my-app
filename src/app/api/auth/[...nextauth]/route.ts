@@ -70,7 +70,10 @@ export const authOptions: NextAuthOptions = {
         strategy: 'jwt'
     },
     callbacks: {
-        async jwt({ token, user, account }) {
+        async jwt({ token, user, account, trigger, session }) {
+            if (trigger === 'update' && session?.image) {
+                token.image = session.image
+            }
             if (account) {
                 const { hashedPassword, ...result } = user as User
                 const { accessToken, refreshToken } = signJwtAccessToken(result)

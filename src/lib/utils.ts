@@ -8,16 +8,15 @@ const supabase = createClient(
 )
 
 export const uploadFile = async (file: File) => {
-    const { data, error } = await supabase.storage
-        .from('avatars')
-        .upload(uuidv4(), file, {
-            cacheControl: '3600',
-            upsert: false
-        })
-    return { data, error }
-}
+    if (file) {
+        const { data, error } = await supabase.storage
+            .from('avatars')
+            .upload(uuidv4(), file)
 
-export const getFileURL = (path: string) => {
-    const { data } = supabase.storage.from('avatars').getPublicUrl(path)
-    return data
+        if (data) {
+            return supabase.storage.from('avatars').getPublicUrl(data.path)
+        } else {
+            console.error(error)
+        }
+    }
 }
