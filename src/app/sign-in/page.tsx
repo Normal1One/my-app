@@ -66,7 +66,7 @@ const SignIn = () => {
     }
 
     useEffect(() => {
-        if (error) {
+        if (error && error === 'OAuthAccountNotLinked') {
             toast.error(
                 'To confirm your identity, sign in with the same account you used originally.'
             )

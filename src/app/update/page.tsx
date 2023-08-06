@@ -11,8 +11,6 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { BsPerson } from 'react-icons/bs'
 import { z } from 'zod'
-import fs from 'fs'
-import { headers } from 'next/dist/client/components/headers'
 
 const schema = z.object({
     name: z.string().min(1, { message: 'Name is required' }),
@@ -29,7 +27,7 @@ type formValues = {
 const Update = () => {
     const [file, setFile] = useState<File>()
     const [defaultValuesSet, setDefaultValuesSet] = useState(false)
-    const { data } = useSession()
+    const { data, update } = useSession()
     const axiosAuth = useAxiosAuth()
     const {
         register,
@@ -41,7 +39,7 @@ const Update = () => {
     })
     const onSubmit = async (values: formValues) => {
         try {
-            const response = await axiosAuth.post(
+            const response = await axiosAuth.patch(
                 '/api/update',
                 { file, ...values },
                 {
@@ -50,7 +48,12 @@ const Update = () => {
                     }
                 }
             )
-            toast.success(response.data)
+            await update({
+                image: response.data.image,
+                email: response.data.email,
+                name: response.data.name
+            })
+            toast.success('User updated successfully!')
         } catch (error) {
             if (isAxiosError(error)) {
                 toast.error(error.response?.data)

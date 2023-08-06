@@ -6,6 +6,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export const PATCH = async (request: NextRequest) => {
     const body = await request.formData()
+    const file = body.get('file') as File
 
     const accessToken = request.headers.get('authorization')
 
@@ -25,6 +26,10 @@ export const PATCH = async (request: NextRequest) => {
         return new NextResponse('No user found', { status: 404 })
     }
 
+    if (file && file.size > 4 * 1024 * 1024) {
+        return new NextResponse('File is too big', { status: 413 })
+    }
+
     const user = await prisma.user.update({
         where: {
             id
@@ -32,7 +37,7 @@ export const PATCH = async (request: NextRequest) => {
         data: {
             name: (body.get('name') as string) ?? undefined,
             email: (body.get('email') as string) ?? undefined,
-            image: (await uploadFile(body.get('file') as File))?.data.publicUrl
+            image: (await uploadFile(file))?.data.publicUrl
         }
     })
 

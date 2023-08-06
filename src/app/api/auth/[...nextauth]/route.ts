@@ -55,11 +55,7 @@ export const authOptions: NextAuthOptions = {
 
                 const user = response.data
 
-                if (user.ok && user) {
-                    return user
-                }
-
-                return null
+                return user ?? null
             }
         })
     ],
@@ -69,10 +65,11 @@ export const authOptions: NextAuthOptions = {
     session: {
         strategy: 'jwt'
     },
+    debug: process.env.NODE_ENV === 'development',
     callbacks: {
         async jwt({ token, user, account, trigger, session }) {
-            if (trigger === 'update' && session?.image) {
-                token.image = session.image
+            if (trigger === 'update') {
+                token = { ...token, ...session }
             }
             if (account) {
                 const { hashedPassword, ...result } = user as User
