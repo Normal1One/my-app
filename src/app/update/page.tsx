@@ -53,7 +53,7 @@ const Update = () => {
                 email: response.data.email,
                 name: response.data.name
             })
-            toast.success('User updated successfully!')
+            toast.success('User updated successfully')
         } catch (error) {
             if (isAxiosError(error)) {
                 toast.error(error.response?.data)

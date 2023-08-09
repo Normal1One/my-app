@@ -28,7 +28,7 @@ export const PUT = async (
     }
 
     if (!user.resetToken) {
-        return new NextResponse('The reset token has been revoked', {
+        return new NextResponse('Reset token has been revoked', {
             status: 401
         })
     }

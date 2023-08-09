@@ -6,8 +6,8 @@ import SocialLoginButtons from '@/components/SocialLoginButtons'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { signIn } from 'next-auth/react'
 import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { z } from 'zod'
@@ -31,8 +31,6 @@ const SignIn = () => {
     const [show, setShow] = useState(false)
     const handleClick = () => setShow(!show)
     const router = useRouter()
-    const searchParams = useSearchParams()
-    const error = searchParams.get('error')
     const {
         register,
         handleSubmit,
@@ -44,19 +42,7 @@ const SignIn = () => {
     const onSubmit = async (data: formValues) => {
         signIn('credentials', { ...data, redirect: false }).then((callback) => {
             if (callback?.error) {
-                switch (callback.error.split(' ').pop()) {
-                    case '404': {
-                        toast.error('No user found')
-                        break
-                    }
-                    case '401': {
-                        toast.error('Incorrect password')
-                        break
-                    }
-                    default: {
-                        toast.error('Something went wrong')
-                    }
-                }
+                toast.error('Something went wrong')
             }
             if (callback?.ok && !callback?.error) {
                 toast.success('Signed in successfully')
@@ -64,14 +50,6 @@ const SignIn = () => {
             }
         })
     }
-
-    useEffect(() => {
-        if (error && error === 'OAuthAccountNotLinked') {
-            toast.error(
-                'To confirm your identity, sign in with the same account you used originally.'
-            )
-        }
-    }, [error])
 
     return (
         <div className='flex h-screen'>

@@ -27,7 +27,7 @@ export const PATCH = async (request: NextRequest) => {
     }
 
     if (file && file.size > 4 * 1024 * 1024) {
-        return new NextResponse('File is too big', { status: 413 })
+        return new NextResponse('File size is too big', { status: 413 })
     }
 
     const user = await prisma.user.update({
