@@ -172,7 +172,10 @@ const SignUp = () => {
                 <SocialLoginButtons />
                 <p className='mt-2 self-center text-sm'>
                     {'Have an account? '}
-                    <Link href='/sign-in' className='text-gray-400 underline'>
+                    <Link
+                        href='/sign-in'
+                        className='text-gray-400 underline hover:opacity-80'
+                    >
                         Sign In
                     </Link>
                 </p>

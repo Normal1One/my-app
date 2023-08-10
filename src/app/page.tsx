@@ -1,5 +1,7 @@
 import Header from '@/components/Header'
 
-export default function Home() {
+const Home = () => {
     return <Header />
 }
+
+export default Home

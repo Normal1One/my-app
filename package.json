@@ -29,6 +29,7 @@
     "react-hook-form": "^7.45.2",
     "react-hot-toast": "^2.4.1",
     "react-icons": "^4.10.1",
+    "react-tooltip": "^5.20.0",
     "uuid": "^9.0.0",
     "zod": "^3.21.4"
   },

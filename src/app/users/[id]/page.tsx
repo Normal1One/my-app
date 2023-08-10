@@ -1,5 +1,6 @@
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import Header from '@/components/Header'
+import Popper from '@/components/Popper'
 import { AuthGetApi } from '@/lib/fetchAPI'
 import { getServerSession } from 'next-auth'
 import Image from 'next/image'
@@ -27,11 +28,14 @@ const User = async ({ params }: { params: { id: string } }) => {
                         <BsPerson className='h-[75px] w-[75px]' />
                     )}
                     <p className='text-lg'>{response.name}</p>
-                    <p className='text-lg'>{response.email}</p>
+                    <div className='flex'>
+                        <p className='text-lg'>{response.email}</p>
+                        {response.emailVerified && <Popper />}
+                    </div>
                     {session?.user.id === params.id && (
                         <Link
                             href='/update'
-                            className='text-gray-400 underline'
+                            className='text-gray-400 underline hover:opacity-80'
                         >
                             Update Profile
                         </Link>

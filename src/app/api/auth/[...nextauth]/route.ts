@@ -74,7 +74,13 @@ export const authOptions: NextAuthOptions = {
             if (account) {
                 const { hashedPassword, ...result } = user as User
                 const { accessToken, refreshToken } = signJwtAccessToken(result)
-                return { ...user, ...token, accessToken, refreshToken }
+                return {
+                    ...user,
+                    ...token,
+                    provider: account.provider,
+                    accessToken,
+                    refreshToken
+                }
             }
             return { ...user, ...token }
         },

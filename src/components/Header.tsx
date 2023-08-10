@@ -16,20 +16,27 @@ const Header = () => {
                 </Link>
                 {data ? (
                     <>
-                        <Link
-                            href='/update-password'
-                            className='hover:opacity-80'
-                        >
-                            Update password
-                        </Link>
+                        {(data.user.provider === 'credentials' ||
+                            data.user.provider === 'email') && (
+                            <Link
+                                href='/update-password'
+                                className='hover:opacity-80'
+                            >
+                                Update password
+                            </Link>
+                        )}
                         <button
                             onClick={() =>
                                 signOut({ redirect: true, callbackUrl: '/' })
                             }
+                            className='hover:opacity-80'
                         >
                             Sign Out
                         </button>
-                        <Link href={`/users/${data.user.id}`}>
+                        <Link
+                            href={`/users/${data.user.id}`}
+                            className='hover:opacity-80'
+                        >
                             {data.user.image ? (
                                 <Image
                                     src={data.user.image}
@@ -48,7 +55,12 @@ const Header = () => {
                         <Link href='/sign-up' className='hover:opacity-80'>
                             Sign Up
                         </Link>
-                        <button onClick={() => signIn()}>Sign In</button>
+                        <button
+                            className='hover:opacity-80'
+                            onClick={() => signIn()}
+                        >
+                            Sign In
+                        </button>
                     </>
                 )}
             </div>

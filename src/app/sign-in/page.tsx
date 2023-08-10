@@ -4,7 +4,7 @@ import Button from '@/components/Button'
 import PasswordButton from '@/components/PasswordButton'
 import SocialLoginButtons from '@/components/SocialLoginButtons'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { signIn } from 'next-auth/react'
+import { signIn, signOut } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -115,7 +115,10 @@ const SignIn = () => {
                 <SocialLoginButtons />
                 <p className='mt-2 self-center text-sm'>
                     {"Don't have an account? "}
-                    <Link href='/sign-up' className='text-gray-400 underline'>
+                    <Link
+                        href='/sign-up'
+                        className='text-gray-400 underline hover:opacity-80'
+                    >
                         Sign Up
                     </Link>
                 </p>

@@ -1,6 +1,7 @@
 'use client'
 
 import Button from '@/components/Button'
+import Header from '@/components/Header'
 import PasswordButton from '@/components/PasswordButton'
 import useAxiosAuth from '@/lib/hooks/useAxiosAuth'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -72,88 +73,91 @@ const UpdatePassword = () => {
     }
 
     return (
-        <div className='flex h-screen'>
-            <form
-                className='m-auto flex w-96 flex-col gap-2'
-                onSubmit={handleSubmit(onSubmit)}
-                noValidate
-            >
-                <p className='mb-5 self-center text-2xl'>Update password</p>
-                <label htmlFor='password' className='mb-2 text-sm'>
-                    Old Password
-                </label>
-                <div className='flex'>
-                    <input
-                        className={`w-full rounded-l border-b border-l border-t border-gray-400 bg-gray-200 p-3 transition focus:shadow-md focus:outline-none ${
-                            errors.password &&
-                            'border-rose-600 bg-rose-200 placeholder-rose-600'
-                        }`}
-                        type={show.password ? 'text' : 'password'}
-                        autoComplete='new-password'
-                        placeholder='••••••••'
-                        id='password'
-                        {...register('password')}
-                    />
-                    <PasswordButton
-                        isHidden={show.password}
-                        isInvalid={errors.password}
-                        handleClick={() => handleClick('password')}
-                    />
-                </div>
-                <p className='text-xs text-rose-600'>
-                    {errors.password?.message}
-                </p>
-                <label htmlFor='newPassword' className='mb-2 text-sm'>
-                    New Password
-                </label>
-                <div className='flex'>
-                    <input
-                        className={`w-full rounded-l border-b border-l border-t border-gray-400 bg-gray-200 p-3 transition focus:shadow-md focus:outline-none ${
-                            errors.newPassword &&
-                            'border-rose-600 bg-rose-200 placeholder-rose-600'
-                        }`}
-                        type={show.newPassword ? 'text' : 'password'}
-                        autoComplete='new-password'
-                        placeholder='••••••••'
-                        id='newPassword'
-                        {...register('newPassword')}
-                    />
-                    <PasswordButton
-                        isHidden={show.newPassword}
-                        isInvalid={errors.newPassword}
-                        handleClick={() => handleClick('newPassword')}
-                    />
-                </div>
-                <p className='text-xs text-rose-600'>
-                    {errors.newPassword?.message}
-                </p>
-                <label htmlFor='password' className='mb-2 text-sm'>
-                    Confirm Password
-                </label>
-                <div className='flex'>
-                    <input
-                        className={`w-full rounded-l border-b border-l border-t border-gray-400 bg-gray-200 p-3 transition focus:shadow-md focus:outline-none ${
-                            errors.confirmPassword &&
-                            'border-rose-600 bg-rose-200 placeholder-rose-600'
-                        }`}
-                        type={show.confirmPassword ? 'text' : 'password'}
-                        autoComplete='new-password'
-                        placeholder='••••••••'
-                        id='confirmPassword'
-                        {...register('confirmPassword')}
-                    />
-                    <PasswordButton
-                        isHidden={show.confirmPassword}
-                        isInvalid={errors.confirmPassword}
-                        handleClick={() => handleClick('confirmPassword')}
-                    />
-                </div>
-                <p className='text-xs text-rose-600'>
-                    {errors.confirmPassword?.message}
-                </p>
-                <Button text='Update' />
-            </form>
-        </div>
+        <section>
+            <Header />
+            <div className='flex h-[calc(100vh-64px)]'>
+                <form
+                    className='m-auto flex w-96 flex-col gap-2'
+                    onSubmit={handleSubmit(onSubmit)}
+                    noValidate
+                >
+                    <p className='mb-5 self-center text-2xl'>Update password</p>
+                    <label htmlFor='password' className='mb-2 text-sm'>
+                        Old Password
+                    </label>
+                    <div className='flex'>
+                        <input
+                            className={`w-full rounded-l border-b border-l border-t border-gray-400 bg-gray-200 p-3 transition focus:shadow-md focus:outline-none ${
+                                errors.password &&
+                                'border-rose-600 bg-rose-200 placeholder-rose-600'
+                            }`}
+                            type={show.password ? 'text' : 'password'}
+                            autoComplete='new-password'
+                            placeholder='••••••••'
+                            id='password'
+                            {...register('password')}
+                        />
+                        <PasswordButton
+                            isHidden={show.password}
+                            isInvalid={errors.password}
+                            handleClick={() => handleClick('password')}
+                        />
+                    </div>
+                    <p className='text-xs text-rose-600'>
+                        {errors.password?.message}
+                    </p>
+                    <label htmlFor='newPassword' className='mb-2 text-sm'>
+                        New Password
+                    </label>
+                    <div className='flex'>
+                        <input
+                            className={`w-full rounded-l border-b border-l border-t border-gray-400 bg-gray-200 p-3 transition focus:shadow-md focus:outline-none ${
+                                errors.newPassword &&
+                                'border-rose-600 bg-rose-200 placeholder-rose-600'
+                            }`}
+                            type={show.newPassword ? 'text' : 'password'}
+                            autoComplete='new-password'
+                            placeholder='••••••••'
+                            id='newPassword'
+                            {...register('newPassword')}
+                        />
+                        <PasswordButton
+                            isHidden={show.newPassword}
+                            isInvalid={errors.newPassword}
+                            handleClick={() => handleClick('newPassword')}
+                        />
+                    </div>
+                    <p className='text-xs text-rose-600'>
+                        {errors.newPassword?.message}
+                    </p>
+                    <label htmlFor='password' className='mb-2 text-sm'>
+                        Confirm Password
+                    </label>
+                    <div className='flex'>
+                        <input
+                            className={`w-full rounded-l border-b border-l border-t border-gray-400 bg-gray-200 p-3 transition focus:shadow-md focus:outline-none ${
+                                errors.confirmPassword &&
+                                'border-rose-600 bg-rose-200 placeholder-rose-600'
+                            }`}
+                            type={show.confirmPassword ? 'text' : 'password'}
+                            autoComplete='new-password'
+                            placeholder='••••••••'
+                            id='confirmPassword'
+                            {...register('confirmPassword')}
+                        />
+                        <PasswordButton
+                            isHidden={show.confirmPassword}
+                            isInvalid={errors.confirmPassword}
+                            handleClick={() => handleClick('confirmPassword')}
+                        />
+                    </div>
+                    <p className='text-xs text-rose-600'>
+                        {errors.confirmPassword?.message}
+                    </p>
+                    <Button text='Update' />
+                </form>
+            </div>
+        </section>
     )
 }
 

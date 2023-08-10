@@ -69,13 +69,19 @@ const Forgot = () => {
                 <Button text='Submit' />
                 <p className='mt-2 self-center text-sm'>
                     {'Have an account? '}
-                    <Link href='/sign-in' className='text-gray-400 underline'>
+                    <Link
+                        href='/sign-in'
+                        className='text-gray-400 underline hover:opacity-80'
+                    >
                         Sign In
                     </Link>
                 </p>
                 <p className='self-center text-sm'>
                     {"Don't have an account? "}
-                    <Link href='/sign-up' className='text-gray-400 underline'>
+                    <Link
+                        href='/sign-up'
+                        className='text-gray-400 underline hover:opacity-80'
+                    >
                         Sign Up
                     </Link>
                 </p>
