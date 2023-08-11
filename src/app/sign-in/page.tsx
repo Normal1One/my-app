@@ -42,7 +42,19 @@ const SignIn = () => {
     const onSubmit = async (data: formValues) => {
         signIn('credentials', { ...data, redirect: false }).then((callback) => {
             if (callback?.error) {
-                toast.error('Something went wrong')
+                switch (callback.error.split(' ').pop()) {
+                    case '401': {
+                        toast.error('Incorrect password')
+                        break
+                    }
+                    case '404': {
+                        toast.error('No user found')
+                        break
+                    }
+                    default: {
+                        toast.error('Something went wrong')
+                    }
+                }
             }
             if (callback?.ok && !callback?.error) {
                 toast.success('Signed in successfully')

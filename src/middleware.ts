@@ -2,12 +2,15 @@ import { withAuth } from 'next-auth/middleware'
 
 export default withAuth({
     callbacks: {
-        authorized: ({ token, req }) =>
-            !(
-                token?.provider !== 'credentials' &&
-                token?.provider !== 'email' &&
-                req.nextUrl.pathname === '/update-password'
-            )
+        authorized: ({ token, req }) => {
+            if (req.nextUrl.pathname === '/update-password') {
+                return (
+                    token?.provider === 'credentials' ||
+                    token?.provider === 'email'
+                )
+            }
+            return !!token
+        }
     }
 })
 
