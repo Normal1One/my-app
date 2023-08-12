@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { isAxiosError } from 'axios'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { BsPerson } from 'react-icons/bs'
@@ -28,8 +28,10 @@ type formValues = {
 const Update = () => {
     const [file, setFile] = useState<File>()
     const [defaultValuesSet, setDefaultValuesSet] = useState(false)
+    const [isLoading, setLoading] = useState(false)
     const { data, update } = useSession()
     const axiosAuth = useAxiosAuth()
+    const ref = useRef<HTMLInputElement>(null)
     const {
         register,
         handleSubmit,
@@ -40,6 +42,7 @@ const Update = () => {
     })
     const onSubmit = async (values: formValues) => {
         try {
+            setLoading(true)
             const response = await axiosAuth.patch(
                 '/api/update',
                 { file, ...values },
@@ -49,6 +52,9 @@ const Update = () => {
                     }
                 }
             )
+            if (ref.current?.value) {
+                ref.current.value = ''
+            }
             await update({
                 image: response.data.image,
                 email: response.data.email,
@@ -61,6 +67,8 @@ const Update = () => {
             } else {
                 toast.error('Something went wrong')
             }
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -102,6 +110,7 @@ const Update = () => {
                             accept='image/*'
                             className='w-full self-center rounded border border-gray-400 bg-gray-200 p-1.5 text-sm transition file:cursor-pointer file:appearance-none file:rounded file:border-none file:bg-gray-400 file:p-2 file:text-white file:hover:opacity-80'
                             onChange={(e) => setFile(e.target.files?.[0])}
+                            ref={ref}
                         />
                     </div>
                     <label htmlFor='name' className='mb-2 text-sm'>
@@ -137,7 +146,11 @@ const Update = () => {
                     <p className='text-xs text-rose-600'>
                         {errors.email?.message}
                     </p>
-                    <Button text='Update' />
+                    <Button
+                        text='Update'
+                        loadingText='Updating...'
+                        isLoading={isLoading}
+                    />
                 </form>
             </div>
         </section>

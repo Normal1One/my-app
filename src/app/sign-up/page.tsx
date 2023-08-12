@@ -48,8 +48,11 @@ const SignUp = () => {
         password: false,
         confirmPassword: false
     })
+    const [success, setSuccess] = useState(false)
+    const [email, setEmail] = useState<string>()
     const handleClick = (item: keyof ShowState) =>
         setShow((prevState) => ({ ...prevState, [item]: !prevState[item] }))
+    const [isLoading, setLoading] = useState(false)
     const {
         register,
         handleSubmit,
@@ -60,22 +63,35 @@ const SignUp = () => {
 
     const onSubmit = async ({ confirmPassword, ...values }: formValues) => {
         try {
+            setLoading(true)
             await axios.post('/api/sign-up', JSON.stringify(values))
-            signIn('email', {
+            await signIn('email', {
                 redirect: false,
                 callbackUrl: '/',
                 email: values.email
             })
-            toast.success(
-                `Email sent to ${values.email}, please check your email`
-            )
+            setEmail(values.email)
+            setSuccess(true)
         } catch (error) {
             if (isAxiosError(error)) {
                 toast.error(error.response?.data)
             } else {
                 toast.error('Something went wrong')
             }
+        } finally {
+            setLoading(false)
         }
+    }
+
+    if (success) {
+        return (
+            <div className='flex h-[100vh] items-center justify-center text-center'>
+                <p className='text-xl'>
+                    Verification email has been sent to {email}, please check
+                    your email
+                </p>
+            </div>
+        )
     }
 
     return (
@@ -163,7 +179,11 @@ const SignUp = () => {
                 <p className='text-xs text-rose-600'>
                     {errors.confirmPassword?.message}
                 </p>
-                <Button text='Sign Up' />
+                <Button
+                    text='Sign Up'
+                    loadingText='Signing Up...'
+                    isLoading={isLoading}
+                />
                 <div className='grid grid-cols-3 items-center text-gray-400'>
                     <hr className='border-gray-400' />
                     <p className='text-center text-sm'>OR</p>

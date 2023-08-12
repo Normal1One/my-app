@@ -41,6 +41,7 @@ const Reset = ({ params }: { params: { token: string } }) => {
     })
     const handleClick = (item: keyof ShowState) =>
         setShow((prevState) => ({ ...prevState, [item]: !prevState[item] }))
+    const [isLoading, setLoading] = useState(false)
     const {
         register,
         handleSubmit,
@@ -51,6 +52,7 @@ const Reset = ({ params }: { params: { token: string } }) => {
 
     const onSubmit = async ({ confirmPassword, ...result }: formValues) => {
         try {
+            setLoading(true)
             const response = await axios.put(
                 `/api/reset/${params.token}`,
                 JSON.stringify(result)
@@ -62,6 +64,8 @@ const Reset = ({ params }: { params: { token: string } }) => {
             } else {
                 toast.error('Something went wrong')
             }
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -121,7 +125,11 @@ const Reset = ({ params }: { params: { token: string } }) => {
                 <p className='text-xs text-rose-600'>
                     {errors.confirmPassword?.message}
                 </p>
-                <Button text='Reset password' />
+                <Button
+                    text='Reset password'
+                    loadingText='Resetting password...'
+                    isLoading={isLoading}
+                />
             </form>
         </div>
     )

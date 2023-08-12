@@ -47,6 +47,7 @@ const UpdatePassword = () => {
         newPassword: false,
         confirmPassword: false
     })
+    const [isLoading, setLoading] = useState(false)
     const handleClick = (item: keyof ShowState) =>
         setShow((prevState) => ({ ...prevState, [item]: !prevState[item] }))
     const {
@@ -58,6 +59,7 @@ const UpdatePassword = () => {
     })
     const onSubmit = async ({ confirmPassword, ...values }: formValues) => {
         try {
+            setLoading(true)
             const response = await axiosAuth.post(
                 '/api/update-password',
                 values
@@ -69,6 +71,8 @@ const UpdatePassword = () => {
             } else {
                 toast.error('Something went wrong')
             }
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -154,7 +158,11 @@ const UpdatePassword = () => {
                     <p className='text-xs text-rose-600'>
                         {errors.confirmPassword?.message}
                     </p>
-                    <Button text='Update' />
+                    <Button
+                        text='Update'
+                        loadingText='Updating...'
+                        isLoading={isLoading}
+                    />
                 </form>
             </div>
         </section>

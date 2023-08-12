@@ -31,6 +31,7 @@ const SignIn = () => {
     const [show, setShow] = useState(false)
     const handleClick = () => setShow(!show)
     const router = useRouter()
+    const [isLoading, setLoading] = useState(false)
     const {
         register,
         handleSubmit,
@@ -40,27 +41,31 @@ const SignIn = () => {
     })
 
     const onSubmit = async (data: formValues) => {
-        signIn('credentials', { ...data, redirect: false }).then((callback) => {
-            if (callback?.error) {
-                switch (callback.error.split(' ').pop()) {
-                    case '401': {
-                        toast.error('Incorrect password')
-                        break
-                    }
-                    case '404': {
-                        toast.error('No user found')
-                        break
-                    }
-                    default: {
-                        toast.error('Something went wrong')
+        setLoading(true)
+        await signIn('credentials', { ...data, redirect: false }).then(
+            (callback) => {
+                if (callback?.error) {
+                    switch (callback.error.split(' ').pop()) {
+                        case '401': {
+                            toast.error('Incorrect password')
+                            break
+                        }
+                        case '404': {
+                            toast.error('No user found')
+                            break
+                        }
+                        default: {
+                            toast.error('Something went wrong')
+                        }
                     }
                 }
+                if (callback?.ok && !callback?.error) {
+                    toast.success('Signed in successfully')
+                    router.push('/')
+                }
             }
-            if (callback?.ok && !callback?.error) {
-                toast.success('Signed in successfully')
-                router.push('/')
-            }
-        })
+        )
+        setLoading(false)
     }
 
     return (
@@ -118,7 +123,11 @@ const SignIn = () => {
                 <p className='text-xs text-rose-600'>
                     {errors.password?.message}
                 </p>
-                <Button text='Sign In' />
+                <Button
+                    text='Sign In'
+                    loadingText='Signing In...'
+                    isLoading={isLoading}
+                />
                 <div className='grid grid-cols-3 items-center text-gray-400'>
                     <hr className='border-gray-400' />
                     <p className='text-center text-sm'>OR</p>

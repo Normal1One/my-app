@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { isAxiosError } from 'axios'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { z } from 'zod'
@@ -22,6 +23,7 @@ type formValues = {
 
 const Forgot = () => {
     const router = useRouter()
+    const [isLoading, setLoading] = useState(false)
     const {
         register,
         handleSubmit,
@@ -32,6 +34,7 @@ const Forgot = () => {
 
     const onSubmit = async ({ email }: formValues) => {
         try {
+            setLoading(true)
             const response = await axios.post('/api/forgot', { email })
             toast.success(response.data)
             router.push('/sign-in')
@@ -41,6 +44,8 @@ const Forgot = () => {
             } else {
                 toast.error('Something went wrong')
             }
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -66,7 +71,11 @@ const Forgot = () => {
                     {...register('email')}
                 ></input>
                 <p className='text-xs text-rose-600'>{errors.email?.message}</p>
-                <Button text='Submit' />
+                <Button
+                    text='Submit'
+                    loadingText='Submitting...'
+                    isLoading={isLoading}
+                />
                 <p className='mt-2 self-center text-sm'>
                     {'Have an account? '}
                     <Link
