@@ -6,9 +6,7 @@ export const POST = async (request: NextRequest) => {
     const body = await request.json()
     const { refresh } = body
 
-    if (!refresh) {
-        return new NextResponse('Missing fields', { status: 400 })
-    }
+    if (!refresh) return new NextResponse('Missing fields', { status: 400 })
 
     try {
         const { iat, exp, ...result } = verifyJwt(refresh) as JwtPayload

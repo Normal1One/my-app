@@ -33,12 +33,23 @@ const User = async ({ params }: { params: { id: string } }) => {
                         {response.emailVerified && <Popper />}
                     </div>
                     {session?.user.id === params.id && (
-                        <Link
-                            href='/update'
-                            className='text-gray-400 underline hover:opacity-80'
-                        >
-                            Update Profile
-                        </Link>
+                        <>
+                            <Link
+                                href='/update'
+                                className='text-gray-400 underline hover:opacity-80'
+                            >
+                                Update profile
+                            </Link>
+                            {(session?.user.provider === 'credentials' ||
+                                session?.user.provider === 'email') && (
+                                <Link
+                                    href='/update-password'
+                                    className='text-gray-400 underline hover:opacity-80'
+                                >
+                                    Update password
+                                </Link>
+                            )}
+                        </>
                     )}
                 </div>
             </div>

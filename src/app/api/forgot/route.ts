@@ -7,9 +7,7 @@ export const POST = async (request: NextRequest) => {
     const body = await request.json()
     const { email } = body
 
-    if (!email) {
-        return new NextResponse('Missing fields', { status: 400 })
-    }
+    if (!email) return new NextResponse('Missing fields', { status: 400 })
 
     const user = await prisma.user.findUnique({
         where: {
@@ -17,9 +15,8 @@ export const POST = async (request: NextRequest) => {
         }
     })
 
-    if (!user || !user?.hashedPassword) {
+    if (!user || !user?.hashedPassword)
         return new NextResponse('No user found', { status: 404 })
-    }
 
     const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY!, {
         expiresIn: '24h'

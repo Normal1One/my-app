@@ -8,17 +8,17 @@ export const GET = async (
 ) => {
     const accessToken = request.headers.get('authorization')
 
-    if (!accessToken || !verifyJwt(accessToken)) {
+    if (!accessToken || !verifyJwt(accessToken))
         return new NextResponse('Unauthorized', { status: 401 })
-    }
 
     const user = await prisma.user.findUnique({
-        where: { id: params.id }
+        where: { id: params.id },
+        include: {
+            writtenPosts: true
+        }
     })
 
-    if (!user) {
-        return new NextResponse('No user found', { status: 404 })
-    }
+    if (!user) return new NextResponse('No user found', { status: 404 })
 
     const { hashedPassword, ...result } = user
     return new NextResponse(JSON.stringify(result))

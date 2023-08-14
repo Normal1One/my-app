@@ -10,9 +10,8 @@ export const PATCH = async (request: NextRequest) => {
 
     const accessToken = request.headers.get('authorization')
 
-    if (!accessToken || !verifyJwt(accessToken)) {
+    if (!accessToken || !verifyJwt(accessToken))
         return new NextResponse('Unauthorized', { status: 401 })
-    }
 
     const { id } = verifyJwt(accessToken) as JwtPayload
 
@@ -22,13 +21,10 @@ export const PATCH = async (request: NextRequest) => {
         }
     })
 
-    if (!exist) {
-        return new NextResponse('No user found', { status: 404 })
-    }
+    if (!exist) return new NextResponse('No user found', { status: 404 })
 
-    if (file && file.size > 4 * 1024 * 1024) {
+    if (file && file.size > 4 * 1024 * 1024)
         return new NextResponse('File size is too big', { status: 413 })
-    }
 
     const user = await prisma.user.update({
         where: {

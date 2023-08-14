@@ -6,9 +6,8 @@ export const POST = async (request: NextRequest) => {
     const body = await request.json()
     const { name, email, password } = body
 
-    if (!name || !email || !password) {
+    if (!name || !email || !password)
         return new NextResponse('Missing fields', { status: 400 })
-    }
 
     const exist = await prisma.user.findUnique({
         where: {
@@ -16,9 +15,7 @@ export const POST = async (request: NextRequest) => {
         }
     })
 
-    if (exist) {
-        return new NextResponse('Email already exists', { status: 409 })
-    }
+    if (exist) return new NextResponse('Email already exists', { status: 409 })
 
     const user = await prisma.user.create({
         data: {

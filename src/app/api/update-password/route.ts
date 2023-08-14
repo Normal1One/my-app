@@ -8,15 +8,13 @@ export const POST = async (request: NextRequest) => {
     const body = await request.json()
     const { password, newPassword } = body
 
-    if (!password || !newPassword) {
+    if (!password || !newPassword)
         return new NextResponse('Missing fields', { status: 400 })
-    }
 
     const accessToken = request.headers.get('authorization')
 
-    if (!accessToken || !verifyJwt(accessToken)) {
+    if (!accessToken || !verifyJwt(accessToken))
         return new NextResponse('Unauthorized', { status: 401 })
-    }
 
     const { id } = verifyJwt(accessToken) as JwtPayload
 
@@ -26,15 +24,13 @@ export const POST = async (request: NextRequest) => {
         }
     })
 
-    if (!user || !user?.hashedPassword) {
+    if (!user || !user?.hashedPassword)
         return new NextResponse('No user found', { status: 404 })
-    }
 
     const passwordMatch = await bcrypt.compare(password, user.hashedPassword)
 
-    if (!passwordMatch) {
+    if (!passwordMatch)
         return new NextResponse('Incorrect password', { status: 401 })
-    }
 
     await prisma.user.update({
         where: {

@@ -16,15 +16,6 @@ const Header = () => {
                 </Link>
                 {data ? (
                     <>
-                        {(data.user.provider === 'credentials' ||
-                            data.user.provider === 'email') && (
-                            <Link
-                                href='/update-password'
-                                className='hover:opacity-80'
-                            >
-                                Update password
-                            </Link>
-                        )}
                         <button
                             onClick={() =>
                                 signOut({ redirect: true, callbackUrl: '/' })
@@ -35,19 +26,22 @@ const Header = () => {
                         </button>
                         <Link
                             href={`/users/${data.user.id}`}
-                            className='hover:opacity-80'
+                            className='flex hover:opacity-80'
                         >
                             {data.user.image ? (
                                 <Image
                                     src={data.user.image}
                                     width={24}
                                     height={24}
-                                    className='rounded-full'
+                                    className='mr-2 rounded-full'
                                     alt={data.user.name || ''}
                                 />
                             ) : (
                                 <BsPerson className='h-6 w-6' />
                             )}
+                            <p className='max-w-[10rem] truncate'>
+                                {data.user.name}
+                            </p>
                         </Link>
                     </>
                 ) : (

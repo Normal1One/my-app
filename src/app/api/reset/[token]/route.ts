@@ -11,9 +11,7 @@ export const PUT = async (
     const body = await request.json()
     const { newPassword } = body
 
-    if (!newPassword) {
-        return new NextResponse('Missing fields', { status: 400 })
-    }
+    if (!newPassword) return new NextResponse('Missing fields', { status: 400 })
 
     const { id } = verifyJwt(params.token) as JwtPayload
 
@@ -23,15 +21,13 @@ export const PUT = async (
         }
     })
 
-    if (!user || !user?.hashedPassword) {
+    if (!user || !user?.hashedPassword)
         return new NextResponse('No user found', { status: 404 })
-    }
 
-    if (!user.resetToken) {
+    if (!user.resetToken)
         return new NextResponse('Reset token has been revoked', {
             status: 401
         })
-    }
 
     await prisma.user.update({
         where: {
