@@ -1,0 +1,27 @@
+_id: req_ce284caa88f2412993a81fd89fa2bb18
+type: Request
+parentId: fld_0bfb7f5d8667487dab996752ade19858
+modified: 1692034416902
+created: 1692033902970
+url: "{{ _.base_url }}/posts/{% response 'body',
+  'req_cc891f61d7644febafe4019361c7b68d', 'b64::JC5pZA==::46b', 'never', 60 %}"
+name: Delete post
+description: ""
+method: DELETE
+body: {}
+parameters: []
+headers: []
+authentication:
+  type: bearer
+  token: "{% response 'body', 'req_708486559cc44d10b9ea05f1277af9bb',
+    'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
+  prefix: Bearer
+  disabled: false
+metaSortKey: -1691958524831
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

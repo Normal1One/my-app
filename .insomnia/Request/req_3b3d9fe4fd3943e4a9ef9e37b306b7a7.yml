@@ -1,0 +1,38 @@
+_id: req_3b3d9fe4fd3943e4a9ef9e37b306b7a7
+type: Request
+parentId: fld_fa6bf0f5877e4d52b643d9c818e6cc6c
+modified: 1692122230194
+created: 1692122082374
+url: "{{ _.base_url }}/update"
+name: Edit user
+description: ""
+method: PATCH
+body:
+  mimeType: multipart/form-data
+  params:
+    - id: pair_076f7c46767d46ea914827e8ce06af3b
+      name: file
+      value: ""
+      description: ""
+      type: file
+      fileName: C:\Users\nikita\Downloads\DALL·E 2023-08-08 14.39.13 - A painting in
+        Baroque style of a pug.png
+parameters: []
+headers:
+  - name: Content-Type
+    value: multipart/form-data
+  - name: User-Agent
+    value: Insomnia/2023.5.2
+authentication:
+  type: bearer
+  prefix: Bearer
+  token: "{% response 'body', 'req_708486559cc44d10b9ea05f1277af9bb',
+    'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
+metaSortKey: -1692013702860.487
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

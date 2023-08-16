@@ -1,0 +1,25 @@
+_id: req_0a06973bf5794e3990f12a55690c02d3
+type: Request
+parentId: fld_3e4959cbc5ea4b85b1b1db777b8e7b0e
+modified: 1692034516671
+created: 1691953558775
+url: "{{ _.base_url }}/posts"
+name: Get all posts
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication:
+  type: bearer
+  prefix: ""
+  token: ""
+  disabled: true
+metaSortKey: -1692034483535.3906
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

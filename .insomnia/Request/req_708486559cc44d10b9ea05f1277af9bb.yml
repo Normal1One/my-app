@@ -1,0 +1,29 @@
+_id: req_708486559cc44d10b9ea05f1277af9bb
+type: Request
+parentId: fld_8426c990c0f946a893f5fb880e0b83b5
+modified: 1692013798422
+created: 1691950685737
+url: "{{ _.base_url }}/sign-in"
+name: Sign in
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"email": "nlavrov2007@gmail.com",
+    	"password": "12345678"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+authentication: {}
+metaSortKey: -1692013346639.1016
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

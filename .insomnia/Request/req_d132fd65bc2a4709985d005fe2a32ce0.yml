@@ -1,0 +1,30 @@
+_id: req_d132fd65bc2a4709985d005fe2a32ce0
+type: Request
+parentId: fld_8426c990c0f946a893f5fb880e0b83b5
+modified: 1692013889937
+created: 1692013850892
+url: "{{ _.base_url }}/sign-up"
+name: Sign up
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"name": "Nikita Lavrov",
+    	"email": "nlavrov2007@gmail.com",
+    	"password": "12345678"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+authentication: {}
+metaSortKey: -1691985935797.5508
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

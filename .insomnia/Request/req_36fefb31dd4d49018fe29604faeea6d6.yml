@@ -1,0 +1,28 @@
+_id: req_36fefb31dd4d49018fe29604faeea6d6
+type: Request
+parentId: fld_6c8c4a42b6e4446f863d405c65e61af9
+modified: 1692034422165
+created: 1692033016690
+url: "{{ _.base_url }}/posts/{% response 'body',
+  'req_cc891f61d7644febafe4019361c7b68d', 'b64::JC5pZA==::46b', 'never', 60
+  %}/likes"
+name: Like post
+description: ""
+method: PUT
+body: {}
+parameters: []
+headers: []
+authentication:
+  type: bearer
+  token: "{% response 'body', 'req_708486559cc44d10b9ea05f1277af9bb',
+    'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'never', 60 %}"
+  prefix: Bearer
+  disabled: false
+metaSortKey: -1692018873726.7488
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
