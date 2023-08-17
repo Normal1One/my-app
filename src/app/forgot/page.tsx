@@ -80,7 +80,7 @@ const Forgot = () => {
                     {'Have an account? '}
                     <Link
                         href='/sign-in'
-                        className='text-gray-400 underline hover:opacity-80'
+                        className='text-gray-400 underline hover:opacity-70'
                     >
                         Sign In
                     </Link>
@@ -89,7 +89,7 @@ const Forgot = () => {
                     {"Don't have an account? "}
                     <Link
                         href='/sign-up'
-                        className='text-gray-400 underline hover:opacity-80'
+                        className='text-gray-400 underline hover:opacity-70'
                     >
                         Sign Up
                     </Link>

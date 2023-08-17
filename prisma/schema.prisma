@@ -40,16 +40,14 @@ model User {
     writtenPosts   Post[]    @relation("WrittenPosts")
     likedPostIDs   String[]  @db.ObjectId
     likedPosts     Post[]    @relation("LikedPosts", fields: [likedPostIDs], references: [id])
-
-    @@unique([id, name])
 }
 
 model Post {
     id         String   @id @default(auto()) @map("_id") @db.ObjectId
-    author     User     @relation("WrittenPosts", fields: [authorId, autorName], references: [id, name], onDelete: Cascade)
+    author     User     @relation("WrittenPosts", fields: [authorId], references: [id], onDelete: Cascade)
     authorId   String   @db.ObjectId
-    autorName  String
     title      String
+    subtitle   String
     createdAt  DateTime @default(now())
     text       String
     likedByIDs String[] @db.ObjectId

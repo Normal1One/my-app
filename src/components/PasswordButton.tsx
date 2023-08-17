@@ -21,9 +21,9 @@ const PasswordButton = ({
             }`}
         >
             {isHidden ? (
-                <BsEyeSlash className='h-5 w-5 fill-gray-400 hover:opacity-80' />
+                <BsEyeSlash className='h-5 w-5 fill-gray-400 hover:opacity-70' />
             ) : (
-                <BsEye className='h-5 w-5 fill-gray-400 hover:opacity-80' />
+                <BsEye className='h-5 w-5 fill-gray-400 hover:opacity-70' />
             )}
         </button>
     )

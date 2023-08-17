@@ -84,7 +84,6 @@ const Update = () => {
 
     return (
         <section>
-            <Header />
             <div className='flex h-[calc(100vh-64px)] align-middle'>
                 <form
                     className='m-auto flex w-96 flex-col gap-2'
@@ -108,7 +107,7 @@ const Update = () => {
                         <input
                             type='file'
                             accept='image/*'
-                            className='w-full self-center rounded border border-gray-400 bg-gray-200 p-1.5 text-sm transition file:cursor-pointer file:appearance-none file:rounded file:border-none file:bg-gray-400 file:p-2 file:text-white file:hover:opacity-80'
+                            className='w-full self-center rounded border border-gray-400 bg-gray-200 p-1.5 text-sm transition file:cursor-pointer file:appearance-none file:rounded file:border-none file:bg-gray-400 file:p-2 file:text-white file:hover:opacity-70'
                             onChange={(e) => setFile(e.target.files?.[0])}
                             ref={ref}
                         />

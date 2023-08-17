@@ -30,13 +30,18 @@ export const DELETE = async (
 
     if (!post) return new NextResponse('No post found', { status: 404 })
 
+    if (post.authorId !== user.id)
+        return new NextResponse("You can't delete other user's post", {
+            status: 403
+        })
+
     await prisma.post.delete({
         where: {
             id: post.id
         }
     })
 
-    return new NextResponse(JSON.stringify([]))
+    return new NextResponse('Post deleted successfully')
 }
 
 export const GET = async (

@@ -78,7 +78,6 @@ const UpdatePassword = () => {
 
     return (
         <section>
-            <Header />
             <div className='flex h-[calc(100vh-64px)]'>
                 <form
                     className='m-auto flex w-96 flex-col gap-2'
