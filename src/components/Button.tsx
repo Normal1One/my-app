@@ -2,12 +2,12 @@ const Button = ({
     text,
     loadingText,
     isLoading,
-    extras
+    onClick
 }: {
     text: string
     loadingText: string
     isLoading: boolean
-    extras?: any
+    onClick?: () => void
 }) => {
     return (
         <button
@@ -16,7 +16,7 @@ const Button = ({
             }`}
             type='submit'
             disabled={isLoading}
-            {...extras}
+            onClick={onClick}
         >
             {isLoading ? loadingText : text}
         </button>

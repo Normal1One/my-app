@@ -21,9 +21,16 @@ type PostWithAuthor = Prisma.PostGetPayload<{
     }
 }>
 
-const Post = ({ post }: { post: PostWithAuthor }) => {
+const Post = ({
+    post,
+    // show,
+    deleteHandler
+}: {
+    post: PostWithAuthor
+    // show: boolean
+    deleteHandler: (arg0: string) => void
+}) => {
     const [liked, setLiked] = useState(false)
-    const [show, setShow] = useState(true)
     const { data } = useSession()
     const router = useRouter()
     const axiosAuth = useAxiosAuth()
@@ -45,18 +52,13 @@ const Post = ({ post }: { post: PostWithAuthor }) => {
         }
     }
 
-    const handleDelete = async () => {
-        await axiosAuth.delete(`api/posts/${post.id}`)
-        setShow(false)
-    }
-
     useEffect(() => {
         if (data?.user) {
             setLiked(post.likedByIDs.includes(data.user.id))
         }
     }, [data?.user, post.likedByIDs])
 
-    if (!show) return
+    // if (!show) return
 
     return (
         <div className='m-auto mb-9 grid max-w-3xl grid-cols-2 justify-between gap-2 rounded border border-gray-400 p-3'>
@@ -93,7 +95,7 @@ const Post = ({ post }: { post: PostWithAuthor }) => {
             {data?.user.id === post.authorId && (
                 <button
                     type='submit'
-                    onClick={handleDelete}
+                    onClick={() => deleteHandler(post.id)}
                     className='w-fit place-self-end self-center hover:opacity-70'
                 >
                     <BsTrash />

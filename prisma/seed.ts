@@ -22,7 +22,7 @@ const main = async () => {
         }
     }
 
-    const posts = faker.helpers.multiple(createRandomPost, { count: 50 })
+    const posts = faker.helpers.multiple(createRandomPost, { count: 30 })
 
     await prisma.post.createMany({ data: posts })
 }

@@ -3,18 +3,29 @@
 import { MouseEvent, useRef, useState } from 'react'
 import { BsX } from 'react-icons/bs'
 import Button from './Button'
+import useAxiosAuth from '@/lib/hooks/useAxiosAuth'
+import { toast } from 'react-hot-toast'
 
-const ConfirmationPopup = () => {
-    const [show, setShow] = useState(false)
+const ConfirmationPopup = ({
+    open,
+    loading,
+    setOpen,
+    onDelete
+}: {
+    open: boolean
+    loading: boolean
+    setOpen: (arg0: boolean) => void
+    onDelete: () => Promise<void>
+}) => {
     const ref = useRef<HTMLDivElement>(null)
 
     const handleClick = (event: MouseEvent) => {
         if (ref.current && !ref.current.contains(event.target as Node)) {
-            setShow(false)
+            setOpen(false)
         }
     }
 
-    if (!show) return
+    if (!open) return
 
     return (
         <div
@@ -24,14 +35,14 @@ const ConfirmationPopup = () => {
             <div className='relative w-[360px] rounded bg-white p-5' ref={ref}>
                 <BsX
                     className='absolute right-2 top-2 h-8 w-8 cursor-pointer hover:opacity-70'
-                    onClick={() => setShow(false)}
+                    onClick={() => setOpen(false)}
                 />
                 <p className='mb-5 text-center text-lg'>Are you sure?</p>
                 <Button
                     text='Delete'
                     loadingText='Deleting...'
-                    isLoading={false}
-                    extras={"type='button'"}
+                    isLoading={loading}
+                    onClick={onDelete}
                 />
             </div>
         </div>

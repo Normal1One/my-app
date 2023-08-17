@@ -57,13 +57,14 @@ const UpdatePassword = () => {
     } = useForm<formValues>({
         resolver: zodResolver(schema)
     })
-    const onSubmit = async ({ confirmPassword, ...values }: formValues) => {
+    const onSubmit = async ({ password }: formValues) => {
         try {
             setLoading(true)
-            const response = await axiosAuth.post(
-                '/api/update-password',
-                values
-            )
+            const response = await axiosAuth.patch('/api/users/me', password, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
             toast.success(response.data)
         } catch (error) {
             if (isAxiosError(error)) {
@@ -77,7 +78,8 @@ const UpdatePassword = () => {
     }
 
     return (
-        <section>
+        <>
+            <Header />
             <div className='flex h-[calc(100vh-64px)]'>
                 <form
                     className='m-auto flex w-96 flex-col gap-2'
@@ -164,7 +166,7 @@ const UpdatePassword = () => {
                     />
                 </form>
             </div>
-        </section>
+        </>
     )
 }
 

@@ -1,5 +1,3 @@
-import ConfirmationPopup from '@/components/ConfirmationPopup'
-import Header from '@/components/Header'
 import AuthProvider from '@/context/AuthProvider'
 import QueryProvider from '@/context/QueryProvider'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
@@ -22,8 +20,6 @@ export default function RootLayout({
                 <body className={inter.className}>
                     <AuthProvider>
                         <Toaster />
-                        <ConfirmationPopup />
-                        <Header />
                         {children}
                     </AuthProvider>
                 </body>

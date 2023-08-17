@@ -44,7 +44,7 @@ const Update = () => {
         try {
             setLoading(true)
             const response = await axiosAuth.patch(
-                '/api/update',
+                '/api/users/me',
                 { file, ...values },
                 {
                     headers: {
@@ -83,7 +83,8 @@ const Update = () => {
     }, [data, defaultValuesSet, reset])
 
     return (
-        <section>
+        <>
+            <Header />
             <div className='flex h-[calc(100vh-64px)] align-middle'>
                 <form
                     className='m-auto flex w-96 flex-col gap-2'
@@ -152,7 +153,7 @@ const Update = () => {
                     />
                 </form>
             </div>
-        </section>
+        </>
     )
 }
 

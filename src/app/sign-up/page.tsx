@@ -85,11 +85,9 @@ const SignUp = () => {
 
     if (success) {
         return (
-            <div className='flex h-[100vh] items-center justify-center text-center'>
-                <p className='text-xl'>
-                    Verification email has been sent to {email}, please check
-                    your email
-                </p>
+            <div className='absolute top-1/2 w-full text-center text-lg'>
+                Verification email has been sent to {email}, please check your
+                email
             </div>
         )
     }

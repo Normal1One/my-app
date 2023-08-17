@@ -35,8 +35,16 @@ export const AuthGetApi = async (url: string) => {
                 Authorization: `Bearer ${session?.user.accessToken}`
             }
         })
-        return await response.json()
+        try {
+            return await response.json()
+        } catch (error) {
+            console.error(error)
+        }
     }
 
-    return await response.json()
+    try {
+        return await response.json()
+    } catch (error) {
+        console.error(error)
+    }
 }
