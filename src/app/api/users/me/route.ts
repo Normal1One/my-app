@@ -28,11 +28,9 @@ export const PATCH = async (request: NextRequest) => {
         return new NextResponse('File size is too big', { status: 413 })
 
     const hashPassword = async () => {
-        const password = body.get('password')
+        const newPassword = body.get('newPassword')
 
-        if (password) {
-            return await bcrypt.hash(password as string, 10)
-        }
+        if (newPassword) return await bcrypt.hash(newPassword as string, 10)
     }
 
     const user = await prisma.user.update({

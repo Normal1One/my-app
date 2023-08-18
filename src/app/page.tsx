@@ -1,7 +1,6 @@
 'use client'
 
 import ConfirmationPopup from '@/components/ConfirmationPopup'
-import Header from '@/components/Header'
 import Post from '@/components/Post'
 import axios from '@/lib/axios'
 import useAxiosAuth from '@/lib/hooks/useAxiosAuth'
@@ -100,6 +99,7 @@ const Home = () => {
 
     //TODO: Add Post page
     //TODO: Add Post creating page
+    //TODO: Add Name parameter for PasswordResetForm
 
     return (
         <>
@@ -109,7 +109,6 @@ const Home = () => {
                 setOpen={setOpen}
                 onDelete={deletePost}
             />
-            <Header />
             {error && (
                 <p className='mb-4 mt-9 w-full text-center text-lg'>
                     Failed to fetch posts
