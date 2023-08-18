@@ -64,7 +64,7 @@ const SignUp = () => {
     const onSubmit = async ({ confirmPassword, ...values }: formValues) => {
         try {
             setLoading(true)
-            await axios.post('/api/sign-up', JSON.stringify(values))
+            await axios.post('/api/users', JSON.stringify(values))
             await signIn('email', {
                 redirect: false,
                 callbackUrl: '/',

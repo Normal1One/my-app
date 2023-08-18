@@ -1,10 +1,8 @@
 'use client'
 
-import { MouseEvent, useRef, useState } from 'react'
+import { MouseEvent, useRef } from 'react'
 import { BsX } from 'react-icons/bs'
 import Button from './Button'
-import useAxiosAuth from '@/lib/hooks/useAxiosAuth'
-import { toast } from 'react-hot-toast'
 
 const ConfirmationPopup = ({
     open,

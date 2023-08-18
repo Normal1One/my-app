@@ -6,7 +6,8 @@ import Post from '@/components/Post'
 import axios from '@/lib/axios'
 import useAxiosAuth from '@/lib/hooks/useAxiosAuth'
 import { Prisma } from '@prisma/client'
-import { useInfiniteQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query'
+import { isAxiosError } from 'axios'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { useInView } from 'react-intersection-observer'
@@ -26,8 +27,8 @@ const Home = () => {
     const [open, setOpen] = useState(false)
     const [postId, setPostId] = useState('')
     const [loading, setLoading] = useState(false)
-    // const [show, setShow] = useState(true)
     const axiosAuth = useAxiosAuth()
+    const queryClient = useQueryClient()
     const { ref, inView } = useInView()
     const allPosts = async ({
         take,
@@ -67,17 +68,27 @@ const Home = () => {
         setOpen(true)
     }
 
-    const handleDelete = async () => {
+    const deletePost = async () => {
         try {
             setLoading(true)
             const response = await axiosAuth.delete(`api/posts/${postId}`)
             toast.success(response.data)
+            const newData = data?.pages.map((page) => ({
+                ...page,
+                data: page.data.filter(
+                    (post: PostWithAuthor) => post.id !== postId
+                )
+            }))
+            queryClient.setQueryData(['posts'], { pages: newData })
         } catch (error) {
-            toast.error('Something went wrong!')
+            if (isAxiosError(error)) {
+                toast.error(error.response?.data)
+            } else {
+                toast.error('Something went wrong')
+            }
         } finally {
             setLoading(false)
             setOpen(false)
-            // setShow(false)
         }
     }
 
@@ -87,10 +98,8 @@ const Home = () => {
         }
     }, [hasNextPage, inView, fetchNextPage])
 
-    //TODO: Add Post invalidation
     //TODO: Add Post page
     //TODO: Add Post creating page
-    //TODO: Fix Post deleting from users
 
     return (
         <>
@@ -98,7 +107,7 @@ const Home = () => {
                 open={open}
                 loading={loading}
                 setOpen={setOpen}
-                onDelete={handleDelete}
+                onDelete={deletePost}
             />
             <Header />
             {error && (
@@ -118,7 +127,6 @@ const Home = () => {
                                             <li ref={ref} key={index}>
                                                 <Post
                                                     post={post}
-                                                    // show={show}
                                                     deleteHandler={
                                                         deleteHandler
                                                     }
@@ -130,7 +138,6 @@ const Home = () => {
                                             <li key={post.id}>
                                                 <Post
                                                     post={post}
-                                                    // show={show}
                                                     deleteHandler={
                                                         deleteHandler
                                                     }

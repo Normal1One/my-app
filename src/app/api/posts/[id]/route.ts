@@ -25,6 +25,9 @@ export const DELETE = async (
     const post = await prisma.post.findUnique({
         where: {
             id: params.id
+        },
+        include: {
+            likedBy: true
         }
     })
 
@@ -34,6 +37,21 @@ export const DELETE = async (
         return new NextResponse("You can't delete other user's post", {
             status: 403
         })
+
+    await Promise.all(
+        post.likedBy.map(async (user) => {
+            await prisma.user.update({
+                where: {
+                    id: user.id
+                },
+                data: {
+                    likedPostIDs: {
+                        set: user.likedPostIDs.filter((id) => id !== post.id)
+                    }
+                }
+            })
+        })
+    )
 
     await prisma.post.delete({
         where: {

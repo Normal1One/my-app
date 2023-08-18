@@ -2,12 +2,14 @@
 
 import useAxiosAuth from '@/lib/hooks/useAxiosAuth'
 import { Prisma } from '@prisma/client'
+import { isAxiosError } from 'axios'
 import dayjs from 'dayjs'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { toast } from 'react-hot-toast'
 import { BsHeart, BsHeartFill, BsPerson, BsTrash } from 'react-icons/bs'
 
 type PostWithAuthor = Prisma.PostGetPayload<{
@@ -23,11 +25,9 @@ type PostWithAuthor = Prisma.PostGetPayload<{
 
 const Post = ({
     post,
-    // show,
     deleteHandler
 }: {
     post: PostWithAuthor
-    // show: boolean
     deleteHandler: (arg0: string) => void
 }) => {
     const [liked, setLiked] = useState(false)
@@ -36,19 +36,27 @@ const Post = ({
     const axiosAuth = useAxiosAuth()
 
     const handleLike = async () => {
-        if (data) {
-            if (liked) {
-                await axiosAuth.delete(`api/posts/${post.id}/likes`)
-                post.likedByIDs = post.likedByIDs.filter(
-                    (id) => id !== data.user.id
-                )
+        try {
+            if (data) {
+                if (liked) {
+                    await axiosAuth.delete(`api/posts/${post.id}/likes`)
+                    post.likedByIDs = post.likedByIDs.filter(
+                        (id) => id !== data.user.id
+                    )
+                } else {
+                    await axiosAuth.put(`api/posts/${post.id}/likes`)
+                    post.likedByIDs.push(data.user.id)
+                }
+                setLiked(!liked)
             } else {
-                await axiosAuth.put(`api/posts/${post.id}/likes`)
-                post.likedByIDs.push(data.user.id)
+                router.push('/sign-in')
             }
-            setLiked(!liked)
-        } else {
-            router.push('/sign-in')
+        } catch (error) {
+            if (isAxiosError(error)) {
+                toast.error(error.response?.data)
+            } else {
+                toast.error('Something went wrong')
+            }
         }
     }
 
@@ -57,8 +65,6 @@ const Post = ({
             setLiked(post.likedByIDs.includes(data.user.id))
         }
     }, [data?.user, post.likedByIDs])
-
-    // if (!show) return
 
     return (
         <div className='m-auto mb-9 grid max-w-3xl grid-cols-2 justify-between gap-2 rounded border border-gray-400 p-3'>
