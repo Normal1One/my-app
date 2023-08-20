@@ -12,13 +12,12 @@ type formValues = {
 
 const Reset = ({ params }: { params: { token: string } }) => {
     const [isLoading, setLoading] = useState(false)
-    const onSubmit = async ({ confirmPassword, ...result }: formValues) => {
+    const onSubmit = async ({ newPassword }: formValues) => {
         try {
             setLoading(true)
-            const response = await axios.put(
-                `/api/reset/${params.token}`,
-                JSON.stringify(result)
-            )
+            const response = await axios.put(`/api/reset/${params.token}`, {
+                newPassword
+            })
             toast.success(response.data)
         } catch (error) {
             if (isAxiosError(error)) {

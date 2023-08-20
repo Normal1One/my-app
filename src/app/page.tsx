@@ -3,31 +3,14 @@
 import ConfirmationPopup from '@/components/ConfirmationPopup'
 import Post from '@/components/Post'
 import axios from '@/lib/axios'
-import useAxiosAuth from '@/lib/hooks/useAxiosAuth'
-import { Prisma } from '@prisma/client'
-import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query'
-import { isAxiosError } from 'axios'
+import { PostWithAuthor } from '@/types/prismaTypes'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
-import { toast } from 'react-hot-toast'
 import { useInView } from 'react-intersection-observer'
-
-type PostWithAuthor = Prisma.PostGetPayload<{
-    include: {
-        author: {
-            select: {
-                name: true
-                image: true
-            }
-        }
-    }
-}>
 
 const Home = () => {
     const [open, setOpen] = useState(false)
     const [postId, setPostId] = useState('')
-    const [loading, setLoading] = useState(false)
-    const axiosAuth = useAxiosAuth()
-    const queryClient = useQueryClient()
     const { ref, inView } = useInView()
     const allPosts = async ({
         take,
@@ -47,7 +30,7 @@ const Home = () => {
 
     const {
         data,
-        error,
+        isError,
         isLoading,
         hasNextPage,
         fetchNextPage,
@@ -62,33 +45,9 @@ const Home = () => {
         }
     })
 
-    const deleteHandler = async (id: string) => {
+    const deleteHandler = (id: string) => {
         setPostId(id)
         setOpen(true)
-    }
-
-    const deletePost = async () => {
-        try {
-            setLoading(true)
-            const response = await axiosAuth.delete(`api/posts/${postId}`)
-            toast.success(response.data)
-            const newData = data?.pages.map((page) => ({
-                ...page,
-                data: page.data.filter(
-                    (post: PostWithAuthor) => post.id !== postId
-                )
-            }))
-            queryClient.setQueryData(['posts'], { pages: newData })
-        } catch (error) {
-            if (isAxiosError(error)) {
-                toast.error(error.response?.data)
-            } else {
-                toast.error('Something went wrong')
-            }
-        } finally {
-            setLoading(false)
-            setOpen(false)
-        }
     }
 
     useEffect(() => {
@@ -97,19 +56,17 @@ const Home = () => {
         }
     }, [hasNextPage, inView, fetchNextPage])
 
-    //TODO: Add Post page
     //TODO: Add Post creating page
-    //TODO: Add Name parameter for PasswordResetForm
 
     return (
         <>
             <ConfirmationPopup
                 open={open}
-                loading={loading}
+                postId={postId}
+                data={data}
                 setOpen={setOpen}
-                onDelete={deletePost}
             />
-            {error && (
+            {isError && (
                 <p className='mb-4 mt-9 w-full text-center text-lg'>
                     Failed to fetch posts
                 </p>

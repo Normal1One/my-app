@@ -1,27 +1,16 @@
 'use client'
 
 import useAxiosAuth from '@/lib/hooks/useAxiosAuth'
-import { Prisma } from '@prisma/client'
+import { PostWithAuthor } from '@/types/prismaTypes'
 import { isAxiosError } from 'axios'
 import dayjs from 'dayjs'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { BsHeart, BsHeartFill, BsPerson, BsTrash } from 'react-icons/bs'
-
-type PostWithAuthor = Prisma.PostGetPayload<{
-    include: {
-        author: {
-            select: {
-                name: true
-                image: true
-            }
-        }
-    }
-}>
 
 const Post = ({
     post,
@@ -33,6 +22,7 @@ const Post = ({
     const [liked, setLiked] = useState(false)
     const { data } = useSession()
     const router = useRouter()
+    const pathname = usePathname()
     const axiosAuth = useAxiosAuth()
 
     const handleLike = async () => {
@@ -88,8 +78,21 @@ const Post = ({
             <p className='text-end text-gray-400'>
                 {dayjs(post.createdAt).format('MMMM DD[,] YYYY [at] h:mm A')}
             </p>
-            <p className='col-span-2 text-xl font-bold'>{post.title}</p>
-            <p className='col-span-2 row-start-3'>{post.subtitle}</p>
+            {pathname.includes('posts') ? (
+                <div className='col-span-2 row-start-2'>
+                    <p className='mb-2 text-xl font-bold'>{post.title}</p>
+                    <p className='mb-2'>{post.subtitle}</p>
+                    <p className='col-span-2 row-start-3'>{post.text}</p>
+                </div>
+            ) : (
+                <Link
+                    href={`/posts/${post.id}`}
+                    className='col-span-2 row-start-2'
+                >
+                    <p className='mb-2 text-xl font-bold'>{post.title}</p>
+                    <p>{post.subtitle}</p>
+                </Link>
+            )}
             <button
                 type='submit'
                 onClick={handleLike}
