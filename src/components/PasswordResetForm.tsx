@@ -106,11 +106,7 @@ const PasswordResetForm = ({
             <p className='text-xs text-rose-600'>
                 {errors.confirmPassword?.message}
             </p>
-            <Button
-                text='Reset password'
-                loadingText='Resetting password...'
-                isLoading={isLoading}
-            />
+            <Button isLoading={isLoading} />
         </form>
     )
 }

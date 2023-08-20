@@ -71,11 +71,7 @@ const Forgot = () => {
                     {...register('email')}
                 ></input>
                 <p className='text-xs text-rose-600'>{errors.email?.message}</p>
-                <Button
-                    text='Submit'
-                    loadingText='Submitting...'
-                    isLoading={isLoading}
-                />
+                <Button isLoading={isLoading} />
                 <p className='mt-2 self-center text-sm'>
                     {'Have an account? '}
                     <Link

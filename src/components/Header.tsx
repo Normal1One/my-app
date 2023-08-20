@@ -34,6 +34,12 @@ const Header = () => {
                     </Link>
                     {data ? (
                         <>
+                            <Link
+                                href='/posts/create'
+                                className='hover:opacity-70'
+                            >
+                                Create Post
+                            </Link>
                             <button
                                 onClick={() =>
                                     signOut({

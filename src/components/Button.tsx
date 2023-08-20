@@ -1,11 +1,7 @@
 const Button = ({
-    text,
-    loadingText,
     isLoading,
     onClick
 }: {
-    text: string
-    loadingText: string
     isLoading: boolean
     onClick?: () => void
 }) => {
@@ -18,7 +14,7 @@ const Button = ({
             disabled={isLoading}
             onClick={onClick}
         >
-            {isLoading ? loadingText : text}
+            {isLoading ? 'Submitting...' : 'Submit'}
         </button>
     )
 }

@@ -45,6 +45,9 @@ const Home = () => {
         }
     })
 
+    //TODO: Fix refresh token bug
+    //TODO: Add posts listing
+
     const deleteHandler = (id: string) => {
         setPostId(id)
         setOpen(true)
@@ -55,8 +58,6 @@ const Home = () => {
             fetchNextPage()
         }
     }, [hasNextPage, inView, fetchNextPage])
-
-    //TODO: Add Post creating page
 
     return (
         <>

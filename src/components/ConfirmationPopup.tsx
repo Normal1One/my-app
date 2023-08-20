@@ -8,6 +8,7 @@ import { MouseEvent, useRef, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { BsX } from 'react-icons/bs'
 import Button from './Button'
+import { usePathname, useRouter } from 'next/navigation'
 
 const ConfirmationPopup = ({
     open,
@@ -22,6 +23,8 @@ const ConfirmationPopup = ({
 }) => {
     const ref = useRef<HTMLDivElement>(null)
     const [loading, setLoading] = useState(false)
+    const router = useRouter()
+    const pathname = usePathname()
     const axiosAuth = useAxiosAuth()
     const queryClient = useQueryClient()
 
@@ -34,8 +37,9 @@ const ConfirmationPopup = ({
     const deletePost = async () => {
         try {
             setLoading(true)
-            const response = await axiosAuth.delete(`api/posts/${postId}`)
+            const response = await axiosAuth.delete(`/api/posts/${postId}`)
             toast.success(response.data)
+            if (pathname.includes('posts')) router.push('/')
             if (data) {
                 const newData = data?.pages.map((page) => ({
                     ...page,
@@ -70,12 +74,7 @@ const ConfirmationPopup = ({
                     onClick={() => setOpen(false)}
                 />
                 <p className='mb-5 text-center text-lg'>Are you sure?</p>
-                <Button
-                    text='Delete'
-                    loadingText='Deleting...'
-                    isLoading={loading}
-                    onClick={deletePost}
-                />
+                <Button isLoading={loading} onClick={deletePost} />
             </div>
         </div>
     )

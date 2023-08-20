@@ -139,11 +139,7 @@ const Update = () => {
                     {...register('email')}
                 ></input>
                 <p className='text-xs text-rose-600'>{errors.email?.message}</p>
-                <Button
-                    text='Update'
-                    loadingText='Updating...'
-                    isLoading={isLoading}
-                />
+                <Button isLoading={isLoading} />
             </form>
         </div>
     )

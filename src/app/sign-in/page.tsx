@@ -123,11 +123,7 @@ const SignIn = () => {
                 <p className='text-xs text-rose-600'>
                     {errors.password?.message}
                 </p>
-                <Button
-                    text='Sign In'
-                    loadingText='Signing In...'
-                    isLoading={isLoading}
-                />
+                <Button isLoading={isLoading} />
                 <div className='grid grid-cols-3 items-center text-gray-400'>
                     <hr className='border-gray-400' />
                     <p className='text-center text-sm'>OR</p>
