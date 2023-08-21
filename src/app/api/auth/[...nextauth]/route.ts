@@ -46,16 +46,14 @@ export const authOptions: NextAuthOptions = {
             },
             async authorize(credentials) {
                 const response = await axios.post(
-                    `${process.env.NEXTAUTH_URL}/api/sign-in`,
+                    `${process.env.NEXTAUTH_URL}/api/users/me`,
                     JSON.stringify({
                         email: credentials?.email,
                         password: credentials?.password
                     })
                 )
 
-                const user = response.data
-
-                return user ?? null
+                return response.data ?? null
             }
         })
     ],

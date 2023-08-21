@@ -24,18 +24,24 @@ const PostDetails = ({ params }: { params: { id: string } }) => {
     }
 
     return (
-        <div className='mt-9'>
+        <>
             <ConfirmationPopup open={open} postId={postId} setOpen={setOpen} />
-            {isError && (
-                <div className='absolute top-1/2 w-full text-center text-lg'>
-                    Failed to fetch post
-                </div>
-            )}
-            {isSuccess && <Post post={data} deleteHandler={deleteHandler} />}
-            {isLoading && (
-                <p className='mb-4 w-full text-center text-lg'>Loading...</p>
-            )}
-        </div>
+            <div className='mt-9'>
+                {isError && (
+                    <div className='absolute top-1/2 w-full text-center text-lg'>
+                        Failed to fetch post
+                    </div>
+                )}
+                {isSuccess && (
+                    <Post post={data} deleteHandler={deleteHandler} />
+                )}
+                {isLoading && (
+                    <p className='mb-4 w-full text-center text-lg'>
+                        Loading...
+                    </p>
+                )}
+            </div>
+        </>
     )
 }
 

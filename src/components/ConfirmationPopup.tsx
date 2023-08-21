@@ -2,23 +2,28 @@
 
 import useAxiosAuth from '@/lib/hooks/useAxiosAuth'
 import { PostWithAuthor } from '@/types/prismaTypes'
-import { InfiniteData, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { isAxiosError } from 'axios'
+import { usePathname, useRouter } from 'next/navigation'
 import { MouseEvent, useRef, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { BsX } from 'react-icons/bs'
 import Button from './Button'
-import { usePathname, useRouter } from 'next/navigation'
+
+interface PaginatedPosts {
+    pages: {
+        data: PostWithAuthor[]
+    }[]
+    pageParams: null | string
+}
 
 const ConfirmationPopup = ({
     open,
     postId,
-    data,
     setOpen
 }: {
     open: boolean
     postId: string
-    data?: InfiniteData<any>
     setOpen: (arg0: boolean) => void
 }) => {
     const ref = useRef<HTMLDivElement>(null)
@@ -34,21 +39,12 @@ const ConfirmationPopup = ({
         }
     }
 
-    const deletePost = async () => {
+    const onDelete = async () => {
         try {
             setLoading(true)
             const response = await axiosAuth.delete(`/api/posts/${postId}`)
             toast.success(response.data)
             if (pathname.includes('posts')) router.push('/')
-            if (data) {
-                const newData = data?.pages.map((page) => ({
-                    ...page,
-                    data: page.data.filter(
-                        (post: PostWithAuthor) => post.id !== postId
-                    )
-                }))
-                queryClient.setQueryData(['posts'], { pages: newData })
-            }
         } catch (error) {
             if (isAxiosError(error)) {
                 toast.error(error.response?.data)
@@ -60,6 +56,32 @@ const ConfirmationPopup = ({
             setOpen(false)
         }
     }
+
+    const mutation = useMutation({
+        mutationFn: onDelete,
+        onMutate: async () => {
+            await queryClient.cancelQueries({ queryKey: ['posts'] })
+            const previousPosts = queryClient.getQueryData<PaginatedPosts>([
+                'posts'
+            ])
+            queryClient.setQueryData(['posts'], {
+                pages: previousPosts?.pages.map((page: any) => ({
+                    ...page,
+                    data: page.data.filter(
+                        (post: PostWithAuthor) => post.id !== postId
+                    )
+                })),
+                pageProps: previousPosts?.pageParams
+            })
+            return { previousPosts }
+        },
+        onError: (error, variables, context) => {
+            queryClient.setQueryData(['posts'], context?.previousPosts)
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ['posts'] })
+        }
+    })
 
     if (!open) return
 
@@ -74,7 +96,7 @@ const ConfirmationPopup = ({
                     onClick={() => setOpen(false)}
                 />
                 <p className='mb-5 text-center text-lg'>Are you sure?</p>
-                <Button isLoading={loading} onClick={deletePost} />
+                <Button isLoading={loading} onClick={() => mutation.mutate()} />
             </div>
         </div>
     )

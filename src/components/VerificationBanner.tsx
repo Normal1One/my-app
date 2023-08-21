@@ -16,7 +16,7 @@ const VerificationBanner = ({
     if (!show) return
 
     return (
-        <section className='fixed w-full bg-rose-600'>
+        <div className='bg-rose-600'>
             <div className='m-auto flex h-8 max-w-7xl items-center justify-around'>
                 <BsX
                     className='h-8 w-8 cursor-pointer hover:opacity-70'
@@ -39,7 +39,7 @@ const VerificationBanner = ({
                     Resent verification email
                 </button>
             </div>
-        </section>
+        </div>
     )
 }
 

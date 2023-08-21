@@ -44,10 +44,16 @@ export const POST = async (request: NextRequest) => {
 }
 
 export const GET = async (request: NextRequest) => {
+    const authorId = request.nextUrl.searchParams.get('authorId')
     const take = request.nextUrl.searchParams.get('take')
     const lastCursor = request.nextUrl.searchParams.get('lastCursor')
 
     const posts = await prisma.post.findMany({
+        ...(authorId && {
+            where: {
+                authorId
+            }
+        }),
         take: take ? parseInt(take as string) : 10,
         ...(lastCursor && {
             skip: 1,
@@ -84,6 +90,11 @@ export const GET = async (request: NextRequest) => {
     const cursor: string = lastPostInResults.id
 
     const nextPosts = await prisma.post.findMany({
+        ...(authorId && {
+            where: {
+                authorId
+            }
+        }),
         take: take ? parseInt(take as string) : 7,
         skip: 1,
         cursor: {

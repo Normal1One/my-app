@@ -1,6 +1,8 @@
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import Popper from '@/components/Popper'
+import PostsList from '@/components/PostsList'
 import UserDeleteButton from '@/components/UserDeleteButton'
+import axios from '@/lib/axios'
 import { AuthGetApi } from '@/lib/fetchAPI'
 import { getServerSession } from 'next-auth'
 import Image from 'next/image'
@@ -11,6 +13,24 @@ const User = async ({ params }: { params: { id: string } }) => {
     const session = await getServerSession(authOptions)
     const response = await AuthGetApi(`api/users/${params.id}`)
 
+    const allPosts = async ({
+        take,
+        lastCursor
+    }: {
+        take?: number
+        lastCursor?: string
+    }) => {
+        'use server'
+        const response = await axios.get('api/posts', {
+            params: {
+                take,
+                lastCursor,
+                authorId: params.id
+            }
+        })
+        return response?.data
+    }
+
     if (!response)
         return (
             <div className='absolute top-1/2 w-full text-center text-lg'>
@@ -19,8 +39,8 @@ const User = async ({ params }: { params: { id: string } }) => {
         )
 
     return (
-        <div className='flex h-[calc(100vh-64px)] align-middle'>
-            <div className='m-auto flex flex-col items-center gap-2'>
+        <div className='pt-32 align-middle'>
+            <div className='m-auto mb-16 flex flex-col items-center gap-2'>
                 {response.image ? (
                     <Image
                         src={response.image}
@@ -59,6 +79,7 @@ const User = async ({ params }: { params: { id: string } }) => {
                     </>
                 )}
             </div>
+            <PostsList allPosts={allPosts} />
         </div>
     )
 }

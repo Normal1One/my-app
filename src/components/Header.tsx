@@ -26,8 +26,8 @@ const Header = () => {
 
     return (
         <>
-            <VerificationBanner show={show} setShow={setShow} />
-            <div className={`bg-gray-200 ${show ? 'pt-8' : ''}`}>
+            <div className='fixed w-full bg-gray-200'>
+                <VerificationBanner show={show} setShow={setShow} />
                 <div className='m-auto flex max-w-7xl items-center justify-around pb-5 pt-5'>
                     <Link href='/' className='hover:opacity-70'>
                         Home

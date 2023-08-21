@@ -12,7 +12,10 @@ const nextConfig = {
                 hostname: '*.supabase.co'
             }
         ]
-    }
+    },
+    experimental: {
+        serverActions: true,
+    },
 }
 
 module.exports = nextConfig

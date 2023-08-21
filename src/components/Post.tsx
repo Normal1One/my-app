@@ -29,12 +29,12 @@ const Post = ({
         try {
             if (data) {
                 if (liked) {
-                    await axiosAuth.delete(`api/posts/${post.id}/likes`)
+                    await axiosAuth.delete(`/api/posts/${post.id}/likes`)
                     post.likedByIDs = post.likedByIDs.filter(
                         (id) => id !== data.user.id
                     )
                 } else {
-                    await axiosAuth.put(`api/posts/${post.id}/likes`)
+                    await axiosAuth.put(`/api/posts/${post.id}/likes`)
                     post.likedByIDs.push(data.user.id)
                 }
                 setLiked(!liked)
