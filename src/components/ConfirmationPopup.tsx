@@ -1,6 +1,7 @@
 'use client'
 
 import useAxiosAuth from '@/lib/hooks/useAxiosAuth'
+import { selectPopupState, setOpen } from '@/redux/slices/popupSlice'
 import { PostWithAuthor } from '@/types/prismaTypes'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { isAxiosError } from 'axios'
@@ -8,7 +9,8 @@ import { usePathname, useRouter } from 'next/navigation'
 import { MouseEvent, useRef, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { BsX } from 'react-icons/bs'
-import Button from './Button'
+import { useDispatch, useSelector } from 'react-redux'
+import Button from './ui/Button'
 
 interface PaginatedPosts {
     pages: {
@@ -17,32 +19,28 @@ interface PaginatedPosts {
     pageParams: null | string
 }
 
-const ConfirmationPopup = ({
-    open,
-    postId,
-    setOpen
-}: {
-    open: boolean
-    postId: string
-    setOpen: (arg0: boolean) => void
-}) => {
+const ConfirmationPopup = () => {
     const ref = useRef<HTMLDivElement>(null)
     const [loading, setLoading] = useState(false)
     const router = useRouter()
     const pathname = usePathname()
     const axiosAuth = useAxiosAuth()
     const queryClient = useQueryClient()
+    const popupState = useSelector(selectPopupState)
+    const dispatch = useDispatch()
 
     const handleClick = (event: MouseEvent) => {
         if (ref.current && !ref.current.contains(event.target as Node)) {
-            setOpen(false)
+            dispatch(setOpen(false))
         }
     }
 
     const onDelete = async () => {
         try {
             setLoading(true)
-            const response = await axiosAuth.delete(`/api/posts/${postId}`)
+            const response = await axiosAuth.delete(
+                `/api/posts/${popupState.postId}`
+            )
             toast.success(response.data)
             if (pathname.includes('posts')) router.push('/')
         } catch (error) {
@@ -53,7 +51,7 @@ const ConfirmationPopup = ({
             }
         } finally {
             setLoading(false)
-            setOpen(false)
+            dispatch(setOpen(false))
         }
     }
 
@@ -68,7 +66,7 @@ const ConfirmationPopup = ({
                 pages: previousPosts?.pages.map((page: any) => ({
                     ...page,
                     data: page.data.filter(
-                        (post: PostWithAuthor) => post.id !== postId
+                        (post: PostWithAuthor) => post.id !== popupState.postId
                     )
                 })),
                 pageProps: previousPosts?.pageParams
@@ -83,7 +81,7 @@ const ConfirmationPopup = ({
         }
     })
 
-    if (!open) return
+    if (!popupState.open) return
 
     return (
         <div
@@ -93,7 +91,7 @@ const ConfirmationPopup = ({
             <div className='relative w-[360px] rounded bg-white p-5' ref={ref}>
                 <BsX
                     className='absolute right-2 top-2 h-8 w-8 cursor-pointer hover:opacity-70'
-                    onClick={() => setOpen(false)}
+                    onClick={() => dispatch(setOpen(false))}
                 />
                 <p className='mb-5 text-center text-lg'>Are you sure?</p>
                 <Button isLoading={loading} onClick={() => mutation.mutate()} />

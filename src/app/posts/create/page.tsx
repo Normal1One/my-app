@@ -1,6 +1,10 @@
 'use client'
 
-import Button from '@/components/Button'
+import Header from '@/components/Header'
+import Button from '@/components/ui/Button'
+import Form from '@/components/ui/Form'
+import InputGroup from '@/components/ui/InputGroup'
+import TextareaGroup from '@/components/ui/TextareaGroup'
 import useAxiosAuth from '@/lib/hooks/useAxiosAuth'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { isAxiosError } from 'axios'
@@ -51,58 +55,35 @@ const Create = () => {
     })
 
     return (
-        <div className='flex h-[calc(100vh-64px)]'>
-            <form
-                className='m-auto flex w-96 flex-col gap-2'
-                onSubmit={handleSubmit(onSubmit)}
-                noValidate
-            >
-                <p className='mb-5 self-center text-2xl'>Create Post</p>
-                <label htmlFor='title' className='mb-2 text-sm'>
-                    Title
-                </label>
-                <input
-                    className={`rounded border border-gray-400 bg-gray-200 p-3 transition focus:shadow-md focus:outline-none ${
-                        errors.title &&
-                        'border-rose-600 bg-rose-200 placeholder-rose-600'
-                    }`}
-                    type='text'
-                    id='title'
-                    {...register('title')}
-                />
-                <p className='text-xs text-rose-600'>{errors.title?.message}</p>
-                <label htmlFor='subtitle' className='mb-2 text-sm'>
-                    Subtitle
-                </label>
-                <input
-                    className={`rounded border border-gray-400 bg-gray-200 p-3 transition focus:shadow-md focus:outline-none ${
-                        errors.subtitle &&
-                        'border-rose-600 bg-rose-200 placeholder-rose-600'
-                    }`}
-                    type='text'
-                    id='subtitle'
-                    {...register('subtitle')}
-                />
-                <p className='text-xs text-rose-600'>
-                    {errors.subtitle?.message}
-                </p>
-                <label htmlFor='text' className='mb-2 text-sm'>
-                    Text
-                </label>
-                <textarea
-                    className={`rounded border border-gray-400 bg-gray-200 p-3 transition focus:shadow-md focus:outline-none ${
-                        errors.text &&
-                        'border-rose-600 bg-rose-200 placeholder-rose-600'
-                    }`}
-                    rows={10}
-                    cols={50}
-                    id='text'
-                    {...register('text')}
-                />
-                <p className='text-xs text-rose-600'>{errors.text?.message}</p>
-                <Button isLoading={isLoading} />
-            </form>
-        </div>
+        <>
+            <Header />
+            <div className='flex h-[calc(100vh-64px)]'>
+                <Form onSubmit={handleSubmit(onSubmit)}>
+                    <p className='mb-5 self-center text-2xl'>Create Post</p>
+                    <InputGroup
+                        type='text'
+                        text='Title'
+                        id='title'
+                        isError={errors.title}
+                        register={register('title')}
+                    />
+                    <InputGroup
+                        type='text'
+                        text='Subtitle'
+                        id='subtitle'
+                        isError={errors.subtitle}
+                        register={register('subtitle')}
+                    />
+                    <TextareaGroup
+                        text='Text'
+                        id='text'
+                        isError={errors.text}
+                        register={register('text')}
+                    />
+                    <Button isLoading={isLoading} />
+                </Form>
+            </div>
+        </>
     )
 }
 

@@ -26,7 +26,7 @@ export const POST = async (request: NextRequest) => {
     if (!passwordMatch)
         return new NextResponse('Incorrect password', { status: 401 })
 
-    const { hashedPassword, ...result } = user
+    const { hashedPassword, likedPostIDs, ...result } = user
     const { accessToken, refreshToken } = signJwtAccessToken(result)
     return new NextResponse(
         JSON.stringify({ ...result, accessToken, refreshToken })

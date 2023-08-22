@@ -1,6 +1,7 @@
 'use client'
 
 import useAxiosAuth from '@/lib/hooks/useAxiosAuth'
+import { setOpen, setPostId } from '@/redux/slices/popupSlice'
 import { PostWithAuthor } from '@/types/prismaTypes'
 import { isAxiosError } from 'axios'
 import dayjs from 'dayjs'
@@ -11,19 +12,15 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { BsHeart, BsHeartFill, BsPerson, BsTrash } from 'react-icons/bs'
+import { useDispatch } from 'react-redux'
 
-const Post = ({
-    post,
-    deleteHandler
-}: {
-    post: PostWithAuthor
-    deleteHandler: (arg0: string) => void
-}) => {
+const Post = ({ post }: { post: PostWithAuthor }) => {
     const [liked, setLiked] = useState(false)
     const { data } = useSession()
     const router = useRouter()
     const pathname = usePathname()
     const axiosAuth = useAxiosAuth()
+    const dispatch = useDispatch()
 
     const handleLike = async () => {
         try {
@@ -48,6 +45,11 @@ const Post = ({
                 toast.error('Something went wrong')
             }
         }
+    }
+
+    const onClick = () => {
+        dispatch(setOpen(true))
+        dispatch(setPostId(post.id))
     }
 
     useEffect(() => {
@@ -104,7 +106,7 @@ const Post = ({
             {data?.user.id === post.authorId && (
                 <button
                     type='submit'
-                    onClick={() => deleteHandler(post.id)}
+                    onClick={onClick}
                     className='w-fit place-self-end self-center hover:opacity-70'
                 >
                     <BsTrash />

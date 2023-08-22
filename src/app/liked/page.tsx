@@ -3,7 +3,7 @@ import Header from '@/components/Header'
 import PostsList from '@/components/PostsList'
 import axios from '@/lib/axios'
 
-const Home = () => {
+const Liked = () => {
     const allPosts = async ({
         take,
         lastCursor
@@ -12,7 +12,7 @@ const Home = () => {
         lastCursor?: string
     }) => {
         'use server'
-        const response = await axios.get('api/posts', {
+        const response = await axios.get('api/posts/liked', {
             params: {
                 take,
                 lastCursor
@@ -32,4 +32,4 @@ const Home = () => {
     )
 }
 
-export default Home
+export default Liked

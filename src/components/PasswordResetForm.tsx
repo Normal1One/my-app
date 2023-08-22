@@ -2,8 +2,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import Button from './Button'
-import PasswordButton from './PasswordButton'
+import Button from './ui/Button'
+import PasswordInputGroup from './ui/PasswordInputGroup'
 
 const schema = z
     .object({
@@ -58,54 +58,22 @@ const PasswordResetForm = ({
             noValidate
         >
             <p className='mb-5 self-center text-2xl'>Reset password</p>
-            <label htmlFor='newPassword' className='mb-2 text-sm'>
-                New Password
-            </label>
-            <div className='flex'>
-                <input
-                    className={`w-full rounded-l border-b border-l border-t border-gray-400 bg-gray-200 p-3 transition focus:shadow-md focus:outline-none ${
-                        errors.newPassword &&
-                        'border-rose-600 bg-rose-200 placeholder-rose-600'
-                    }`}
-                    type={show.newPassword ? 'text' : 'password'}
-                    placeholder='••••••••'
-                    autoComplete='new-password'
-                    id='newPassword'
-                    {...register('newPassword')}
-                />
-                <PasswordButton
-                    isHidden={show.newPassword}
-                    isInvalid={errors.newPassword}
-                    handleClick={() => handleClick('newPassword')}
-                />
-            </div>
-            <p className='text-xs text-rose-600'>
-                {errors.newPassword?.message}
-            </p>
-            <label htmlFor='confirmPassword' className='mb-2 text-sm'>
-                Confirm Password
-            </label>
-            <div className='flex'>
-                <input
-                    className={`w-full rounded-l border-b border-l border-t border-gray-400 bg-gray-200 p-3 transition focus:shadow-md focus:outline-none ${
-                        errors.confirmPassword &&
-                        'border-rose-600 bg-rose-200 placeholder-rose-600'
-                    }`}
-                    type={show.confirmPassword ? 'text' : 'password'}
-                    autoComplete='new-password'
-                    placeholder='••••••••'
-                    id='confirmPassword'
-                    {...register('confirmPassword')}
-                />
-                <PasswordButton
-                    isHidden={show.confirmPassword}
-                    isInvalid={errors.confirmPassword}
-                    handleClick={() => handleClick('confirmPassword')}
-                />
-            </div>
-            <p className='text-xs text-rose-600'>
-                {errors.confirmPassword?.message}
-            </p>
+            <PasswordInputGroup
+                isHidden={show.newPassword}
+                text='New Password'
+                id='password'
+                isError={errors.newPassword}
+                register={register('newPassword')}
+                handleClick={() => handleClick('newPassword')}
+            />
+            <PasswordInputGroup
+                isHidden={show.confirmPassword}
+                text='Confirm Password'
+                id='confirmPassword'
+                isError={errors.confirmPassword}
+                register={register('confirmPassword')}
+                handleClick={() => handleClick('confirmPassword')}
+            />
             <Button isLoading={isLoading} />
         </form>
     )

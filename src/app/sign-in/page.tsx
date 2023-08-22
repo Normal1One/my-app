@@ -1,10 +1,13 @@
 'use client'
 
-import Button from '@/components/Button'
-import PasswordButton from '@/components/PasswordButton'
-import SocialLoginButtons from '@/components/SocialLoginButtons'
+import Button from '@/components/ui/Button'
+import Form from '@/components/ui/Form'
+import InputGroup from '@/components/ui/InputGroup'
+import PasswordInputGroup from '@/components/ui/PasswordInputGroup'
+import SocialLoginButtons from '@/components/ui/SocialLoginButtons'
+import TextLink from '@/components/ui/TextLink'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { signIn, signOut } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -70,76 +73,40 @@ const SignIn = () => {
 
     return (
         <div className='flex h-screen'>
-            <form
-                className='m-auto flex w-96 flex-col gap-2'
-                onSubmit={handleSubmit(onSubmit)}
-                noValidate
-            >
+            <Form onSubmit={handleSubmit(onSubmit)}>
                 <p className='mb-5 self-center text-2xl'>Sign In</p>
-                <label htmlFor='email' className='mb-2 text-sm'>
-                    Email
-                </label>
-                <input
-                    className={`rounded border border-gray-400 bg-gray-200 p-3 transition focus:shadow-md focus:outline-none ${
-                        errors.email &&
-                        'border-rose-600 bg-rose-200 placeholder-rose-600'
-                    }`}
-                    type='text'
+                <InputGroup
+                    type='email'
+                    text='Email'
                     placeholder='jsmith@example.com'
-                    autoComplete='username'
                     id='email'
-                    {...register('email')}
-                ></input>
-                <p className='text-xs text-rose-600'>{errors.email?.message}</p>
-                <div className='mb-2 flex justify-between'>
-                    <label htmlFor='password' className='text-sm'>
-                        Password
-                    </label>
-                    <Link
-                        href='/forgot'
-                        className='w-max text-sm text-gray-400'
-                    >
-                        Forgot Password?
-                    </Link>
-                </div>
-                <div className='flex'>
-                    <input
-                        className={`w-full rounded-l border-b border-l border-t border-gray-400 bg-gray-200 p-3 transition focus:shadow-md focus:outline-none ${
-                            errors.password &&
-                            'border-rose-600 bg-rose-200 placeholder-rose-600'
-                        }`}
-                        type={show ? 'text' : 'password'}
-                        placeholder='••••••••'
-                        autoComplete='current-password'
-                        id='password'
-                        {...register('password')}
-                    />
-                    <PasswordButton
-                        isHidden={show}
-                        isInvalid={errors.password}
-                        handleClick={() => handleClick()}
-                    />
-                </div>
-                <p className='text-xs text-rose-600'>
-                    {errors.password?.message}
-                </p>
+                    isError={errors.email}
+                    register={register('email')}
+                />
+                <PasswordInputGroup
+                    isHidden={show}
+                    text='Password'
+                    id='password'
+                    isError={errors.password}
+                    register={register('password')}
+                    handleClick={() => handleClick()}
+                    rest={
+                        <Link
+                            href='/forgot'
+                            className='w-max text-sm text-gray-400'
+                        >
+                            Forgot Password?
+                        </Link>
+                    }
+                />
                 <Button isLoading={isLoading} />
-                <div className='grid grid-cols-3 items-center text-gray-400'>
-                    <hr className='border-gray-400' />
-                    <p className='text-center text-sm'>OR</p>
-                    <hr className='border-gray-400' />
-                </div>
                 <SocialLoginButtons />
-                <p className='mt-2 self-center text-sm'>
-                    {"Don't have an account? "}
-                    <Link
-                        href='/sign-up'
-                        className='text-gray-400 underline hover:opacity-70'
-                    >
-                        Sign Up
-                    </Link>
-                </p>
-            </form>
+                <TextLink
+                    text="Don't have an account? "
+                    linkText='Sign Up'
+                    link='/sign-up'
+                />
+            </Form>
         </div>
     )
 }

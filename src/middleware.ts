@@ -14,5 +14,5 @@ export default withAuth({
 })
 
 export const config = {
-    matcher: ['/users/:path*', '/update', '/update-password']
+    matcher: ['/users/:path*', '/liked', '/update', '/update-password']
 }
