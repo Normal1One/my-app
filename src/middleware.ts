@@ -4,9 +4,7 @@ export default withAuth({
     callbacks: {
         authorized: ({ token, req }) => {
             if (req.nextUrl.pathname === '/update-password') {
-                return ['credentials', 'email'].includes(
-                    token?.provider as string
-                )
+                return token?.type !== 'oauth'
             }
             return !!token
         }

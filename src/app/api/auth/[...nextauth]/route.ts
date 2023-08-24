@@ -69,13 +69,13 @@ export const authOptions: NextAuthOptions = {
             if (trigger === 'update') {
                 token = { ...token, ...session }
             }
-            if (account) {
+            if (account && account?.type !== 'credentials') {
                 const { hashedPassword, likedPostIDs, ...result } = user as User
                 const { accessToken, refreshToken } = signJwtAccessToken(result)
                 return {
-                    ...user,
+                    ...result,
                     ...token,
-                    provider: account.provider,
+                    type: account.type,
                     accessToken,
                     refreshToken
                 }

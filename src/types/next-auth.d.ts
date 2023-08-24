@@ -6,14 +6,14 @@ declare module 'next-auth' {
         user: DefaultUser & {
             accessToken: string
             refreshToken: string
-            provider: string
+            type: string
             emailVerified: string
         }
     }
 
     interface DefaultJWT {
         JWT: DefaultJWT & {
-            provider: string
+            type: string
         }
     }
 }

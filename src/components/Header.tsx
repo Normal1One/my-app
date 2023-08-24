@@ -1,10 +1,10 @@
-import { getServerSession } from 'next-auth'
 import Image from 'next/image'
 import Link from 'next/link'
 import { BsPerson } from 'react-icons/bs'
 import VerificationBanner from './VerificationBanner'
 import SignInButton from './ui/SignInButton'
 import SignOutButton from './ui/SignOutButton'
+import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 
 const Header = async () => {

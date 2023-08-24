@@ -64,9 +64,7 @@ const User = async ({ params }: { params: { id: string } }) => {
                             >
                                 Update profile
                             </Link>
-                            {['credentials', 'email'].includes(
-                                session?.user.provider
-                            ) && (
+                            {session.user.type !== 'oauth' && (
                                 <Link
                                     href='/update-password'
                                     className='text-gray-400 underline hover:opacity-70'

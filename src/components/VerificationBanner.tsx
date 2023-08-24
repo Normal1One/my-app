@@ -10,10 +10,10 @@ const VerificationBanner = () => {
     const [show, setShow] = useState(false)
 
     useEffect(() => {
-        if (data?.user.provider === 'credentials' && !data.user.emailVerified) {
+        if (data?.user && !data.user.type && !data.user.emailVerified) {
             setShow(true)
         }
-    }, [data?.user.emailVerified, data?.user.provider])
+    }, [data?.user])
 
     if (!show) return
 

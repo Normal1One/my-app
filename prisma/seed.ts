@@ -9,7 +9,8 @@ const main = async () => {
         data: {
             name: faker.person.fullName(),
             email: faker.internet.email(),
-            hashedPassword: await bcrypt.hash(faker.internet.password(), 10)
+            hashedPassword: await bcrypt.hash(faker.internet.password(), 10),
+            emailVerified: new Date()
         }
     })
 

@@ -10,7 +10,6 @@ import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { BsHeart, BsHeartFill, BsPerson, BsTrash } from 'react-icons/bs'
 import { useDispatch } from 'react-redux'
@@ -20,7 +19,6 @@ interface Props {
 }
 
 const Post = ({ post }: Props) => {
-    const [liked, setLiked] = useState(false)
     const { data } = useSession()
     const router = useRouter()
     const pathname = usePathname()
@@ -29,8 +27,10 @@ const Post = ({ post }: Props) => {
     const dispatch = useDispatch()
 
     const handleLike = async () => {
-        if (data) {
-            liked ? unlikeMutation.mutate() : likeMutation.mutate()
+        if (data?.user) {
+            post.likedByIDs.includes(data.user.id)
+                ? unlikeMutation.mutate()
+                : likeMutation.mutate()
         } else {
             router.push('/sign-in')
         }
@@ -40,15 +40,21 @@ const Post = ({ post }: Props) => {
         mutationFn: () => {
             return axiosAuth.put(`/api/posts/${post.id}/likes`)
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries(['posts'])
+        onMutate: () => {
+            if (data) post.likedByIDs.push(data.user.id)
         },
-        onError: (error, variables, context) => {
+        onError: (error, _variables, _context) => {
+            post.likedByIDs = post.likedByIDs.filter(
+                (id) => id !== data?.user.id
+            )
             if (isAxiosError(error)) {
                 toast.error(error.response?.data)
             } else {
                 toast.error('Something went wrong')
             }
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ['posts'] })
         }
     })
 
@@ -56,15 +62,21 @@ const Post = ({ post }: Props) => {
         mutationFn: () => {
             return axiosAuth.delete(`/api/posts/${post.id}/likes`)
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries(['posts'])
+        onMutate: () => {
+            post.likedByIDs = post.likedByIDs.filter(
+                (id) => id !== data?.user.id
+            )
         },
-        onError: (error, variables, context) => {
+        onError: (error, _variables, _context) => {
+            if (data) post.likedByIDs.push(data.user.id)
             if (isAxiosError(error)) {
                 toast.error(error.response?.data)
             } else {
                 toast.error('Something went wrong')
             }
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ['posts'] })
         }
     })
 
@@ -72,12 +84,6 @@ const Post = ({ post }: Props) => {
         dispatch(setOpen(true))
         dispatch(setPostId(post.id))
     }
-
-    useEffect(() => {
-        if (data?.user) {
-            setLiked(post.likedByIDs.includes(data.user.id))
-        }
-    }, [data?.user, post.likedByIDs])
 
     return (
         <div className='m-auto mb-9 grid max-w-3xl grid-cols-2 justify-between gap-2 rounded border border-gray-400 p-3'>
@@ -121,7 +127,11 @@ const Post = ({ post }: Props) => {
                 onClick={handleLike}
                 className='flex w-fit items-center hover:opacity-70'
             >
-                {liked ? <BsHeartFill /> : <BsHeart />}
+                {data?.user && post.likedByIDs.includes(data.user.id) ? (
+                    <BsHeartFill />
+                ) : (
+                    <BsHeart />
+                )}
                 <p className='ml-2'>{post.likedByIDs.length}</p>
             </button>
             {data?.user.id === post.authorId && (

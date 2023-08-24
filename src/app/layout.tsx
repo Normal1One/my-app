@@ -21,9 +21,11 @@ export default function RootLayout({
             <QueryProvider>
                 <body className={inter.className}>
                     <AuthProvider>
-                        <Toaster />
-                        <Header />
-                        <ReduxProvider>{children}</ReduxProvider>
+                        <ReduxProvider>
+                            <Toaster />
+                            <Header />
+                            {children}
+                        </ReduxProvider>
                     </AuthProvider>
                 </body>
                 <ReactQueryDevtools initialIsOpen={false} />
