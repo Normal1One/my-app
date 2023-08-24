@@ -1,14 +1,12 @@
 import Link from 'next/link'
 
-const TextLink = ({
-    text,
-    linkText,
-    link
-}: {
+interface Props {
     text: string
     linkText: string
     link: string
-}) => {
+}
+
+const TextLink = ({ text, linkText, link }: Props) => {
     return (
         <p className='self-center text-sm'>
             {text}

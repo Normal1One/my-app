@@ -4,6 +4,16 @@ import Label from './Label'
 import PasswordInput from './PasswordInput'
 import { ReactNode } from 'react'
 
+interface Props {
+    isHidden: boolean
+    text: string
+    id: string
+    isError: FieldError | undefined
+    register: UseFormRegisterReturn
+    rest?: ReactNode
+    handleClick: (arg0: string) => void
+}
+
 const PasswordInputGroup = ({
     isHidden,
     text,
@@ -12,15 +22,7 @@ const PasswordInputGroup = ({
     isError,
     register,
     rest
-}: {
-    isHidden: boolean
-    text: string
-    id: string
-    isError: FieldError | undefined
-    register: UseFormRegisterReturn
-    rest?: ReactNode
-    handleClick: (arg0: string) => void
-}) => {
+}: Props) => {
     return (
         <>
             {rest ? (

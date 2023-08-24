@@ -1,6 +1,5 @@
 'use client'
 
-import Header from '@/components/Header'
 import Button from '@/components/ui/Button'
 import Form from '@/components/ui/Form'
 import InputGroup from '@/components/ui/InputGroup'
@@ -85,50 +84,47 @@ const Update = () => {
     }, [data, defaultValuesSet, reset])
 
     return (
-        <>
-            <Header />
-            <div className='flex h-[calc(100vh-64px)] align-middle'>
-                <Form onSubmit={handleSubmit(onSubmit)}>
-                    <p className='mb-5 self-center text-2xl'>Update user</p>
-                    <p className='mb-2 text-sm'>Image</p>
-                    <div className='flex justify-between'>
-                        {data?.user.image && data?.user.name ? (
-                            <Image
-                                src={data?.user.image}
-                                alt={data?.user.name}
-                                width={48}
-                                height={48}
-                                className='mr-7 rounded-full'
-                            />
-                        ) : (
-                            <BsPerson className='mr-7 h-12 w-12' />
-                        )}
-                        <input
-                            type='file'
-                            accept='image/*'
-                            className='w-full self-center rounded border border-gray-400 bg-gray-200 p-1.5 text-sm transition file:cursor-pointer file:appearance-none file:rounded file:border-none file:bg-gray-400 file:p-2 file:text-white file:hover:opacity-70'
-                            onChange={(e) => setFile(e.target.files?.[0])}
-                            ref={ref}
+        <div className='flex h-screen'>
+            <Form onSubmit={handleSubmit(onSubmit)}>
+                <p className='mb-5 self-center text-2xl'>Update user</p>
+                <p className='mb-2 text-sm'>Image</p>
+                <div className='flex justify-between'>
+                    {data?.user.image && data?.user.name ? (
+                        <Image
+                            src={data?.user.image}
+                            alt={data?.user.name}
+                            width={48}
+                            height={48}
+                            className='mr-7 rounded-full'
                         />
-                    </div>
-                    <InputGroup
-                        type='text'
-                        text='Name'
-                        id='name'
-                        isError={errors.name}
-                        register={register('name')}
+                    ) : (
+                        <BsPerson className='mr-7 h-12 w-12' />
+                    )}
+                    <input
+                        type='file'
+                        accept='image/*'
+                        className='w-full self-center rounded border border-gray-400 bg-gray-200 p-1.5 text-sm transition file:cursor-pointer file:appearance-none file:rounded file:border-none file:bg-gray-400 file:p-2 file:text-white file:hover:opacity-70'
+                        onChange={(e) => setFile(e.target.files?.[0])}
+                        ref={ref}
                     />
-                    <InputGroup
-                        type='email'
-                        text='Email'
-                        id='email'
-                        isError={errors.email}
-                        register={register('email')}
-                    />
-                    <Button isLoading={isLoading} />
-                </Form>
-            </div>
-        </>
+                </div>
+                <InputGroup
+                    type='text'
+                    text='Name'
+                    id='name'
+                    isError={errors.name}
+                    register={register('name')}
+                />
+                <InputGroup
+                    type='email'
+                    text='Email'
+                    id='email'
+                    isError={errors.email}
+                    register={register('email')}
+                />
+                <Button isLoading={isLoading} />
+            </Form>
+        </div>
     )
 }
 

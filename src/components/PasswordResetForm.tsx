@@ -30,13 +30,12 @@ interface ShowState {
     confirmPassword: boolean
 }
 
-const PasswordResetForm = ({
-    onSubmit,
-    isLoading
-}: {
+interface Props {
     onSubmit: (arg0: formValues) => Promise<void>
     isLoading: boolean
-}) => {
+}
+
+const PasswordResetForm = ({ onSubmit, isLoading }: Props) => {
     const [show, setShow] = useState({
         newPassword: false,
         confirmPassword: false

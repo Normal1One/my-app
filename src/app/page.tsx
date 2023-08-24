@@ -1,5 +1,4 @@
 import ConfirmationPopup from '@/components/ConfirmationPopup'
-import Header from '@/components/Header'
 import PostsList from '@/components/PostsList'
 import axios from '@/lib/axios'
 
@@ -24,7 +23,6 @@ const Home = () => {
     return (
         <>
             <ConfirmationPopup />
-            <Header />
             <div className='pt-32'>
                 <PostsList allPosts={allPosts} />
             </div>

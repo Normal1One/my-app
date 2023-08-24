@@ -1,6 +1,5 @@
 'use client'
 
-import Header from '@/components/Header'
 import Button from '@/components/ui/Button'
 import Form from '@/components/ui/Form'
 import InputGroup from '@/components/ui/InputGroup'
@@ -55,35 +54,32 @@ const Create = () => {
     })
 
     return (
-        <>
-            <Header />
-            <div className='flex h-[calc(100vh-64px)]'>
-                <Form onSubmit={handleSubmit(onSubmit)}>
-                    <p className='mb-5 self-center text-2xl'>Create Post</p>
-                    <InputGroup
-                        type='text'
-                        text='Title'
-                        id='title'
-                        isError={errors.title}
-                        register={register('title')}
-                    />
-                    <InputGroup
-                        type='text'
-                        text='Subtitle'
-                        id='subtitle'
-                        isError={errors.subtitle}
-                        register={register('subtitle')}
-                    />
-                    <TextareaGroup
-                        text='Text'
-                        id='text'
-                        isError={errors.text}
-                        register={register('text')}
-                    />
-                    <Button isLoading={isLoading} />
-                </Form>
-            </div>
-        </>
+        <div className='flex h-screen'>
+            <Form onSubmit={handleSubmit(onSubmit)}>
+                <p className='mb-5 self-center text-2xl'>Create Post</p>
+                <InputGroup
+                    type='text'
+                    text='Title'
+                    id='title'
+                    isError={errors.title}
+                    register={register('title')}
+                />
+                <InputGroup
+                    type='text'
+                    text='Subtitle'
+                    id='subtitle'
+                    isError={errors.subtitle}
+                    register={register('subtitle')}
+                />
+                <TextareaGroup
+                    text='Text'
+                    id='text'
+                    isError={errors.text}
+                    register={register('text')}
+                />
+                <Button isLoading={isLoading} />
+            </Form>
+        </div>
     )
 }
 

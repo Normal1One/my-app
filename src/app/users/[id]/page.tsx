@@ -1,8 +1,8 @@
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import ConfirmationPopup from '@/components/ConfirmationPopup'
-import Header from '@/components/Header'
-import Popper from '@/components/ui/Popper'
 import PostsList from '@/components/PostsList'
+import Popper from '@/components/ui/Popper'
+import TextCenter from '@/components/ui/TextCenter'
 import UserDeleteButton from '@/components/ui/UserDeleteButton'
 import axios from '@/lib/axios'
 import { AuthGetApi } from '@/lib/fetchAPI'
@@ -10,7 +10,6 @@ import { getServerSession } from 'next-auth'
 import Image from 'next/image'
 import Link from 'next/link'
 import { BsPerson } from 'react-icons/bs'
-import TextCenter from '@/components/ui/TextCenter'
 
 const User = async ({ params }: { params: { id: string } }) => {
     const session = await getServerSession(authOptions)
@@ -39,7 +38,6 @@ const User = async ({ params }: { params: { id: string } }) => {
     return (
         <>
             <ConfirmationPopup />
-            <Header />
             <div className='pt-32 align-middle'>
                 <div className='m-auto mb-16 flex flex-col items-center gap-2'>
                     {response.image ? (

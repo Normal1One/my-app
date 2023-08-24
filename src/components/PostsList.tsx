@@ -6,7 +6,11 @@ import { useEffect } from 'react'
 import { useInView } from 'react-intersection-observer'
 import Post from './Post'
 
-const PostsList = ({ allPosts }: { allPosts: any }) => {
+interface Props {
+    allPosts: ({}) => Promise<any>
+}
+
+const PostsList = ({ allPosts }: Props) => {
     const { ref, inView } = useInView()
     const {
         data,

@@ -13,8 +13,13 @@ const refreshToken = async (refreshToken: string) => {
     return data.accessToken
 }
 
-export const AuthGetApi = async (url: string) => {
+export const AuthGetApi = async (url: string, params = {}) => {
     const session = await getServerSession(authOptions)
+    const searchParams = new URLSearchParams(params)
+    console.log(
+        '🚀 ~ file: fetchAPI.ts:19 ~ AuthGetApi ~ searchParams:',
+        searchParams.toString()
+    )
 
     let response = await fetch(`${process.env.NEXTAUTH_URL}/${url}`, {
         method: 'GET',

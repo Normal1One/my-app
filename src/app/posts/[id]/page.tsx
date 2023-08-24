@@ -1,7 +1,6 @@
 'use client'
 
 import ConfirmationPopup from '@/components/ConfirmationPopup'
-import Header from '@/components/Header'
 import Post from '@/components/Post'
 import TextCenter from '@/components/ui/TextCenter'
 import axios from '@/lib/axios'
@@ -20,7 +19,6 @@ const PostDetails = ({ params }: { params: { id: string } }) => {
     return (
         <>
             <ConfirmationPopup />
-            <Header />
             <div className='mt-9'>
                 {isError && <TextCenter text='Failed to fetch post' />}
                 {isSuccess && <Post post={data} />}

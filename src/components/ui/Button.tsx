@@ -1,10 +1,9 @@
-const Button = ({
-    isLoading,
-    onClick
-}: {
+interface Props {
     isLoading: boolean
     onClick?: () => void
-}) => {
+}
+
+const Button = ({ isLoading, onClick }: Props) => {
     return (
         <button
             className={`w-full rounded pb-3 pt-3 text-white ${

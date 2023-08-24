@@ -1,19 +1,21 @@
 import { FieldError, UseFormRegisterReturn } from 'react-hook-form'
 import PasswordButton from './PasswordButton'
 
+interface Props {
+    isHidden: boolean
+    id: string
+    isError: FieldError | undefined
+    register: UseFormRegisterReturn
+    handleClick: (arg0: string) => void
+}
+
 const PasswordInput = ({
     isHidden,
     id,
     isError,
     register,
     handleClick
-}: {
-    isHidden: boolean
-    id: string
-    isError: FieldError | undefined
-    register: UseFormRegisterReturn
-    handleClick: (arg0: string) => void
-}) => {
+}: Props) => {
     return (
         <div className='flex'>
             <input

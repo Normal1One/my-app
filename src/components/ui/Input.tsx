@@ -1,18 +1,14 @@
 import { FieldError, UseFormRegisterReturn } from 'react-hook-form'
 
-const Input = ({
-    type,
-    placeholder,
-    id,
-    isError,
-    register
-}: {
+interface Props {
     type: string
     placeholder?: string
     id: string
     isError: FieldError | undefined
     register: UseFormRegisterReturn
-}) => {
+}
+
+const Input = ({ type, placeholder, id, isError, register }: Props) => {
     return (
         <input
             className={`rounded border border-gray-400 bg-gray-200 p-3 transition focus:shadow-md focus:outline-none ${

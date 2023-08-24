@@ -1,6 +1,5 @@
 'use client'
 
-import Header from '@/components/Header'
 import PasswordResetForm from '@/components/PasswordResetForm'
 import useAxiosAuth from '@/lib/hooks/useAxiosAuth'
 import { isAxiosError } from 'axios'
@@ -40,12 +39,9 @@ const UpdatePassword = () => {
     }
 
     return (
-        <>
-            <Header />
-            <div className='flex h-[calc(100vh-64px)]'>
-                <PasswordResetForm onSubmit={onSubmit} isLoading={isLoading} />
-            </div>
-        </>
+        <div className='flex h-screen'>
+            <PasswordResetForm onSubmit={onSubmit} isLoading={isLoading} />
+        </div>
     )
 }
 

@@ -1,12 +1,11 @@
 import { ReactNode } from 'react'
 
-const Form = ({
-    children,
-    onSubmit
-}: {
+interface Props {
     children: ReactNode
     onSubmit: () => void
-}) => {
+}
+
+const Form = ({ children, onSubmit }: Props) => {
     return (
         <form
             className='m-auto flex w-96 flex-col gap-2'

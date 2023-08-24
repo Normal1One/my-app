@@ -3,6 +3,7 @@
 import useAxiosAuth from '@/lib/hooks/useAxiosAuth'
 import { setOpen, setPostId } from '@/redux/slices/popupSlice'
 import { PostWithAuthor } from '@/types/prismaTypes'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { isAxiosError } from 'axios'
 import dayjs from 'dayjs'
 import { useSession } from 'next-auth/react'
@@ -14,38 +15,58 @@ import { toast } from 'react-hot-toast'
 import { BsHeart, BsHeartFill, BsPerson, BsTrash } from 'react-icons/bs'
 import { useDispatch } from 'react-redux'
 
-const Post = ({ post }: { post: PostWithAuthor }) => {
+interface Props {
+    post: PostWithAuthor
+}
+
+const Post = ({ post }: Props) => {
     const [liked, setLiked] = useState(false)
     const { data } = useSession()
     const router = useRouter()
     const pathname = usePathname()
     const axiosAuth = useAxiosAuth()
+    const queryClient = useQueryClient()
     const dispatch = useDispatch()
 
     const handleLike = async () => {
-        try {
-            if (data) {
-                if (liked) {
-                    await axiosAuth.delete(`/api/posts/${post.id}/likes`)
-                    post.likedByIDs = post.likedByIDs.filter(
-                        (id) => id !== data.user.id
-                    )
-                } else {
-                    await axiosAuth.put(`/api/posts/${post.id}/likes`)
-                    post.likedByIDs.push(data.user.id)
-                }
-                setLiked(!liked)
-            } else {
-                router.push('/sign-in')
-            }
-        } catch (error) {
+        if (data) {
+            liked ? unlikeMutation.mutate() : likeMutation.mutate()
+        } else {
+            router.push('/sign-in')
+        }
+    }
+
+    const likeMutation = useMutation({
+        mutationFn: () => {
+            return axiosAuth.put(`/api/posts/${post.id}/likes`)
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['posts'])
+        },
+        onError: (error, variables, context) => {
             if (isAxiosError(error)) {
                 toast.error(error.response?.data)
             } else {
                 toast.error('Something went wrong')
             }
         }
-    }
+    })
+
+    const unlikeMutation = useMutation({
+        mutationFn: () => {
+            return axiosAuth.delete(`/api/posts/${post.id}/likes`)
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['posts'])
+        },
+        onError: (error, variables, context) => {
+            if (isAxiosError(error)) {
+                toast.error(error.response?.data)
+            } else {
+                toast.error('Something went wrong')
+            }
+        }
+    })
 
     const onClick = () => {
         dispatch(setOpen(true))

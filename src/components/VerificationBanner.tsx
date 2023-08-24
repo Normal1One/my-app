@@ -1,17 +1,19 @@
 'use client'
 
 import { signIn, useSession } from 'next-auth/react'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { BsX } from 'react-icons/bs'
 
-const VerificationBanner = ({
-    show,
-    setShow
-}: {
-    show: boolean
-    setShow: (arg0: boolean) => void
-}) => {
+const VerificationBanner = () => {
     const { data } = useSession()
+    const [show, setShow] = useState(false)
+
+    useEffect(() => {
+        if (data?.user.provider === 'credentials' && !data.user.emailVerified) {
+            setShow(true)
+        }
+    }, [data?.user.emailVerified, data?.user.provider])
 
     if (!show) return
 

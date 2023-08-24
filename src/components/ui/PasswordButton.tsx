@@ -1,15 +1,13 @@
 import { FieldError } from 'react-hook-form'
 import { BsEye, BsEyeSlash } from 'react-icons/bs'
 
-const PasswordButton = ({
-    isHidden,
-    isInvalid,
-    handleClick
-}: {
+interface Props {
     isHidden: boolean
     isInvalid: FieldError | undefined
     handleClick: () => void
-}) => {
+}
+
+const PasswordButton = ({ isHidden, isInvalid, handleClick }: Props) => {
     return (
         <button
             type='button'

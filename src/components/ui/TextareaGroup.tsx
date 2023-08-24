@@ -2,17 +2,14 @@ import { FieldError, UseFormRegisterReturn } from 'react-hook-form'
 import Label from './Label'
 import ErrorMessage from './ErrorMessage'
 
-const TextareaGroup = ({
-    text,
-    id,
-    isError,
-    register
-}: {
+interface Props {
     text: string
     id: string
     isError: FieldError | undefined
     register: UseFormRegisterReturn
-}) => {
+}
+
+const TextareaGroup = ({ text, id, isError, register }: Props) => {
     return (
         <>
             <Label text={text} htmlFor={id} />
