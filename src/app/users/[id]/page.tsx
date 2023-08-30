@@ -39,7 +39,7 @@ const User = async ({ params }: { params: { id: string } }) => {
         <>
             <ConfirmationPopup />
             <div className='pt-32 align-middle'>
-                <div className='m-auto mb-16 flex flex-col items-center gap-2'>
+                <div className='m-auto mb-16 flex flex-col items-center gap-2 pt-20'>
                     {response.image ? (
                         <Image
                             src={response.image}

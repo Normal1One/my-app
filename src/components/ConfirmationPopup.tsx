@@ -65,7 +65,7 @@ const ConfirmationPopup = () => {
             queryClient.setQueryData(['posts'], {
                 pages: previousPosts?.pages.map((page: any) => ({
                     ...page,
-                    data: page.data.filter(
+                    data: page.data?.filter(
                         (post: PostWithAuthor) => post.id !== popupState.postId
                     )
                 })),

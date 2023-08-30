@@ -3,21 +3,10 @@ import PostsList from '@/components/PostsList'
 import { AuthGetApi } from '@/lib/fetchAPI'
 
 const Liked = () => {
-    const allPosts = async ({
-        take,
-        lastCursor
-    }: {
-        take?: number
-        lastCursor?: string
-    }) => {
+    const allPosts = async () => {
         'use server'
-        const response = await AuthGetApi('api/posts/liked', {
-            params: {
-                take,
-                lastCursor
-            }
-        })
-        return response?.data
+        const response = await AuthGetApi('api/posts/liked')
+        return response
     }
 
     return (

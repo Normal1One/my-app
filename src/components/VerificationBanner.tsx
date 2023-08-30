@@ -13,7 +13,7 @@ const VerificationBanner = () => {
         if (data?.user && !data.user.type && !data.user.emailVerified) {
             setShow(true)
         }
-    }, [data?.user])
+    }, [data?.user && data?.user.type])
 
     if (!show) return
 

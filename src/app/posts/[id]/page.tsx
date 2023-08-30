@@ -19,7 +19,7 @@ const PostDetails = ({ params }: { params: { id: string } }) => {
     return (
         <>
             <ConfirmationPopup />
-            <div className='mt-9'>
+            <div className='pt-32'>
                 {isError && <TextCenter text='Failed to fetch post' />}
                 {isSuccess && <Post post={data} />}
                 {isLoading && (

@@ -7,7 +7,13 @@ import { useInView } from 'react-intersection-observer'
 import Post from './Post'
 
 interface Props {
-    allPosts: ({}) => Promise<any>
+    allPosts: ({
+        take,
+        lastCursor
+    }: {
+        take?: number
+        lastCursor?: string
+    }) => Promise<any>
 }
 
 const PostsList = ({ allPosts }: Props) => {
@@ -38,30 +44,28 @@ const PostsList = ({ allPosts }: Props) => {
     return (
         <ul>
             {isSuccess &&
-                data?.pages.map(
-                    (page) =>
-                        page.data &&
-                        page.data.map((post: PostWithAuthor, index: number) => {
-                            if (page.data.length === index + 1) {
-                                return (
-                                    <li ref={ref} key={index}>
-                                        <Post post={post} />
-                                    </li>
-                                )
-                            } else {
-                                return (
-                                    <li key={post.id}>
-                                        <Post post={post} />
-                                    </li>
-                                )
-                            }
-                        })
+                data?.pages.map((page) =>
+                    page?.data?.map((post: PostWithAuthor, index: number) => {
+                        if (page.data.length === index + 1) {
+                            return (
+                                <li ref={ref} key={index}>
+                                    <Post post={post} />
+                                </li>
+                            )
+                        } else {
+                            return (
+                                <li key={post.id}>
+                                    <Post post={post} />
+                                </li>
+                            )
+                        }
+                    })
                 )}
             {(isLoading || isFetchingNextPage) && (
                 <p className='mb-4 w-full text-center text-lg'>Loading...</p>
             )}
             {isError && (
-                <p className='mb-4 mt-9 w-full text-center text-lg'>
+                <p className='mb-4 w-full pt-32 text-center text-lg'>
                     Failed to fetch posts
                 </p>
             )}
