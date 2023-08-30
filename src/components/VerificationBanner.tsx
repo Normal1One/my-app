@@ -8,12 +8,16 @@ import { BsX } from 'react-icons/bs'
 const VerificationBanner = () => {
     const { data } = useSession()
     const [show, setShow] = useState(false)
+    const [isDefault, setDefault] = useState(false)
 
     useEffect(() => {
-        if (data?.user && !data.user.type && !data.user.emailVerified) {
-            setShow(true)
+        if (!isDefault && data) {
+            if (data?.user && !data.user.type && !data.user.emailVerified) {
+                setShow(true)
+            }
+            setDefault(true)
         }
-    }, [data?.user && data?.user.type])
+    }, [data, isDefault])
 
     if (!show) return
 

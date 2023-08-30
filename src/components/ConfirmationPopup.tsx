@@ -75,9 +75,6 @@ const ConfirmationPopup = () => {
         },
         onError: (error, variables, context) => {
             queryClient.setQueryData(['posts'], context?.previousPosts)
-        },
-        onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: ['posts'] })
         }
     })
 

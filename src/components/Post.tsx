@@ -23,7 +23,6 @@ const Post = ({ post }: Props) => {
     const router = useRouter()
     const pathname = usePathname()
     const axiosAuth = useAxiosAuth()
-    const queryClient = useQueryClient()
     const dispatch = useDispatch()
 
     const handleLike = async () => {
@@ -52,9 +51,6 @@ const Post = ({ post }: Props) => {
             } else {
                 toast.error('Something went wrong')
             }
-        },
-        onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: ['posts'] })
         }
     })
 
@@ -74,9 +70,6 @@ const Post = ({ post }: Props) => {
             } else {
                 toast.error('Something went wrong')
             }
-        },
-        onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: ['posts'] })
         }
     })
 
