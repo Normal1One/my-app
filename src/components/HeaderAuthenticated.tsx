@@ -26,9 +26,6 @@ const HeaderAuthenticated = () => {
             <Link href='/posts/create' className='hover:opacity-70'>
                 Create Post
             </Link>
-            <Link href='/liked' className='hover:opacity-70'>
-                Liked Posts
-            </Link>
             <SignOutButton />
             <Link
                 href={`/users/${data.user.id}`}

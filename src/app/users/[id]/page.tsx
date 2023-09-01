@@ -4,15 +4,32 @@ import PostsList from '@/components/PostsList'
 import Popper from '@/components/ui/Popper'
 import TextCenter from '@/components/ui/TextCenter'
 import UserDeleteButton from '@/components/ui/UserDeleteButton'
+import axios from '@/lib/axios'
 import { AuthGetApi } from '@/lib/fetchAPI'
 import { getServerSession } from 'next-auth'
 import Image from 'next/image'
 import Link from 'next/link'
 import { BsPerson } from 'react-icons/bs'
 
+interface Props {
+    take?: number
+    lastCursor?: string
+}
+
 const User = async ({ params }: { params: { id: string } }) => {
     const session = await getServerSession(authOptions)
     const response = await AuthGetApi(`api/users/${params.id}`)
+
+    const getPostsByAuthor = async ({ take, lastCursor }: Props) => {
+        'use server'
+        const response = await axios.get(`api/users/${params.id}/posts`, {
+            params: {
+                take,
+                lastCursor
+            }
+        })
+        return response?.data
+    }
 
     if (!response) return <TextCenter text='User not found' />
 
@@ -57,7 +74,10 @@ const User = async ({ params }: { params: { id: string } }) => {
                         </>
                     )}
                 </div>
-                <PostsList userId={params.id} />
+                <PostsList
+                    getPosts={getPostsByAuthor}
+                    queryName='postsByAuthor'
+                />
             </div>
         </>
     )

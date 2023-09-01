@@ -55,29 +55,40 @@ const ConfirmationPopup = () => {
         }
     }
 
+    const updater = (previousPosts: PaginatedPosts | undefined) => {
+        return {
+            pages: previousPosts?.pages.map((page: any) => ({
+                ...page,
+                data: page.data?.filter(
+                    (post: PostWithAuthor) => post.id !== popupState.postId
+                )
+            })),
+            pageProps: previousPosts?.pageParams
+        }
+    }
+
     const mutation = useMutation({
         mutationFn: onDelete,
         onMutate: async () => {
-            await queryClient.cancelQueries({ queryKey: ['posts'] })
+            await queryClient.cancelQueries()
             const previousPosts = queryClient.getQueryData<PaginatedPosts>([
                 'posts'
             ])
-            queryClient.setQueryData(['posts'], {
-                pages: previousPosts?.pages.map((page: any) => ({
-                    ...page,
-                    data: page.data?.filter(
-                        (post: PostWithAuthor) => post.id !== popupState.postId
-                    )
-                })),
-                pageProps: previousPosts?.pageParams
-            })
-            return { previousPosts }
+            const previousPostsByAuthor =
+                queryClient.getQueryData<PaginatedPosts>(['postsByAuthor'])
+            queryClient.setQueryData(['posts'], updater(previousPosts))
+            queryClient.setQueryData(
+                ['postsByAuthor'],
+                updater(previousPostsByAuthor)
+            )
+            return { previousPosts, previousPostsByAuthor }
         },
         onError: (error, variables, context) => {
             queryClient.setQueryData(['posts'], context?.previousPosts)
-        },
-        onSettled: () => {
-            queryClient.invalidateQueries()
+            queryClient.setQueryData(
+                ['postsByAuthor'],
+                context?.previousPostsByAuthor
+            )
         }
     })
 

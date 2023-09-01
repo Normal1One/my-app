@@ -5,14 +5,21 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useInView } from 'react-intersection-observer'
 import Post from './Post'
-import { usePathname } from 'next/navigation'
-import { getAllPosts, getLikedPosts, getPostsByAuthor } from '@/lib/posts'
 
-const PostsList = ({ userId }: { userId?: string }) => {
+interface SearchParams {
+    take?: number
+    lastCursor?: string
+}
+
+interface Props {
+    getPosts: ({ take, lastCursor }: SearchParams) => Promise<any>
+    queryName: string
+}
+
+const PostsList = ({ getPosts, queryName }: Props) => {
     const { ref, inView } = useInView()
-    const pathname = usePathname()
     const {
-        data: allPosts,
+        data,
         isError,
         isLoading,
         hasNextPage,
@@ -21,27 +28,8 @@ const PostsList = ({ userId }: { userId?: string }) => {
         isFetchingNextPage
     } = useInfiniteQuery({
         queryFn: ({ pageParam = '' }) =>
-            getAllPosts({ take: 10, lastCursor: pageParam }),
-        queryKey: ['posts'],
-        getNextPageParam: (lastPage) => {
-            return lastPage?.metaData.lastCursor
-        }
-    })
-    const { data: likedPosts } = useInfiniteQuery({
-        queryFn: async ({ pageParam = '' }) =>
-            getLikedPosts({ take: 10, lastCursor: pageParam }),
-        queryKey: ['likedPosts'],
-        enabled: !!allPosts,
-        getNextPageParam: (lastPage) => {
-            return lastPage?.metaData.lastCursor
-        }
-    })
-
-    const { data: postsByAuthor } = useInfiniteQuery({
-        queryFn: async ({ pageParam = '' }) =>
-            getPostsByAuthor({ take: 10, lastCursor: pageParam, userId }),
-        queryKey: ['postsByAuthor', userId],
-        enabled: !!allPosts,
+            getPosts({ take: 10, lastCursor: pageParam }),
+        queryKey: [queryName],
         getNextPageParam: (lastPage) => {
             return lastPage?.metaData.lastCursor
         }
@@ -53,16 +41,10 @@ const PostsList = ({ userId }: { userId?: string }) => {
         }
     }, [hasNextPage, inView, fetchNextPage])
 
-    const posts = pathname.includes('liked')
-        ? likedPosts
-        : pathname.includes('users')
-        ? postsByAuthor
-        : allPosts
-
     return (
         <ul>
             {isSuccess &&
-                posts?.pages.map((page) =>
+                data?.pages?.map((page) =>
                     page?.data?.map((post: PostWithAuthor, index: number) => {
                         if (page.data.length === index + 1) {
                             return (
