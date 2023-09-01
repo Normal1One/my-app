@@ -3,13 +3,14 @@
 import useAxiosAuth from '@/lib/hooks/useAxiosAuth'
 import { setOpen, setPostId } from '@/redux/slices/popupSlice'
 import { PostWithAuthor } from '@/types/prismaTypes'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { isAxiosError } from 'axios'
 import dayjs from 'dayjs'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { BsHeart, BsHeartFill, BsPerson, BsTrash } from 'react-icons/bs'
 import { useDispatch } from 'react-redux'
@@ -20,63 +21,62 @@ interface Props {
 
 const Post = ({ post }: Props) => {
     const { data } = useSession()
+    const [liked, setLiked] = useState(false)
+    const queryClient = useQueryClient()
     const router = useRouter()
     const pathname = usePathname()
     const axiosAuth = useAxiosAuth()
     const dispatch = useDispatch()
 
-    const handleLike = async () => {
+    const onLike = async () => {
         if (data?.user) {
             post.likedByIDs.includes(data.user.id)
-                ? unlikeMutation.mutate()
-                : likeMutation.mutate()
+                ? handleUnlike(data.user.id)
+                : handleLike(data.user.id)
+            queryClient.invalidateQueries()
         } else {
             router.push('/sign-in')
         }
     }
 
-    const likeMutation = useMutation({
-        mutationFn: () => {
-            return axiosAuth.put(`/api/posts/${post.id}/likes`)
-        },
-        onMutate: () => {
-            if (data) post.likedByIDs.push(data.user.id)
-        },
-        onError: (error, _variables, _context) => {
-            post.likedByIDs = post.likedByIDs.filter(
-                (id) => id !== data?.user.id
-            )
+    const handleLike = async (userId: string) => {
+        try {
+            await axiosAuth.put(`/api/posts/${post.id}/likes`)
+            post.likedByIDs.push(userId)
+            setLiked(true)
+        } catch (error) {
             if (isAxiosError(error)) {
                 toast.error(error.response?.data)
             } else {
                 toast.error('Something went wrong')
             }
         }
-    })
+    }
 
-    const unlikeMutation = useMutation({
-        mutationFn: () => {
-            return axiosAuth.delete(`/api/posts/${post.id}/likes`)
-        },
-        onMutate: () => {
-            post.likedByIDs = post.likedByIDs.filter(
-                (id) => id !== data?.user.id
-            )
-        },
-        onError: (error, _variables, _context) => {
-            if (data) post.likedByIDs.push(data.user.id)
+    const handleUnlike = async (userId: string) => {
+        try {
+            await axiosAuth.delete(`/api/posts/${post.id}/likes`)
+            post.likedByIDs = post.likedByIDs.filter((id) => id !== userId)
+            setLiked(false)
+        } catch (error) {
             if (isAxiosError(error)) {
                 toast.error(error.response?.data)
             } else {
                 toast.error('Something went wrong')
             }
         }
-    })
+    }
 
     const onClick = () => {
         dispatch(setOpen(true))
         dispatch(setPostId(post.id))
     }
+
+    useEffect(() => {
+        if (data?.user) {
+            setLiked(post.likedByIDs.includes(data?.user.id))
+        }
+    }, [data?.user, post.likedByIDs])
 
     return (
         <div className='m-auto mb-9 grid max-w-3xl grid-cols-2 justify-between gap-2 rounded border border-gray-400 p-3'>
@@ -117,14 +117,10 @@ const Post = ({ post }: Props) => {
             )}
             <button
                 type='submit'
-                onClick={handleLike}
+                onClick={onLike}
                 className='flex w-fit items-center hover:opacity-70'
             >
-                {data?.user && post.likedByIDs.includes(data.user.id) ? (
-                    <BsHeartFill />
-                ) : (
-                    <BsHeart />
-                )}
+                {liked ? <BsHeartFill /> : <BsHeart />}
                 <p className='ml-2'>{post.likedByIDs.length}</p>
             </button>
             {data?.user.id === post.authorId && (

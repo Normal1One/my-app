@@ -13,10 +13,7 @@ export const uploadFile = async (file: File) => {
             .from('avatars')
             .upload(uuidv4(), file)
 
-        if (data) {
+        if (data)
             return supabase.storage.from('avatars').getPublicUrl(data.path)
-        } else {
-            console.error(error)
-        }
     }
 }
